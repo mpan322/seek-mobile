@@ -3,14 +3,14 @@ import 'package:http/http.dart' as http;
 import '../utils/secure_storage.dart';
 
 class AuthService {
-  final String baseUrl = 'http://YOUR_NEST_BACKEND_URL';
+  final String baseUrl = 'http://localhost:5173';
 
   Future<bool> login(String email, String password) async {
     final url = Uri.parse('$baseUrl/auth/login');
 
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json', "platform": "mobile"},
       body: jsonEncode({'email': email, 'password': password}),
     );
 
