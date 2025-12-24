@@ -14,7 +14,8 @@ import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { Input, InputField } from "@/components/ui/input";
 import { useAppStore } from "@/src/store/useAppStore";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
+import { LinkText } from "@/components/ui/link";
 
 type SignupFormData = {
   email: string;
@@ -145,6 +146,13 @@ export default function Signup() {
           <ButtonText>Sign Up</ButtonText>
         </Button>
       </FormControl>
+
+      <VStack className="gap-4 items-center">
+        <Link href="/(auth)/login">
+          <LinkText size="lg">Already have an account? Login.</LinkText>
+        </Link>
+      </VStack>
+
     </VStack>
   );
 }

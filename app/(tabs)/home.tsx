@@ -9,8 +9,9 @@ export default function HomeScreen() {
   const router = useRouter();
 
   const handleLogout = () => {
+    console.log("logging out")
     logout();
-    router.navigate("/home");
+    router.navigate("/");
   };
 
   return (

@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import "react-native-reanimated";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
@@ -20,10 +20,7 @@ export default function RootLayout() {
     <GluestackUIProvider mode="dark">
       <ThemeProvider value={DarkTheme}>
         <QueryClientProvider client={queryClient}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          </Stack>
+          <Slot initialRouteName="index" />
         </QueryClientProvider>
       </ThemeProvider>
     </GluestackUIProvider>
