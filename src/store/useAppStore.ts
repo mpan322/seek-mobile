@@ -2,11 +2,13 @@ import { create } from "zustand";
 
 interface AppState {
   isLogged: boolean;
-  setLogin: (status: boolean) => void;
+  login: () => void;
+  logout: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
   isLogged: false,
-  setLogin: (status) => set({ isLogged: status }),
+  login: () => set({ isLogged: true }),
+  logout: () => set({ isLogged: false }),
 }));
 
