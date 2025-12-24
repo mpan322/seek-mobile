@@ -1,4 +1,3 @@
-import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { Href, useRouter } from "expo-router";
 import { Divider } from "@/components/ui/divider";
@@ -23,7 +22,7 @@ export default function HelpScreen() {
       />
       <Divider />
       <FlatButton
-        onPress={() => goto("/(main)/settings/reset-password")}
+        onPress={() => goto("/(main)/settings/previous-flags")}
         text="Previous Flags"
       />
       <Divider />

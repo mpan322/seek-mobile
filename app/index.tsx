@@ -37,6 +37,14 @@ export default function Base() {
         >
           <ButtonText>To Settings</ButtonText>
         </Button>
+        <Button
+          variant="solid"
+          action="primary"
+          className="w-full"
+          onPress={() => goto("/(main)/settings/previous-flags")}
+        >
+          <ButtonText>To Flags</ButtonText>
+        </Button>
       </Box>
     </SafeAreaView>
   );

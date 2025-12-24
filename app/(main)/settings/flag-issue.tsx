@@ -24,7 +24,7 @@ type IssueState = {
 const useIssueState = create<IssueState>((set, get) => ({
   issue: "",
   accountName: "",
-  isValid: get().issue.length > 0,
+  isValid: get()?.issue.length > 0,
   setIssue: (issue: string) => set({ issue }),
   setAccountName: (accountName: string) => set({ accountName }),
   clear: () => set({ issue: "", accountName: "" }),
