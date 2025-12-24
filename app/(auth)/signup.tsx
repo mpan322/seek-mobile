@@ -139,8 +139,7 @@ export default function Signup() {
       <FormControl>
         <Button
           onPress={handleSubmit}
-          action={!isValid() ? "secondary" : "primary"}
-          disabled={!isValid()}
+          isDisabled={!isValid()}
           size="lg"
         >
           <ButtonText>Sign Up</ButtonText>

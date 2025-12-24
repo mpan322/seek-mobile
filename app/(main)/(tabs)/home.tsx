@@ -11,7 +11,7 @@ export default function HomeScreen() {
   const handleLogout = () => {
     console.log("logging out")
     logout();
-    router.navigate("/");
+    router.navigate("/base");
   };
 
   return (

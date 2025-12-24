@@ -76,8 +76,7 @@ export default function Login() {
           className="rounded-xl"
           size="lg"
           onPress={handleSubmit}
-          disabled={!isValid()}
-          action={!isValid() ? "secondary" : "primary"}
+          isDisabled={!isValid()}
         >
           <ButtonText>Login</ButtonText>
         </Button>
