@@ -84,7 +84,7 @@ export default function Signup() {
         onSuccess: (res) => {
           console.log("signup successful", res.data);
           login();
-          router.navigate("/(tabs)/home");
+          router.navigate("/(main)/(tabs)/home");
         },
         onError: (err) => {
           console.error(err);

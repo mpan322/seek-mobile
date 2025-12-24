@@ -19,6 +19,7 @@ export function EmailInput({ setEmail, email }: EmailInputProps) {
       </FormControlLabel>
       <Input size="lg">
         <InputField
+          type="text"
           placeholder="Enter your email"
           value={email}
           onChangeText={setEmail}

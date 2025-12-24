@@ -24,6 +24,7 @@ export function PasswordInput({
       </FormControlLabel>
       <Input size="lg">
         <InputField
+          type="password"
           placeholder="Enter your password"
           onChangeText={setPassword}
           value={password}

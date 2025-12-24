@@ -48,7 +48,7 @@ export default function Login() {
         onSuccess: (res) => {
           console.log("login successful", res.data);
           login();
-          router.navigate("/(tabs)/home");
+          router.navigate("/(main)/(tabs)/home");
         },
         onError: (err) => {
           console.error(err);
