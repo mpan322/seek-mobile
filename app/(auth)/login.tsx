@@ -19,7 +19,7 @@ interface LoginForm {
   setPassword: (password: string) => void;
 }
 
-const useLogin = create<LoginForm>((set) => ({
+const useLogin = create<LoginForm>((set, get) => ({
   email: "",
   password: "",
   setEmail: (email: string) => {
@@ -31,24 +31,31 @@ const useLogin = create<LoginForm>((set) => ({
 }));
 
 export default function Login() {
-  const { email, password, setEmail, setPassword } = useLogin((state) => state);
+  const { email, password, setEmail, setPassword } = useLogin(
+    (state) => state,
+  );
+
+  function isValid() {
+    return email.length > 0 && password.length > 0 && isValidPassword(password);
+  }
+
   const { mutate } = useAuthControllerLogin();
   const toast = useToast();
   const login = useAuth((state) => state.login);
   const router = useRouter();
-
-  function isValid(): boolean {
-    return email.length > 0 && password.length > 0 && isValidPassword(password);
-  }
 
   const handleSubmit = async () => {
     mutate(
       { data: { email: email + "@st-andrews.ac.uk", password } },
       {
         onSuccess: (res) => {
-          console.log("login successful", res.data);
-          login();
-          router.navigate("/(main)/(tabs)/home");
+          const { access_token, refresh_token } = res.data;
+          login({
+            accessToken: access_token,
+            refreshToken: refresh_token,
+          });
+          console.log("[LOG] login successful");
+          router.navigate("/(app)/(tabs)/home");
         },
         onError: (err) => {
           console.error(err);
@@ -89,6 +96,10 @@ export default function Login() {
 
         <Link href="/(auth)/signup">
           <LinkText size="lg">No account yet? Sign up.</LinkText>
+        </Link>
+
+        <Link href="/">
+          <LinkText size="lg">DEV: Back to root</LinkText>
         </Link>
       </VStack>
     </VStack>

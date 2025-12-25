@@ -33,26 +33,26 @@ export default function SettingsScreen() {
     <View className="bg-background-0 h-full">
       <VStack className="px-6 gap-2">
         <FlatButton
-          onPress={() => goto("/(main)/settings/modify-password")}
+          onPress={() => goto("/(app)/settings/modify-password")}
           text="Modify Password"
         />
         <Divider />
         <FlatButton
-          onPress={() => goto("/(main)/settings/permissions")}
+          onPress={() => goto("/(app)/settings/permissions")}
           text="Permissions"
         />
         <Divider />
         <FlatButton
-          onPress={() => goto("/(main)/settings/privacy-policy")}
+          onPress={() => goto("/(app)/settings/privacy-policy")}
           text="Privacy Policy"
         />
         <Divider />
         <FlatButton
-          onPress={() => goto("/(main)/settings/terms-of-service")}
+          onPress={() => goto("/(app)/settings/terms-of-service")}
           text="Terms of Service"
         />
         <Divider />
-        <FlatButton onPress={() => goto("/(main)/settings/help")} text="Help" />
+        <FlatButton onPress={() => goto("/(app)/settings/help")} text="Help" />
         <Divider />
         <Box className="items-start gap-2 pt-2">
           <Button variant="link" action="secondary" size="lg">

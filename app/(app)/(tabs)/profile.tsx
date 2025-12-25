@@ -43,7 +43,7 @@ export default function SettingsScreen() {
             variant="outline"
             size="xl"
             className="grid grid-cols-3 rounded-xl"
-            onPress={() => goto("/(main)/settings")}
+            onPress={() => goto("/(app)/settings")}
           >
             <Box className="items-center flex flex-row">
               <Box className="flex-1">

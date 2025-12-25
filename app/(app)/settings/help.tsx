@@ -12,17 +12,17 @@ export default function HelpScreen() {
   return (
     <VStack className="p-6 gap-2">
       <FlatButton
-        onPress={() => goto("/(main)/settings/contact")}
+        onPress={() => goto("/(app)/settings/contact")}
         text="Contact"
       />
       <Divider />
       <FlatButton
-        onPress={() => goto("/(main)/settings/flag-issue")}
+        onPress={() => goto("/(app)/settings/flag-issue")}
         text="Flag an Issue"
       />
       <Divider />
       <FlatButton
-        onPress={() => goto("/(main)/settings/previous-flags")}
+        onPress={() => goto("/(app)/settings/previous-flags")}
         text="Previous Flags"
       />
       <Divider />

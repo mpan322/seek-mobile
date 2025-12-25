@@ -16,6 +16,7 @@ import { Input, InputField } from "@/components/ui/input";
 import { Link, useRouter } from "expo-router";
 import { LinkText } from "@/components/ui/link";
 import { useAuth } from "@/src/store/auth-store";
+import { SuccessToast } from "@/components/custom/success-toast";
 
 type SignupFormData = {
   email: string;
@@ -48,14 +49,14 @@ const useSignup = create<SignupForm>((set) => ({
 export default function Signup() {
   const { data, setKey } = useSignup((state) => state);
   const { name, email, password, confirmPassword } = data;
-  const login = useAuth(state => state.login);
+  const login = useAuth((state) => state.login);
   const router = useRouter();
 
   const { mutate } = useAuthControllerSignup();
   const toast = useToast();
 
   function isValid(): boolean {
-    console.log(data)
+    console.log(data);
     return (
       email.length > 0 &&
       password.length > 0 &&
@@ -83,8 +84,13 @@ export default function Signup() {
       {
         onSuccess: (res) => {
           console.log("signup successful", res.data);
-          login();
-          router.navigate("/(main)/(tabs)/home");
+          toast.show({
+            placement: "top",
+            render: (props) => (
+              <SuccessToast {...props} message="Signup successful" />
+            ),
+          });
+          router.navigate("/(auth)/login");
         },
         onError: (err) => {
           console.error(err);
@@ -129,6 +135,7 @@ export default function Signup() {
         </FormControlLabel>
         <Input size="lg">
           <InputField
+            type="password"
             placeholder="Confirm your password"
             onChangeText={setKey("confirmPassword")}
             value={confirmPassword}
@@ -137,11 +144,7 @@ export default function Signup() {
       </FormControl>
 
       <FormControl>
-        <Button
-          onPress={handleSubmit}
-          isDisabled={!isValid()}
-          size="lg"
-        >
+        <Button onPress={handleSubmit} isDisabled={!isValid()} size="lg">
           <ButtonText>Sign Up</ButtonText>
         </Button>
       </FormControl>
@@ -151,7 +154,6 @@ export default function Signup() {
           <LinkText size="lg">Already have an account? Login.</LinkText>
         </Link>
       </VStack>
-
     </VStack>
   );
 }

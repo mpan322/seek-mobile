@@ -4,7 +4,7 @@ import { Href, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Base() {
+export default function Index() {
   const router = useRouter();
   function goto(path: Href) {
     router.navigate(path);
@@ -17,7 +17,7 @@ export default function Base() {
           variant="solid"
           action="primary"
           className="w-full"
-          onPress={() => goto("/login")}
+          onPress={() => goto("/(auth)/login")}
         >
           <ButtonText>To Login</ButtonText>
         </Button>
@@ -25,7 +25,7 @@ export default function Base() {
           variant="solid"
           action="primary"
           className="w-full"
-          onPress={() => goto("/(main)/(tabs)/home")}
+          onPress={() => goto("/(app)/(tabs)/home")}
         >
           <ButtonText>To Home</ButtonText>
         </Button>
@@ -33,7 +33,7 @@ export default function Base() {
           variant="solid"
           action="primary"
           className="w-full"
-          onPress={() => goto("/(main)/settings")}
+          onPress={() => goto("/(app)/settings")}
         >
           <ButtonText>To Settings</ButtonText>
         </Button>
@@ -41,7 +41,7 @@ export default function Base() {
           variant="solid"
           action="primary"
           className="w-full"
-          onPress={() => goto("/(main)/settings/previous-flags")}
+          onPress={() => goto("/(app)/settings/previous-flags")}
         >
           <ButtonText>To Flags</ButtonText>
         </Button>

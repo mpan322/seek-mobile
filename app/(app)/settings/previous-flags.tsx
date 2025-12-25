@@ -82,7 +82,7 @@ type FlagCardProps = {
 function FlagCard({ id, status, date, description }: FlagCardProps) {
   const router = useRouter();
   const gotoDetails = () => {
-    router.navigate(`/(main)/settings/${id}/flag-details`);
+    router.navigate(`/(app)/settings/${id}/flag-details`);
   };
 
   return (
