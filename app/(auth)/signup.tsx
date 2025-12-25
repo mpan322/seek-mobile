@@ -13,9 +13,9 @@ import { useAuthControllerSignup } from "@/src/api/auth";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { Input, InputField } from "@/components/ui/input";
-import { useAppStore } from "@/src/store/useAppStore";
 import { Link, useRouter } from "expo-router";
 import { LinkText } from "@/components/ui/link";
+import { useAuth } from "@/src/store/auth-store";
 
 type SignupFormData = {
   email: string;
@@ -48,7 +48,7 @@ const useSignup = create<SignupForm>((set) => ({
 export default function Signup() {
   const { data, setKey } = useSignup((state) => state);
   const { name, email, password, confirmPassword } = data;
-  const login = useAppStore(state => state.login);
+  const login = useAuth(state => state.login);
   const router = useRouter();
 
   const { mutate } = useAuthControllerSignup();

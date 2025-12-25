@@ -10,7 +10,7 @@ import { PasswordInput } from "@/components/custom/password-input";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { EmailInput } from "@/components/custom/email-input";
-import { useAppStore } from "@/src/store/useAppStore";
+import { useAuth } from "@/src/store/auth-store";
 
 interface LoginForm {
   email: string;
@@ -34,7 +34,7 @@ export default function Login() {
   const { email, password, setEmail, setPassword } = useLogin((state) => state);
   const { mutate } = useAuthControllerLogin();
   const toast = useToast();
-  const login = useAppStore((state) => state.login);
+  const login = useAuth((state) => state.login);
   const router = useRouter();
 
   function isValid(): boolean {

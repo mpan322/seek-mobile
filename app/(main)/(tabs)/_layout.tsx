@@ -35,6 +35,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="messages"
+        options={{
+          title: "Messages",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="bubble.circle.fill" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

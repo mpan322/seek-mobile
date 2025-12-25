@@ -9,7 +9,8 @@ import { useEffect } from "react";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  // anchor: "(tabs)",
+  initialRouteName: "/",
 };
 
 const queryClient = new QueryClient();

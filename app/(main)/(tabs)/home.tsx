@@ -1,17 +1,17 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text } from "@/components/ui/text";
-import { useAppStore } from "@/src/store/useAppStore";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/src/store/auth-store";
 
 export default function HomeScreen() {
-  const logout = useAppStore((state) => state.logout);
+  const logout = useAuth((state) => state.logout);
   const router = useRouter();
 
   const handleLogout = () => {
     console.log("logging out")
     logout();
-    router.navigate("/base");
+    router.navigate("/");
   };
 
   return (
