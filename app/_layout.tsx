@@ -39,10 +39,10 @@ export default function RootLayout() {
     SplashScreen.hide();
   }, [_hasHydrated]);
 
-  // prevent rendering until auth state is hydrated
-  if (!_hasHydrated) {
-    return <></>;
-  }
+  // // prevent rendering until auth state is hydrated
+  // if (!_hasHydrated) {
+  //   return <Slot />;
+  // }
 
   return (
     <GluestackUIProvider mode="dark">

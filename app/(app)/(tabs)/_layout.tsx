@@ -44,6 +44,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="saved-listings"
+        options={{
+          title: "Saved Listings",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="star" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

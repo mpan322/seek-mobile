@@ -1,6 +1,5 @@
-import { router, Stack, usePathname } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Slot } from "expo-router";
 
 export default function StackLayout() {
-  return <Stack />;
+  return <Slot />;
 }

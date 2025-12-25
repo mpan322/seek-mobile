@@ -23,7 +23,7 @@ export function AuthGaurd({ children }: AuthGaurdProps) {
     if (!isLoggedIn && isAuth) {
       console.log("[LOG] redirecting to main");
       router.replace("/");
-    } else if (isLoggedIn) {
+    } else if (isLoggedIn && !isAuth) {
       console.log("[LOG] redirecting to home");
       router.replace("/(app)/(tabs)/home");
     }
