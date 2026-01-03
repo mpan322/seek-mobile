@@ -17,7 +17,7 @@ export const unstable_settings = {
 
 const queryClient = new QueryClient();
 
-axios.defaults.baseURL = "http://192.168.86.55:3000";
+axios.defaults.baseURL = "http://192.168.1.51:3000";
 axios.defaults.headers["platform"] = "mobile";
 
 SplashScreen.preventAutoHideAsync();

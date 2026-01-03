@@ -18,7 +18,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="swipe"
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (

@@ -107,6 +107,7 @@ export default function Signup() {
             ),
           });
         },
+        onSettled: () => console.log("signup finished"),
       },
     );
   };
