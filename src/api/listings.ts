@@ -24,13 +24,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   CreateListingDto,
   ErrorDto,
@@ -40,35 +33,38 @@ import type {
   Step4ListingDto
 } from './model';
 
+import { customInstance } from '../utils/custom-axios';
 
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const listingsControllerCreateDraft = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<string>> => {
     
-    
-    return axios.post(
-      `/listings/draft`,undefined,{
-        responseType: 'text',
-    ...options,}
-    );
-  }
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<string>(
+      {url: `/listings/draft`, method: 'POST', signal
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerCreateDraftMutationOptions = <TError = AxiosError<ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateDraft>>, TError,void, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerCreateDraftMutationOptions = <TError = ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateDraft>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateDraft>>, TError,void, TContext> => {
 
 const mutationKey = ['listingsControllerCreateDraft'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -76,7 +72,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerCreateDraft>>, void> = () => {
           
 
-          return  listingsControllerCreateDraft(axiosOptions)
+          return  listingsControllerCreateDraft(requestOptions)
         }
 
         
@@ -86,10 +82,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerCreateDraftMutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerCreateDraft>>>
     
-    export type ListingsControllerCreateDraftMutationError = AxiosError<ErrorDto>
+    export type ListingsControllerCreateDraftMutationError = ErrorDto
 
-    export const useListingsControllerCreateDraft = <TError = AxiosError<ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateDraft>>, TError,void, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerCreateDraft = <TError = ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateDraft>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerCreateDraft>>,
         TError,
@@ -103,28 +99,30 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const listingsControllerCreateStep1 = (
     id: string,
-    createListingDto: CreateListingDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing>> => {
-    
-    
-    return axios.patch(
-      `/listings/${id}/createStep1`,
-      createListingDto,options
-    );
-  }
+    createListingDto: CreateListingDto,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<Listing>(
+      {url: `/listings/${id}/createStep1`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: createListingDto
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerCreateStep1MutationOptions = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep1>>, TError,{id: string;data: CreateListingDto}, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerCreateStep1MutationOptions = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep1>>, TError,{id: string;data: CreateListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep1>>, TError,{id: string;data: CreateListingDto}, TContext> => {
 
 const mutationKey = ['listingsControllerCreateStep1'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -132,7 +130,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerCreateStep1>>, {id: string;data: CreateListingDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  listingsControllerCreateStep1(id,data,axiosOptions)
+          return  listingsControllerCreateStep1(id,data,requestOptions)
         }
 
         
@@ -142,10 +140,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerCreateStep1MutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerCreateStep1>>>
     export type ListingsControllerCreateStep1MutationBody = CreateListingDto
-    export type ListingsControllerCreateStep1MutationError = AxiosError<ErrorDto | ErrorDto | ErrorDto>
+    export type ListingsControllerCreateStep1MutationError = ErrorDto | ErrorDto | ErrorDto
 
-    export const useListingsControllerCreateStep1 = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep1>>, TError,{id: string;data: CreateListingDto}, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerCreateStep1 = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep1>>, TError,{id: string;data: CreateListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerCreateStep1>>,
         TError,
@@ -159,28 +157,30 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const listingsControllerCreateStep2 = (
     id: string,
-    step2ListingDto: Step2ListingDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing>> => {
-    
-    
-    return axios.patch(
-      `/listings/${id}/createStep2`,
-      step2ListingDto,options
-    );
-  }
+    step2ListingDto: Step2ListingDto,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<Listing>(
+      {url: `/listings/${id}/createStep2`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: step2ListingDto
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerCreateStep2MutationOptions = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep2>>, TError,{id: string;data: Step2ListingDto}, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerCreateStep2MutationOptions = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep2>>, TError,{id: string;data: Step2ListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep2>>, TError,{id: string;data: Step2ListingDto}, TContext> => {
 
 const mutationKey = ['listingsControllerCreateStep2'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -188,7 +188,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerCreateStep2>>, {id: string;data: Step2ListingDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  listingsControllerCreateStep2(id,data,axiosOptions)
+          return  listingsControllerCreateStep2(id,data,requestOptions)
         }
 
         
@@ -198,10 +198,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerCreateStep2MutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerCreateStep2>>>
     export type ListingsControllerCreateStep2MutationBody = Step2ListingDto
-    export type ListingsControllerCreateStep2MutationError = AxiosError<ErrorDto | ErrorDto | ErrorDto>
+    export type ListingsControllerCreateStep2MutationError = ErrorDto | ErrorDto | ErrorDto
 
-    export const useListingsControllerCreateStep2 = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep2>>, TError,{id: string;data: Step2ListingDto}, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerCreateStep2 = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep2>>, TError,{id: string;data: Step2ListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerCreateStep2>>,
         TError,
@@ -215,28 +215,30 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const listingsControllerCreateStep3 = (
     id: string,
-    step3ListingDto: Step3ListingDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing>> => {
-    
-    
-    return axios.patch(
-      `/listings/${id}/createStep3`,
-      step3ListingDto,options
-    );
-  }
+    step3ListingDto: Step3ListingDto,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<Listing>(
+      {url: `/listings/${id}/createStep3`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: step3ListingDto
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerCreateStep3MutationOptions = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep3>>, TError,{id: string;data: Step3ListingDto}, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerCreateStep3MutationOptions = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep3>>, TError,{id: string;data: Step3ListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep3>>, TError,{id: string;data: Step3ListingDto}, TContext> => {
 
 const mutationKey = ['listingsControllerCreateStep3'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -244,7 +246,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerCreateStep3>>, {id: string;data: Step3ListingDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  listingsControllerCreateStep3(id,data,axiosOptions)
+          return  listingsControllerCreateStep3(id,data,requestOptions)
         }
 
         
@@ -254,10 +256,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerCreateStep3MutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerCreateStep3>>>
     export type ListingsControllerCreateStep3MutationBody = Step3ListingDto
-    export type ListingsControllerCreateStep3MutationError = AxiosError<ErrorDto | ErrorDto | ErrorDto>
+    export type ListingsControllerCreateStep3MutationError = ErrorDto | ErrorDto | ErrorDto
 
-    export const useListingsControllerCreateStep3 = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep3>>, TError,{id: string;data: Step3ListingDto}, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerCreateStep3 = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep3>>, TError,{id: string;data: Step3ListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerCreateStep3>>,
         TError,
@@ -271,28 +273,30 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const listingsControllerCreateStep4 = (
     id: string,
-    step4ListingDto: Step4ListingDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.patch(
-      `/listings/${id}/createStep4`,
-      step4ListingDto,options
-    );
-  }
+    step4ListingDto: Step4ListingDto,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/listings/${id}/createStep4`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: step4ListingDto
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerCreateStep4MutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep4>>, TError,{id: string;data: Step4ListingDto}, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerCreateStep4MutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep4>>, TError,{id: string;data: Step4ListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep4>>, TError,{id: string;data: Step4ListingDto}, TContext> => {
 
 const mutationKey = ['listingsControllerCreateStep4'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -300,7 +304,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerCreateStep4>>, {id: string;data: Step4ListingDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  listingsControllerCreateStep4(id,data,axiosOptions)
+          return  listingsControllerCreateStep4(id,data,requestOptions)
         }
 
         
@@ -310,10 +314,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerCreateStep4MutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerCreateStep4>>>
     export type ListingsControllerCreateStep4MutationBody = Step4ListingDto
-    export type ListingsControllerCreateStep4MutationError = AxiosError<unknown>
+    export type ListingsControllerCreateStep4MutationError = unknown
 
-    export const useListingsControllerCreateStep4 = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep4>>, TError,{id: string;data: Step4ListingDto}, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerCreateStep4 = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerCreateStep4>>, TError,{id: string;data: Step4ListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerCreateStep4>>,
         TError,
@@ -327,28 +331,31 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const listingsControllerPublish = (
     id: string,
-    createListingDto: CreateListingDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing>> => {
-    
-    
-    return axios.post(
-      `/listings/${id}/publish`,
-      createListingDto,options
-    );
-  }
+    createListingDto: CreateListingDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<Listing>(
+      {url: `/listings/${id}/publish`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createListingDto, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerPublishMutationOptions = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerPublish>>, TError,{id: string;data: CreateListingDto}, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerPublishMutationOptions = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerPublish>>, TError,{id: string;data: CreateListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerPublish>>, TError,{id: string;data: CreateListingDto}, TContext> => {
 
 const mutationKey = ['listingsControllerPublish'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -356,7 +363,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerPublish>>, {id: string;data: CreateListingDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  listingsControllerPublish(id,data,axiosOptions)
+          return  listingsControllerPublish(id,data,requestOptions)
         }
 
         
@@ -366,10 +373,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerPublishMutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerPublish>>>
     export type ListingsControllerPublishMutationBody = CreateListingDto
-    export type ListingsControllerPublishMutationError = AxiosError<ErrorDto | ErrorDto | ErrorDto>
+    export type ListingsControllerPublishMutationError = ErrorDto | ErrorDto | ErrorDto
 
-    export const useListingsControllerPublish = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerPublish>>, TError,{id: string;data: CreateListingDto}, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerPublish = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerPublish>>, TError,{id: string;data: CreateListingDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerPublish>>,
         TError,
@@ -382,27 +389,28 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions, queryClient);
     }
     export const listingsControllerDeleteListing = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing>> => {
-    
-    
-    return axios.delete(
-      `/listings/${id}`,options
-    );
-  }
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<Listing>(
+      {url: `/listings/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerDeleteListingMutationOptions = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerDeleteListing>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerDeleteListingMutationOptions = <TError = ErrorDto | ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerDeleteListing>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerDeleteListing>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['listingsControllerDeleteListing'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -410,7 +418,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerDeleteListing>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  listingsControllerDeleteListing(id,axiosOptions)
+          return  listingsControllerDeleteListing(id,requestOptions)
         }
 
         
@@ -420,10 +428,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerDeleteListingMutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerDeleteListing>>>
     
-    export type ListingsControllerDeleteListingMutationError = AxiosError<ErrorDto | ErrorDto | ErrorDto | ErrorDto>
+    export type ListingsControllerDeleteListingMutationError = ErrorDto | ErrorDto | ErrorDto | ErrorDto
 
-    export const useListingsControllerDeleteListing = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerDeleteListing>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerDeleteListing = <TError = ErrorDto | ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerDeleteListing>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerDeleteListing>>,
         TError,
@@ -436,15 +444,17 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(mutationOptions, queryClient);
     }
     export const listingsControllerGetById = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing>> => {
-    
-    
-    return axios.get(
-      `/listings/${id}`,options
-    );
-  }
-
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<Listing>(
+      {url: `/listings/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 
 
@@ -455,16 +465,16 @@ export const getListingsControllerGetByIdQueryKey = (id?: string,) => {
     }
 
     
-export const getListingsControllerGetByIdQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getListingsControllerGetByIdQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = ErrorDto | ErrorDto | ErrorDto>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getListingsControllerGetByIdQueryKey(id);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerGetById>>> = ({ signal }) => listingsControllerGetById(id, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerGetById>>> = ({ signal }) => listingsControllerGetById(id, requestOptions, signal);
 
       
 
@@ -474,36 +484,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type ListingsControllerGetByIdQueryResult = NonNullable<Awaited<ReturnType<typeof listingsControllerGetById>>>
-export type ListingsControllerGetByIdQueryError = AxiosError<ErrorDto | ErrorDto | ErrorDto>
+export type ListingsControllerGetByIdQueryError = ErrorDto | ErrorDto | ErrorDto
 
 
-export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
+export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = ErrorDto | ErrorDto | ErrorDto>(
  id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerGetById>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerGetById>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
+export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = ErrorDto | ErrorDto | ErrorDto>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerGetById>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerGetById>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = ErrorDto | ErrorDto | ErrorDto>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof listingsControllerGetById>>, TError = ErrorDto | ErrorDto | ErrorDto>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -519,15 +529,17 @@ export function useListingsControllerGetById<TData = Awaited<ReturnType<typeof l
 
 
 export const listingsControllerMyListings = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing[]>> => {
     
-    
-    return axios.get(
-      `/listings/mine`,options
-    );
-  }
-
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<Listing[]>(
+      {url: `/listings/mine`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 
 
@@ -538,16 +550,16 @@ export const getListingsControllerMyListingsQueryKey = () => {
     }
 
     
-export const getListingsControllerMyListingsQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = AxiosError<ErrorDto | ErrorDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getListingsControllerMyListingsQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = ErrorDto | ErrorDto>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getListingsControllerMyListingsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerMyListings>>> = ({ signal }) => listingsControllerMyListings({ signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerMyListings>>> = ({ signal }) => listingsControllerMyListings(requestOptions, signal);
 
       
 
@@ -557,36 +569,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type ListingsControllerMyListingsQueryResult = NonNullable<Awaited<ReturnType<typeof listingsControllerMyListings>>>
-export type ListingsControllerMyListingsQueryError = AxiosError<ErrorDto | ErrorDto>
+export type ListingsControllerMyListingsQueryError = ErrorDto | ErrorDto
 
 
-export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
+export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = ErrorDto | ErrorDto>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerMyListings>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerMyListings>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
+export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = ErrorDto | ErrorDto>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerMyListings>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerMyListings>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = ErrorDto | ErrorDto>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeof listingsControllerMyListings>>, TError = ErrorDto | ErrorDto>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerMyListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -602,15 +614,17 @@ export function useListingsControllerMyListings<TData = Awaited<ReturnType<typeo
 
 
 export const listingsControllerGetListing = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing>> => {
-    
-    
-    return axios.get(
-      `/listings/mine/${id}`,options
-    );
-  }
-
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<Listing>(
+      {url: `/listings/mine/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 
 
@@ -621,16 +635,16 @@ export const getListingsControllerGetListingQueryKey = (id?: string,) => {
     }
 
     
-export const getListingsControllerGetListingQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getListingsControllerGetListingQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = ErrorDto | ErrorDto | ErrorDto>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getListingsControllerGetListingQueryKey(id);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerGetListing>>> = ({ signal }) => listingsControllerGetListing(id, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerGetListing>>> = ({ signal }) => listingsControllerGetListing(id, requestOptions, signal);
 
       
 
@@ -640,36 +654,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type ListingsControllerGetListingQueryResult = NonNullable<Awaited<ReturnType<typeof listingsControllerGetListing>>>
-export type ListingsControllerGetListingQueryError = AxiosError<ErrorDto | ErrorDto | ErrorDto>
+export type ListingsControllerGetListingQueryError = ErrorDto | ErrorDto | ErrorDto
 
 
-export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
+export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = ErrorDto | ErrorDto | ErrorDto>(
  id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerGetListing>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerGetListing>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
+export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = ErrorDto | ErrorDto | ErrorDto>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerGetListing>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerGetListing>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = ErrorDto | ErrorDto | ErrorDto>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeof listingsControllerGetListing>>, TError = ErrorDto | ErrorDto | ErrorDto>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetListing>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -685,15 +699,17 @@ export function useListingsControllerGetListing<TData = Awaited<ReturnType<typeo
 
 
 export const listingsControllerGetAllUnverifiedListings = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Listing[]>> => {
     
-    
-    return axios.get(
-      `/listings/allUnverified`,options
-    );
-  }
-
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<Listing[]>(
+      {url: `/listings/allUnverified`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
 
 
@@ -704,16 +720,16 @@ export const getListingsControllerGetAllUnverifiedListingsQueryKey = () => {
     }
 
     
-export const getListingsControllerGetAllUnverifiedListingsQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = AxiosError<ErrorDto | ErrorDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getListingsControllerGetAllUnverifiedListingsQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = ErrorDto | ErrorDto>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getListingsControllerGetAllUnverifiedListingsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>> = ({ signal }) => listingsControllerGetAllUnverifiedListings({ signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>> = ({ signal }) => listingsControllerGetAllUnverifiedListings(requestOptions, signal);
 
       
 
@@ -723,36 +739,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type ListingsControllerGetAllUnverifiedListingsQueryResult = NonNullable<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>>
-export type ListingsControllerGetAllUnverifiedListingsQueryError = AxiosError<ErrorDto | ErrorDto>
+export type ListingsControllerGetAllUnverifiedListingsQueryError = ErrorDto | ErrorDto
 
 
-export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
+export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = ErrorDto | ErrorDto>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
+export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = ErrorDto | ErrorDto>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>,
           TError,
           Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = ErrorDto | ErrorDto>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = AxiosError<ErrorDto | ErrorDto>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError = ErrorDto | ErrorDto>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetAllUnverifiedListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -768,27 +784,28 @@ export function useListingsControllerGetAllUnverifiedListings<TData = Awaited<Re
 
 
 export const listingsControllerVerifyListing = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    
-    
-    return axios.patch(
-      `/listings/verify/${id}`,undefined,options
-    );
-  }
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/listings/verify/${id}`, method: 'PATCH'
+    },
+      options);
+    }
+  
 
 
-
-export const getListingsControllerVerifyListingMutationOptions = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerVerifyListing>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+export const getListingsControllerVerifyListingMutationOptions = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerVerifyListing>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof listingsControllerVerifyListing>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['listingsControllerVerifyListing'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -796,7 +813,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof listingsControllerVerifyListing>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  listingsControllerVerifyListing(id,axiosOptions)
+          return  listingsControllerVerifyListing(id,requestOptions)
         }
 
         
@@ -806,10 +823,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ListingsControllerVerifyListingMutationResult = NonNullable<Awaited<ReturnType<typeof listingsControllerVerifyListing>>>
     
-    export type ListingsControllerVerifyListingMutationError = AxiosError<ErrorDto | ErrorDto | ErrorDto>
+    export type ListingsControllerVerifyListingMutationError = ErrorDto | ErrorDto | ErrorDto
 
-    export const useListingsControllerVerifyListing = <TError = AxiosError<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerVerifyListing>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+    export const useListingsControllerVerifyListing = <TError = ErrorDto | ErrorDto | ErrorDto,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof listingsControllerVerifyListing>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof listingsControllerVerifyListing>>,
         TError,

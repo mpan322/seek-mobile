@@ -20,35 +20,32 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   UploadControllerDownloadParams,
   UploadControllerGetPresignedUrlParams
 } from './model';
 
+import { customInstance } from '../utils/custom-axios';
 
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const uploadControllerGetPresignedUrl = (
-    params: UploadControllerGetPresignedUrlParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.get(
-      `/upload/presign`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params: UploadControllerGetPresignedUrlParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/upload/presign`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
 
 
@@ -59,16 +56,16 @@ export const getUploadControllerGetPresignedUrlQueryKey = (params?: UploadContro
     }
 
     
-export const getUploadControllerGetPresignedUrlQueryOptions = <TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = AxiosError<unknown>>(params: UploadControllerGetPresignedUrlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getUploadControllerGetPresignedUrlQueryOptions = <TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = unknown>(params: UploadControllerGetPresignedUrlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getUploadControllerGetPresignedUrlQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>> = ({ signal }) => uploadControllerGetPresignedUrl(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>> = ({ signal }) => uploadControllerGetPresignedUrl(params, requestOptions, signal);
 
       
 
@@ -78,36 +75,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type UploadControllerGetPresignedUrlQueryResult = NonNullable<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>>
-export type UploadControllerGetPresignedUrlQueryError = AxiosError<unknown>
+export type UploadControllerGetPresignedUrlQueryError = unknown
 
 
-export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = AxiosError<unknown>>(
+export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = unknown>(
  params: UploadControllerGetPresignedUrlParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>,
           TError,
           Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = AxiosError<unknown>>(
+export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = unknown>(
  params: UploadControllerGetPresignedUrlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>,
           TError,
           Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = AxiosError<unknown>>(
- params: UploadControllerGetPresignedUrlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = unknown>(
+ params: UploadControllerGetPresignedUrlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = AxiosError<unknown>>(
- params: UploadControllerGetPresignedUrlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError = unknown>(
+ params: UploadControllerGetPresignedUrlParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerGetPresignedUrl>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -123,17 +120,18 @@ export function useUploadControllerGetPresignedUrl<TData = Awaited<ReturnType<ty
 
 
 export const uploadControllerDownload = (
-    params: UploadControllerDownloadParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.get(
-      `/upload/access`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
+    params: UploadControllerDownloadParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/upload/access`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
 
 
@@ -144,16 +142,16 @@ export const getUploadControllerDownloadQueryKey = (params?: UploadControllerDow
     }
 
     
-export const getUploadControllerDownloadQueryOptions = <TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = AxiosError<unknown>>(params: UploadControllerDownloadParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getUploadControllerDownloadQueryOptions = <TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = unknown>(params: UploadControllerDownloadParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getUploadControllerDownloadQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof uploadControllerDownload>>> = ({ signal }) => uploadControllerDownload(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof uploadControllerDownload>>> = ({ signal }) => uploadControllerDownload(params, requestOptions, signal);
 
       
 
@@ -163,36 +161,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type UploadControllerDownloadQueryResult = NonNullable<Awaited<ReturnType<typeof uploadControllerDownload>>>
-export type UploadControllerDownloadQueryError = AxiosError<unknown>
+export type UploadControllerDownloadQueryError = unknown
 
 
-export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = AxiosError<unknown>>(
+export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = unknown>(
  params: UploadControllerDownloadParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof uploadControllerDownload>>,
           TError,
           Awaited<ReturnType<typeof uploadControllerDownload>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = AxiosError<unknown>>(
+export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = unknown>(
  params: UploadControllerDownloadParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof uploadControllerDownload>>,
           TError,
           Awaited<ReturnType<typeof uploadControllerDownload>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = AxiosError<unknown>>(
- params: UploadControllerDownloadParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = unknown>(
+ params: UploadControllerDownloadParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = AxiosError<unknown>>(
- params: UploadControllerDownloadParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useUploadControllerDownload<TData = Awaited<ReturnType<typeof uploadControllerDownload>>, TError = unknown>(
+ params: UploadControllerDownloadParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof uploadControllerDownload>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

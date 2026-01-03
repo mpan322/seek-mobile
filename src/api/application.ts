@@ -15,40 +15,38 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import { customInstance } from '../utils/custom-axios';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const applicationControllerCreateApplication = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
     
-    
-    return axios.post(
-      `/application`,undefined,options
-    );
-  }
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/application`, method: 'POST', signal
+    },
+      options);
+    }
+  
 
 
-
-export const getApplicationControllerCreateApplicationMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,void, TContext>, axios?: AxiosRequestConfig}
+export const getApplicationControllerCreateApplicationMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,void, TContext> => {
 
 const mutationKey = ['applicationControllerCreateApplication'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -56,7 +54,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, void> = () => {
           
 
-          return  applicationControllerCreateApplication(axiosOptions)
+          return  applicationControllerCreateApplication(requestOptions)
         }
 
         
@@ -66,10 +64,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ApplicationControllerCreateApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerCreateApplication>>>
     
-    export type ApplicationControllerCreateApplicationMutationError = AxiosError<unknown>
+    export type ApplicationControllerCreateApplicationMutationError = unknown
 
-    export const useApplicationControllerCreateApplication = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,void, TContext>, axios?: AxiosRequestConfig}
+    export const useApplicationControllerCreateApplication = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof applicationControllerCreateApplication>>,
         TError,

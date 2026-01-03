@@ -15,7 +15,6 @@ import { HStack } from "@/components/ui/hstack/index";
 import { Image } from "expo-image";
 import { Icon } from "@/components/ui/icon";
 import {
-  FilterIcon,
   FilterXIcon,
   ForwardIcon,
   HeartIcon,
@@ -61,10 +60,7 @@ const example: Listing = {
 };
 
 export default function HomeScreen() {
-  const logout = useAuth((state) => state.logout);
-  const router = useRouter();
   const bottomBarHeight = useBottomTabBarHeight();
-
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
   const data: Listing[] = [
     { ...example, _id: "1" },

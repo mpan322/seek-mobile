@@ -15,45 +15,44 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ContactDto
 } from './model';
 
+import { customInstance } from '../utils/custom-axios';
 
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
 export const contactControllerContact = (
-    contactDto: ContactDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    
-    return axios.post(
-      `/contact`,
-      contactDto,options
-    );
-  }
+    contactDto: ContactDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/contact`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: contactDto, signal
+    },
+      options);
+    }
+  
 
 
-
-export const getContactControllerContactMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext>, axios?: AxiosRequestConfig}
+export const getContactControllerContactMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext> => {
 
 const mutationKey = ['contactControllerContact'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -61,7 +60,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof contactControllerContact>>, {data: ContactDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  contactControllerContact(data,axiosOptions)
+          return  contactControllerContact(data,requestOptions)
         }
 
         
@@ -71,10 +70,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ContactControllerContactMutationResult = NonNullable<Awaited<ReturnType<typeof contactControllerContact>>>
     export type ContactControllerContactMutationBody = ContactDto
-    export type ContactControllerContactMutationError = AxiosError<unknown>
+    export type ContactControllerContactMutationError = unknown
 
-    export const useContactControllerContact = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext>, axios?: AxiosRequestConfig}
+    export const useContactControllerContact = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof contactControllerContact>>,
         TError,
