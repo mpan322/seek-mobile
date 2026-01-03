@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.seekapp"
+      "bundleIdentifier": "com.anonymous.seekapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -41,11 +44,33 @@
           }
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+       "expo-image-picker",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos",
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "cameraRollPermission": "Allow $(PRODUCT_NAME) to access your photos"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to show local search results.",
+          "isAndroidBackgroundLocationEnabled": false
+        }
+      ],
+      "expo-maps",
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "426f54d6-8dd3-4b49-a8ea-bad8a8148720"
+      }
     }
   }
 }

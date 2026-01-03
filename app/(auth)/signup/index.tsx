@@ -15,8 +15,11 @@ import { ErrorToast } from "@/components/custom/error-toast";
 import { Input, InputField } from "@/components/ui/input";
 import { Link, useRouter } from "expo-router";
 import { LinkText } from "@/components/ui/link";
-import { useAuth } from "@/src/store/auth-store";
 import { SuccessToast } from "@/components/custom/success-toast";
+import { ProfilePhotoInput } from "@/components/custom/profile-photo-input";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect } from "react";
+import { useProgress } from "@/components/custom/progress-bar";
 
 type SignupFormData = {
   email: string;
@@ -49,14 +52,17 @@ const useSignup = create<SignupForm>((set) => ({
 export default function Signup() {
   const { data, setKey } = useSignup((state) => state);
   const { name, email, password, confirmPassword } = data;
-  const login = useAuth((state) => state.login);
   const router = useRouter();
+
+  const { setProgress } = useProgress();
+  useEffect(() => {
+    setProgress(0.05);
+  }, []);
 
   const { mutate } = useAuthControllerSignup();
   const toast = useToast();
 
   function isValid(): boolean {
-    console.log(data);
     return (
       email.length > 0 &&
       password.length > 0 &&
@@ -152,6 +158,10 @@ export default function Signup() {
       <VStack className="gap-4 items-center">
         <Link href="/(auth)/login">
           <LinkText size="lg">Already have an account? Login.</LinkText>
+        </Link>
+
+        <Link href="/(auth)/signup/verify-email">
+          <LinkText size="lg">DEV: Verify Email</LinkText>
         </Link>
       </VStack>
     </VStack>

@@ -1,10 +1,12 @@
 import { PropsWithChildren, useEffect } from "react";
 import { useAuth } from "@/src/store/auth-store";
 import { useRouter, useSegments } from "expo-router";
+import { useNavigationState } from "@react-navigation/native";
 
 type AuthGaurdProps = PropsWithChildren<{}>;
 
 export function AuthGaurd({ children }: AuthGaurdProps) {
+  console.log("[LOG] AuthGaurd rendering");
   const router = useRouter();
   const { _hasHydrated, accessToken, refreshToken } = useAuth((state) => state);
 
@@ -29,5 +31,5 @@ export function AuthGaurd({ children }: AuthGaurdProps) {
     }
   }, [accessToken, refreshToken, _hasHydrated, segements]);
 
-  return children;
+  return <>{children}</>;
 }

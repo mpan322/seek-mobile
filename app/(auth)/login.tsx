@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { EmailInput } from "@/components/custom/email-input";
 import { useAuth } from "@/src/store/auth-store";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface LoginForm {
   email: string;
@@ -19,7 +20,7 @@ interface LoginForm {
   setPassword: (password: string) => void;
 }
 
-const useLogin = create<LoginForm>((set, get) => ({
+const useLogin = create<LoginForm>((set) => ({
   email: "",
   password: "",
   setEmail: (email: string) => {
@@ -31,9 +32,7 @@ const useLogin = create<LoginForm>((set, get) => ({
 }));
 
 export default function Login() {
-  const { email, password, setEmail, setPassword } = useLogin(
-    (state) => state,
-  );
+  const { email, password, setEmail, setPassword } = useLogin((state) => state);
 
   function isValid() {
     return email.length > 0 && password.length > 0 && isValidPassword(password);
@@ -71,37 +70,39 @@ export default function Login() {
   };
 
   return (
-    <VStack className="gap-8 p-4">
-      {/* Email */}
-      <EmailInput setEmail={setEmail} email={email} />
+    <SafeAreaView>
+      <VStack className="gap-8 p-4">
+        {/* Email */}
+        <EmailInput setEmail={setEmail} email={email} />
 
-      {/* Password */}
-      <PasswordInput setPassword={setPassword} password={password} />
+        {/* Password */}
+        <PasswordInput setPassword={setPassword} password={password} />
 
-      <FormControl>
-        <Button
-          className="rounded-xl"
-          size="lg"
-          onPress={handleSubmit}
-          isDisabled={!isValid()}
-        >
-          <ButtonText>Login</ButtonText>
-        </Button>
-      </FormControl>
+        <FormControl>
+          <Button
+            className="rounded-xl"
+            size="lg"
+            onPress={handleSubmit}
+            isDisabled={!isValid()}
+          >
+            <ButtonText>Login</ButtonText>
+          </Button>
+        </FormControl>
 
-      <VStack className="gap-4 items-center">
-        <Link href="/(auth)/forgot-password">
-          <LinkText size="lg">Forgot Password?</LinkText>
-        </Link>
+        <VStack className="gap-4 items-center">
+          <Link href="/(auth)/forgot-password">
+            <LinkText size="lg">Forgot Password?</LinkText>
+          </Link>
 
-        <Link href="/(auth)/signup">
-          <LinkText size="lg">No account yet? Sign up.</LinkText>
-        </Link>
+          <Link href="/(auth)/signup">
+            <LinkText size="lg">No account yet? Sign up.</LinkText>
+          </Link>
 
-        <Link href="/">
-          <LinkText size="lg">DEV: Back to root</LinkText>
-        </Link>
+          <Link href="/">
+            <LinkText size="lg">DEV: Back to root</LinkText>
+          </Link>
+        </VStack>
       </VStack>
-    </VStack>
+    </SafeAreaView>
   );
 }

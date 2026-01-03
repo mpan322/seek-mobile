@@ -45,6 +45,14 @@ export default function Index() {
         >
           <ButtonText>To Flags</ButtonText>
         </Button>
+        <Button
+          variant="solid"
+          action="primary"
+          className="w-full"
+          onPress={() => goto("/(auth)/signup/profile-photo")}
+        >
+          <ButtonText>To Profile Photo</ButtonText>
+        </Button>
       </Box>
     </SafeAreaView>
   );
