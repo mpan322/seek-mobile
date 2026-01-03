@@ -1,13 +1,14 @@
+import "@/global.css";
 import { Slot, SplashScreen, usePathname } from "expo-router";
 import "react-native-reanimated";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import "@/global.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { useEffect } from "react";
 import { useAuth } from "@/src/store/auth-store";
 import { AuthGaurd } from "@/components/custom/auth-gaurd";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
@@ -48,9 +49,11 @@ export default function RootLayout() {
     <GluestackUIProvider mode="dark">
       <ThemeProvider value={DarkTheme}>
         <QueryClientProvider client={queryClient}>
-          <AuthGaurd>
-            <Slot />
-          </AuthGaurd>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <AuthGaurd>
+              <Slot />
+            </AuthGaurd>
+          </GestureHandlerRootView>
         </QueryClientProvider>
       </ThemeProvider>
     </GluestackUIProvider>
