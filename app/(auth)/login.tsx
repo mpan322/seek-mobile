@@ -57,7 +57,7 @@ export default function Login() {
           router.navigate("/(app)/(tabs)/home");
         },
         onError: (err) => {
-          console.error(err);
+          console.log("[LOG] login failed", err);
           toast.show({
             placement: "top",
             render: (props) => (

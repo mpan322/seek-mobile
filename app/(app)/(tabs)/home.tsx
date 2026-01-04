@@ -6,7 +6,7 @@ import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/src/store/auth-store";
-import { FlatList, Pressable } from "react-native";
+import { FlatList, Pressable, Share } from "react-native";
 import { Dimensions } from "react-native";
 import { Listing } from "@/src/api/model";
 import { Box } from "@/components/ui/box";
@@ -161,9 +161,28 @@ function ScrollDots({ total, value }: ScrollDotsProps) {
   );
 }
 
-function ActionBar() {
+type ActionBarProps = {
+  data: Listing;
+};
+
+function ActionBar({ data }: ActionBarProps) {
+  const id = data._id;
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+
+  function handleShare() {
+    Share.share({
+      message: `Check out this listing on Seek! ${id}`,
+      url: `https://www.seekapp.uk/link/${id}`,
+    });
+  }
+
+  function handleLike() {
+    Share.share({
+      message: `Check out this listing on Seek! ${id}`,
+      url: `https://www.seekapp.uk/link/${id}`,
+    });
+  }
 
   return (
     <Box
@@ -177,8 +196,12 @@ function ActionBar() {
           <Settings2Icon color="white" size={35} />
         </Pressable>
         <VStack className="gap-4">
-          <HeartIcon fill="white" color="transparent" size={35} />
-          <ShareIcon color="white" size={35} />
+          <Pressable>
+            <HeartIcon fill="white" color="transparent" size={35} />
+          </Pressable>
+          <Pressable>
+            <ShareIcon color="white" size={35} />
+          </Pressable>
         </VStack>
         <Avatar className="overflow-hidden">
           <Image

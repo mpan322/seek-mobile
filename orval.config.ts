@@ -13,6 +13,7 @@ export default defineConfig({
           path: "src/utils/custom-axios.ts",
           name: "customInstance",
         },
+        header: () => ["import { AxiosError, AxiosResponse } from 'axios';"],
       },
     },
   },

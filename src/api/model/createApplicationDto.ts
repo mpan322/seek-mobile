@@ -2,7 +2,6 @@
  * import { AxiosError, AxiosResponse } from 'axios';
  */
 
-export interface LoginDto {
-  email: string;
-  password: string;
+export interface CreateApplicationDto {
+  listingId: string;
 }

@@ -38,19 +38,19 @@ export const useAuth = create<AuthState>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
       }),
-      onRehydrateStorage(state?: AuthState, error?: unknown) {
-        console.log("[LOG] reloading auth state from storage");
-
-        if (error) {
-          console.error(
-            "[ERROR] error rehydrating auth state from storage:",
-            error,
-          );
-        } else {
-          console.log("[LOG] auth state rehydrated from storage:", state);
-        }
-
-        return () => state?.setHydrated();
+      onRehydrateStorage() {
+        console.log("[LOG] attempting rehydration auth state from storage");
+        return (state, error) => {
+          state?.setHydrated();
+          if (error) {
+            console.error(
+              "[ERROR] error rehydrating auth state from storage:",
+              error,
+            );
+          } else {
+            console.log("[LOG] auth state rehydrated from storage:", state);
+          }
+        };
       },
     },
   ),
