@@ -15,7 +15,6 @@ import { HStack } from "@/components/ui/hstack/index";
 import { Image } from "expo-image";
 import { Icon } from "@/components/ui/icon";
 import {
-  FilterXIcon,
   ForwardIcon,
   HeartIcon,
   Settings2Icon,
