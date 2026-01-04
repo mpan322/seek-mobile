@@ -27,7 +27,12 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.seek.seekapp"
+      "package": "com.seek.seekapp",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "output": "static",
@@ -49,7 +54,7 @@
       ],
       "expo-secure-store",
       [
-       "expo-image-picker",
+        "expo-image-picker",
         {
           "photosPermission": "Allow $(PRODUCT_NAME) to access your photos",
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
@@ -62,7 +67,7 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to show local search results.",
           "isAndroidBackgroundLocationEnabled": false
         }
-      ],
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -73,6 +78,12 @@
       "eas": {
         "projectId": "426f54d6-8dd3-4b49-a8ea-bad8a8148720"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/426f54d6-8dd3-4b49-a8ea-bad8a8148720"
     }
   }
 }
