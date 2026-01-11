@@ -9,7 +9,6 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-// 1. Define Data Types
 type PinData = {
   id: number;
   title: string;
@@ -17,7 +16,6 @@ type PinData = {
   longitude: number;
 };
 
-// 2. Dummy Data for Pins (e.g., San Francisco)
 const PINS: PinData[] = [
   {
     id: 1,
