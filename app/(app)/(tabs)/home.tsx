@@ -25,6 +25,7 @@ import { VStack } from "@/components/ui/vstack/index";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useStore } from "expo-router/build/global-state/router-store";
 import { useState } from "react";
+import { useListingsControllerMyListings } from "@/src/api/listings";
 
 const example: Listing = {
   _id: "1",
@@ -138,7 +139,7 @@ function ListingScrollItem({ listing }: { listing: Listing }) {
       <Box className="absolute bottom-4 w-full">
         <ScrollDots total={listing.photos.length} value={imageIndex} />
       </Box>
-      <ActionBar />
+      <ActionBar data={listing} />
     </Box>
   );
 }
@@ -171,13 +172,7 @@ function ActionBar({ data }: ActionBarProps) {
   const router = useRouter();
 
   function handleShare() {
-    Share.share({
-      message: `Check out this listing on Seek! ${id}`,
-      url: `https://www.seekapp.uk/link/${id}`,
-    });
-  }
-
-  function handleLike() {
+    console.log("[LOG] sharing listing");
     Share.share({
       message: `Check out this listing on Seek! ${id}`,
       url: `https://www.seekapp.uk/link/${id}`,
@@ -199,7 +194,7 @@ function ActionBar({ data }: ActionBarProps) {
           <Pressable>
             <HeartIcon fill="white" color="transparent" size={35} />
           </Pressable>
-          <Pressable>
+          <Pressable onPress={handleShare}>
             <ShareIcon color="white" size={35} />
           </Pressable>
         </VStack>

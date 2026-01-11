@@ -5,8 +5,8 @@ export default defineConfig({
     input: "./swagger.json",
     output: {
       mode: "tags",
-      schemas: "src/api/model",
-      target: "src/api/seek-api.ts",
+      schemas: "src/api/seek-api/model",
+      target: "src/api/seek-api/seek-api.ts",
       client: "react-query",
       override: {
         mutator: {
@@ -15,6 +15,15 @@ export default defineConfig({
         },
         header: () => ["import { AxiosError, AxiosResponse } from 'axios';"],
       },
+    },
+  },
+  "maps-api": {
+    input: "./google-maps-platform-openapi3.json",
+    output: {
+      mode: "tags",
+      schemas: "src/api/maps-api/model",
+      target: "src/api/maps-api/maps-api.ts",
+      client: "react-query",
     },
   },
 });
