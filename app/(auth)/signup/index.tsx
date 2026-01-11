@@ -9,7 +9,7 @@ import { create } from "zustand";
 import { EmailInput } from "@/components/custom/email-input";
 import { PasswordInput } from "@/components/custom/password-input";
 import { isValidPassword } from "@/src/utils/validate-password";
-import { useAuthControllerSignup } from "@/src/api/auth";
+import { useAuthControllerSignup } from "@/src/api/seek-api/auth";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { Input, InputField } from "@/components/ui/input";

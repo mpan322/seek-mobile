@@ -22,7 +22,7 @@ import { HStack } from "@/components/ui/hstack";
 import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
 import { Icon } from "@/components/ui/icon/index.web";
-import { Listing } from "@/src/api/model";
+import { Listing } from "@/src/api/seek-api/model";
 
 type TriggerProps = {
   isExpanded: boolean;

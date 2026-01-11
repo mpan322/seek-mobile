@@ -1,4 +1,4 @@
-import { ErrorDto } from "@/src/api/model";
+import { ErrorDto } from "@/src/api/seek-api/model";
 import { ToastComponentProps } from "@gluestack-ui/core/lib/esm/toast/creator/types";
 import { Toast, ToastDescription, ToastTitle } from "@/components/ui/toast";
 import { AlertCircleIcon } from "@/components/ui/icon";

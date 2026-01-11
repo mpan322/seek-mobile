@@ -4,7 +4,7 @@ import { VStack } from "@/components/ui/vstack";
 import { LinkText } from "@/components/ui/link";
 import { Link, useRouter } from "expo-router";
 import { create } from "zustand";
-import { useAuthControllerLogin } from "@/src/api/auth";
+import { useAuthControllerLogin } from "@/src/api/seek-api/auth";
 import { isValidPassword } from "@/src/utils/validate-password";
 import { PasswordInput } from "@/components/custom/password-input";
 import { useToast } from "@/components/ui/toast";

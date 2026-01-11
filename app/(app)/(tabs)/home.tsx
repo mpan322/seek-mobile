@@ -8,7 +8,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/src/store/auth-store";
 import { FlatList, Pressable, Share } from "react-native";
 import { Dimensions } from "react-native";
-import { Listing } from "@/src/api/model";
+import { Listing } from "@/src/api/seek-api/model";
 import { Box } from "@/components/ui/box";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { HStack } from "@/components/ui/hstack/index";
@@ -25,7 +25,7 @@ import { VStack } from "@/components/ui/vstack/index";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useStore } from "expo-router/build/global-state/router-store";
 import { useState } from "react";
-import { useListingsControllerMyListings } from "@/src/api/listings";
+import { useListingsControllerMyListings } from "@/src/api/seek-api/listings";
 
 const example: Listing = {
   _id: "1",
