@@ -24,8 +24,15 @@ import {
 import { VStack } from "@/components/ui/vstack/index";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useStore } from "expo-router/build/global-state/router-store";
-import { useState } from "react";
-import { useListingsControllerMyListings } from "@/src/api/seek-api/listings";
+import { useEffect, useState } from "react";
+import {
+  useListingsControllerGetAllVerifiedListings,
+  useListingsControllerMyListings,
+} from "@/src/api/seek-api/listings";
+import { useApplicationControllerGetApplication } from "@/src/api/seek-api/application";
+import { useAppControllerGetHello } from "@/src/api/seek-api/app";
+import { RefreshControl } from "react-native-gesture-handler";
+import { ScrollDots } from "@/components/custom/scroll-dots";
 
 const example: Listing = {
   _id: "1",
@@ -60,17 +67,36 @@ const example: Listing = {
 };
 
 export default function HomeScreen() {
+  const { data: app } = useAppControllerGetHello();
+  const { refetch, data, error, isRefetching } =
+    useListingsControllerGetAllVerifiedListings();
+  const listings = data?.data ?? [];
+
+  useEffect(() => {
+    if (error) {
+      console.log("[[ERROR]]", error);
+    }
+  }, [error]);
+
   const bottomBarHeight = useBottomTabBarHeight();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
-  const data: Listing[] = [
-    { ...example, _id: "1" },
-    { ...example, _id: "2" },
-    { ...example, _id: "3" },
-  ];
+  const top = useSafeAreaInsets().top;
 
   return (
     <FlatList
-      data={data}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetching}
+          onRefresh={() => {
+            console.log("[LOG] refreshing listings");
+            refetch();
+          }}
+          progressViewOffset={top - 10}
+        />
+      }
+      ListEmptyComponent={<Box className="w-full h-full bg-red-500" />}
+      data={listings}
+      className="min-h-full"
       pagingEnabled
       disableIntervalMomentum
       directionalLockEnabled={true}
@@ -129,36 +155,46 @@ function ListingScrollItem({ listing }: { listing: Listing }) {
             }}
           >
             <Image
-              source={{ uri: "https://picsum.photos/1080/2100" }}
+              source={{ uri: item }}
               style={{ width: "100%", height: "100%" }}
               contentFit="contain"
             />
           </Box>
         )}
       />
-      <Box className="absolute bottom-4 w-full">
-        <ScrollDots total={listing.photos.length} value={imageIndex} />
-      </Box>
-      <ActionBar data={listing} />
+      <Overlay data={listing} imageIndex={imageIndex} />
+      {/* <Box className="absolute w-full h-full"> */}
+      {/*   <Box className="absolute bottom-4 w-full"> */}
+      {/*   </Box> */}
+      {/*   <ActionBar data={listing} /> */}
+      {/* </Box> */}
     </Box>
   );
 }
 
-type ScrollDotsProps = {
-  total: number;
-  value: number;
+type OverlayProps = {
+  data: Listing;
+  imageIndex: number;
 };
 
-function ScrollDots({ total, value }: ScrollDotsProps) {
+function Overlay({ data: listing, imageIndex }: OverlayProps) {
+  const { top } = useSafeAreaInsets();
+
   return (
-    <HStack className="gap-3 items-center justify-center w-full">
-      {Array.from({ length: total }).map((_, i) => (
-        <Box
-          key={i}
-          className={`w-2 h-2 rounded-full ${i === value ? "bg-white" : "bg-gray-400"}`}
-        />
-      ))}
-    </HStack>
+    <Box
+      className="absolute w-full h-full bg-transparent flex-row px-4 "
+      style={{
+        paddingTop: top,
+      }}
+      pointerEvents="box-none"
+    >
+      <Box className="flex flex-1 justify-end py-4 gap-2">
+        <ScrollDots total={listing.photos.length} value={imageIndex} />
+      </Box>
+      <Box className="h-full w-fit py-4">
+        <ActionBar data={listing} />
+      </Box>
+    </Box>
   );
 }
 
@@ -168,7 +204,6 @@ type ActionBarProps = {
 
 function ActionBar({ data }: ActionBarProps) {
   const id = data._id;
-  const { top } = useSafeAreaInsets();
   const router = useRouter();
 
   function handleShare() {
@@ -180,35 +215,28 @@ function ActionBar({ data }: ActionBarProps) {
   }
 
   return (
-    <Box
-      className="absolute h-full right-4 w-fit"
-      style={{
-        paddingTop: top,
-      }}
-    >
-      <VStack className="flex flex-1 flex-col justify-between items-center py-4">
-        <Pressable onPress={() => router.navigate("/(app)/filters")}>
-          <Settings2Icon color="white" size={35} />
+    <VStack className="flex flex-1 flex-col justify-between items-center">
+      <Pressable onPress={() => router.navigate("/(app)/filters")}>
+        <Settings2Icon color="white" size={35} />
+      </Pressable>
+      <VStack className="gap-4">
+        <Pressable>
+          <HeartIcon fill="white" color="transparent" size={35} />
         </Pressable>
-        <VStack className="gap-4">
-          <Pressable>
-            <HeartIcon fill="white" color="transparent" size={35} />
-          </Pressable>
-          <Pressable onPress={handleShare}>
-            <ShareIcon color="white" size={35} />
-          </Pressable>
-        </VStack>
-        <Avatar className="overflow-hidden">
-          <Image
-            source={{ uri: "https://picsum.photos/200" }}
-            placeholderContentFit="cover"
-            contentFit="cover"
-            transition={200}
-            style={{ width: "100%", height: "100%" }}
-            placeholder={require("@/assets/images/avatar.jpg")}
-          />
-        </Avatar>
+        <Pressable onPress={handleShare}>
+          <ShareIcon color="white" size={35} />
+        </Pressable>
       </VStack>
-    </Box>
+      <Avatar className="overflow-hidden">
+        <Image
+          // source={{ uri: "https://picsum.photos/200" }}
+          placeholderContentFit="cover"
+          contentFit="cover"
+          transition={200}
+          style={{ width: "100%", height: "100%" }}
+          placeholder={require("@/assets/images/avatar.jpg")}
+        />
+      </Avatar>
+    </VStack>
   );
 }

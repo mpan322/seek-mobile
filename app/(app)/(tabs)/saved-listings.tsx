@@ -23,6 +23,7 @@ import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
 import { Icon } from "@/components/ui/icon/index.web";
 import { Listing } from "@/src/api/seek-api/model";
+import { ListingCard } from "@/components/custom/listing-card";
 
 type TriggerProps = {
   isExpanded: boolean;
@@ -161,31 +162,3 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
   );
 }
 
-type ListingCardProps = {
-  data: Listing;
-  left: React.ReactNode;
-};
-
-function ListingCard({ data, left }: ListingCardProps) {
-  return (
-    <Card className="border-[1px] border-white rounded-xl p-3">
-      <HStack className="justify-between">
-        <HStack className="gap-4">
-          <Image
-            className="rounded-xl"
-            alt="listing image"
-            source={{
-              uri: "https://picsum.photos/200",
-            }}
-          />
-          <VStack className="gap-1">
-            <Text className="text-lg font-bold text-white">Listing Name</Text>
-            <Text className="text-sm">Listing Location</Text>
-            <Text className="text-sm">Listing Price</Text>
-          </VStack>
-        </HStack>
-        {left}
-      </HStack>
-    </Card>
-  );
-}
