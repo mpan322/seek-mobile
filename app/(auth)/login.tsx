@@ -47,8 +47,8 @@ export default function Login() {
     mutate(
       { data: { email: email + "@st-andrews.ac.uk", password } },
       {
-        onSuccess: (res) => {
-          const { access_token, refresh_token } = res.data;
+        onSuccess: (data) => {
+          const { access_token, refresh_token } = data;
           login({
             accessToken: access_token,
             refreshToken: refresh_token,

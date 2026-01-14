@@ -2,10 +2,11 @@ import { Stack } from "expo-router";
 
 export default function Layout() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="filters" options={{ headerShown: false }} />
-      <Stack.Screen name="[chat]" options={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="filters" />
+      <Stack.Screen name="chat" />
+      <Stack.Screen name="location" />
       <Stack.Screen name="(settings)" />
     </Stack>
   );

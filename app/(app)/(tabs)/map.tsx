@@ -12,8 +12,18 @@ import {
   Settings2Icon,
 } from "lucide-react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Dimensions, Alert } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Alert,
+  NativeTouchEvent,
+} from "react-native";
+import MapView, {
+  Marker,
+  MarkerPressEvent,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
 import { Divider } from "@/components/ui/divider";
@@ -34,10 +44,12 @@ import {
 } from "@/components/custom/listing-card";
 import { BottomSheetFlashList as GFlashList } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
+import { useRouter } from "expo-router";
 
 const BottomSheetFlatList = GFlatList as unknown as typeof FlashList;
 
 export default function MapScreen() {
+  const router = useRouter();
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null,
   );
@@ -62,10 +74,9 @@ export default function MapScreen() {
 
   const {
     error: listingsError,
-    data: listingsResp,
+    data: listings,
     isLoading: listingsLoading,
   } = useListingsControllerGetAllVerifiedListings();
-  const listings = listingsResp?.data ?? [];
 
   // querying places api
   const [searchFocused, setSearchFocused] = useState<boolean>(false);
@@ -91,24 +102,15 @@ export default function MapScreen() {
   const sheetRef = useRef<BottomSheet>(null);
   const listRef = useRef<BottomSheetFlatListMethods>(null);
 
-  function handleMarkerPress(listing: Listing) {
-    sheetRef.current?.snapToIndex(1, {
-      duration: 350,
-    });
-
-    // 2. Then scroll the list
-    setTimeout(() => {
-      listRef.current?.scrollToIndex({
-        index: 2,
-        animated: true,
-        viewOffset: 0,
-      });
-    }, 360);
+  function handleMarkerPress(e: MarkerPressEvent, listing: Listing) {
+    sheetRef.current?.snapToIndex(1);
+    listRef.current?.scrollToItem({ item: listing, animated: false });
+    e.stopPropagation();
   }
 
-  useEffect(() => {
-    listRef.current?.scrollToEnd();
-  }, []);
+  function handleCardPress(listing: Listing) {
+    router.push(`/(app)/location/${listing._id}/details`);
+  }
 
   return (
     <VStack className="flex-1">
@@ -166,8 +168,8 @@ export default function MapScreen() {
           Keyboard.dismiss();
         }}
         initialRegion={{
-          latitude: location?.coords.latitude ?? 56.337111,
-          longitude: location?.coords.longitude ?? -2.795107,
+          latitude: 56.337111,
+          longitude: -2.795107,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
@@ -176,11 +178,11 @@ export default function MapScreen() {
           <ListingMarker
             key={listing._id}
             listing={listing}
-            onPress={() => handleMarkerPress(listing)}
+            onPress={(e) => handleMarkerPress(e, listing)}
           />
         ))}
       </MapView>
-      <Box className="absolute bottom-5 right-5 z-10">
+      <Box className="absolute bottom-7 right-5">
         <Pressable
           className="rounded-full aspect-square bg-black p-3"
           onPressIn={() => centerLocation()}
@@ -190,16 +192,17 @@ export default function MapScreen() {
       </Box>
 
       <BottomSheet
-        containerStyle={{ flex: 1 }}
         snapPoints={["3%", "50%"]}
+        topInset={top + 2}
         enableContentPanningGesture={false}
+        enableDynamicSizing={false}
         ref={sheetRef}
         backgroundStyle={{
           backgroundColor: "rgb(31, 31, 31)",
         }}
         handleStyle={{
           backgroundColor: "rgb(31, 31, 31)",
-          borderTopEndRadius: 10,
+          borderTopEndRadius: 12,
         }}
         handleIndicatorStyle={{
           backgroundColor: "white",
@@ -208,18 +211,24 @@ export default function MapScreen() {
         <BottomSheetFlatList<Listing>
           // @ts-ignore
           ref={listRef}
-          style={{ flex: 1 }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flex: 1 }}
+          showsVerticalScrollIndicator={true}
           data={listings}
-          renderItem={({ item }) => <VerticalListingCard data={item} />}
+          renderItem={({ item }) => (
+            <VerticalListingCard
+              data={item}
+              onPress={() => handleCardPress(item)}
+            />
+          )}
         />
       </BottomSheet>
     </VStack>
   );
 }
 
-type ListingMarkerProps = { listing: Listing; onPress?: () => void };
+type ListingMarkerProps = {
+  listing: Listing;
+  onPress?: (e: MarkerPressEvent) => void;
+};
 function ListingMarker({ listing, onPress }: ListingMarkerProps) {
   const [track, setTrack] = useState<boolean>(true);
   useEffect(() => {

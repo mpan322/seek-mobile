@@ -16,6 +16,7 @@ import {
 import { CheckCircleIcon, Icon } from "../ui/icon/index";
 import { useState } from "react";
 import { ScrollDots } from "./scroll-dots";
+import { useRouter } from "expo-router";
 
 export type ListingCardProps = {
   data: Listing;
@@ -23,36 +24,46 @@ export type ListingCardProps = {
 };
 
 export function ListingCard({ data, left }: ListingCardProps) {
+  const router = useRouter();
+
   return (
     <Card className="border-[1px] border-white rounded-xl p-3">
-      <HStack className="justify-between">
-        <HStack className="gap-4">
-          <Image
-            className="rounded-xl"
-            alt="listing image"
-            source={{
-              uri: "https://picsum.photos/200",
-            }}
-          />
-          <VStack className="gap-1">
-            <Text className="text-lg font-bold text-white">
-              {data.propertyTitle}
-            </Text>
-            <Text className="text-sm">{data.streetAddress}</Text>
-            <Text className="text-sm">£{data.monthlyRent}</Text>
-          </VStack>
+      <Pressable
+        onPress={() => router.navigate(`/(app)/location/${data._id}/details`)}
+      >
+        <HStack className="justify-between">
+          <HStack className="gap-4">
+            <Image
+              className="rounded-xl"
+              alt="listing image"
+              source={{
+                uri: data.photos.at(0) ?? "https://picsum.photos/200",
+              }}
+            />
+            <VStack className="gap-1">
+              <Text className="text-lg font-bold text-white">
+                {data.propertyTitle}
+              </Text>
+              <Text className="text-sm">{data.streetAddress}</Text>
+              <Text className="text-sm">£{data.monthlyRent}</Text>
+            </VStack>
+          </HStack>
+          {left}
         </HStack>
-        {left}
-      </HStack>
+      </Pressable>
     </Card>
   );
 }
 
 export type VerticalListingCardProps = {
   data: Listing;
+  onPress?: () => void;
 };
 
-export function VerticalListingCard({ data }: VerticalListingCardProps) {
+export function VerticalListingCard({
+  data,
+  onPress,
+}: VerticalListingCardProps) {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [parentWidth, setParentWidth] = useState<number>(0);
   const onLayout = (e: LayoutChangeEvent) => {
@@ -62,7 +73,11 @@ export function VerticalListingCard({ data }: VerticalListingCardProps) {
   return (
     <Card className="bg-transparent">
       <VStack className="justify-between">
-        <Box onLayout={onLayout} className="rounded-xl overflow-hidden">
+        <Pressable
+          onPress={onPress}
+          onLayout={onLayout}
+          className="rounded-xl overflow-hidden"
+        >
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -100,8 +115,7 @@ export function VerticalListingCard({ data }: VerticalListingCardProps) {
           <Box className="absolute w-full bottom-2">
             <ScrollDots total={data.photos.length} value={imageIndex} />
           </Box>
-        </Box>
-
+        </Pressable>
         <HStack className="p-3">
           <VStack className="flex-1">
             <Text className="text-lg font-bold text-white">

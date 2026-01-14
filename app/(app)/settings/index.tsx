@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/modal";
 import { useState } from "react";
 import { Text } from "@/components/ui/text";
-import { ModalContext } from "@gluestack-ui/core/modal/creator";
 import React from "react";
 import { CloseIcon, Icon } from "@/components/ui/icon";
 import { SafeAreaView } from "react-native-safe-area-context";

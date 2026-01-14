@@ -1,82 +1,25 @@
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
-import { Text } from "@/components/ui/text";
-import { Button, ButtonText } from "@/components/ui/button";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import { useAuth } from "@/src/store/auth-store";
 import { FlatList, Pressable, Share } from "react-native";
 import { Dimensions } from "react-native";
 import { Listing } from "@/src/api/seek-api/model";
 import { Box } from "@/components/ui/box";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { HStack } from "@/components/ui/hstack/index";
 import { Image } from "expo-image";
-import { Icon } from "@/components/ui/icon";
-import {
-  ForwardIcon,
-  HeartIcon,
-  Settings2Icon,
-  SettingsIcon,
-  ShareIcon,
-} from "lucide-react-native";
+import { HeartIcon, Settings2Icon, ShareIcon } from "lucide-react-native";
 import { VStack } from "@/components/ui/vstack/index";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useStore } from "expo-router/build/global-state/router-store";
+import { Avatar } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
-import {
-  useListingsControllerGetAllVerifiedListings,
-  useListingsControllerMyListings,
-} from "@/src/api/seek-api/listings";
-import { useApplicationControllerGetApplication } from "@/src/api/seek-api/application";
-import { useAppControllerGetHello } from "@/src/api/seek-api/app";
+import { useListingsControllerGetAllVerifiedListings } from "@/src/api/seek-api/listings";
 import { RefreshControl } from "react-native-gesture-handler";
 import { ScrollDots } from "@/components/custom/scroll-dots";
 
-const example: Listing = {
-  _id: "1",
-  landlord: "",
-  propertyTitle: "",
-  numOfPeople: 0,
-  sizeSqMeters: 0,
-  propertyType: "FLAT_APARTMENT",
-  bedroomsCount: 0,
-  enSuiteBedroomCount: 0,
-  bathrooms: 0,
-  registerOfTitleKey: "",
-  propertyDesc: "",
-  amenities: [],
-  streetAddress: "",
-  cityTown: "",
-  postcodeZIP: "",
-  country: "",
-  monthlyRent: 0,
-  securityDeposit: 0,
-  availableFrom: "",
-  availableUntil: "",
-  furnishingStatus: "furnished",
-  epcRating: "A",
-  photos: ["a", "b", "c"],
-  videoTourLink: "",
-  floorPlanImage: "",
-  requirements: [],
-  isVerified: false,
-  isDraft: false,
-  lastUpdated: "",
-};
-
 export default function HomeScreen() {
-  const { data: app } = useAppControllerGetHello();
-  const { refetch, data, error, isRefetching } =
-    useListingsControllerGetAllVerifiedListings();
-  const listings = data?.data ?? [];
-
-  useEffect(() => {
-    if (error) {
-      console.log("[[ERROR]]", error);
-    }
-  }, [error]);
+  const {
+    refetch,
+    data: listings,
+    isRefetching,
+  } = useListingsControllerGetAllVerifiedListings();
 
   const bottomBarHeight = useBottomTabBarHeight();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -87,15 +30,12 @@ export default function HomeScreen() {
       refreshControl={
         <RefreshControl
           refreshing={isRefetching}
-          onRefresh={() => {
-            console.log("[LOG] refreshing listings");
-            refetch();
-          }}
-          progressViewOffset={top - 10}
+          onRefresh={() => refetch()}
+          progressViewOffset={top}
         />
       }
       ListEmptyComponent={<Box className="w-full h-full bg-red-500" />}
-      data={listings}
+      data={listings ?? []}
       className="min-h-full"
       pagingEnabled
       disableIntervalMomentum
@@ -119,13 +59,18 @@ function ListingScrollItem({ listing }: { listing: Listing }) {
   const bottomBarHeight = useBottomTabBarHeight();
   const height = SCREEN_HEIGHT - bottomBarHeight;
   const [imageIndex, setImageIndex] = useState<number>(0);
+  const router = useRouter();
+
+  function handleCardPress(listing: Listing) {
+    router.push(`/(app)/location/${listing._id}/details`);
+  }
 
   return (
     <Box
       style={{
         height: height,
       }}
-      className="bg-gray-300"
+      className="bg-secondary-50"
     >
       <FlatList
         data={listing.photos}
@@ -148,7 +93,8 @@ function ListingScrollItem({ listing }: { listing: Listing }) {
         decelerationRate={0.9}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <Box
+          <Pressable
+            onPress={() => handleCardPress(listing)}
             style={{
               height: "100%",
               width: SCREEN_WIDTH,
@@ -157,9 +103,9 @@ function ListingScrollItem({ listing }: { listing: Listing }) {
             <Image
               source={{ uri: item }}
               style={{ width: "100%", height: "100%" }}
-              contentFit="contain"
+              contentFit="cover"
             />
-          </Box>
+          </Pressable>
         )}
       />
       <Overlay data={listing} imageIndex={imageIndex} />

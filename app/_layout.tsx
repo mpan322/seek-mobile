@@ -16,7 +16,7 @@ export const unstable_settings = {
   initialRouteName: "/",
 };
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 axios.defaults.baseURL = "http://192.168.1.51:3000";
 axios.defaults.headers["platform"] = "mobile";

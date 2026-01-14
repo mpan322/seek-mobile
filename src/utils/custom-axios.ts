@@ -36,22 +36,16 @@ AXIOS_INSTANCE.interceptors.response.use(
       console.log("[LOG] authentication error, logging out");
       useAuth.getState().logout();
     }
-    return error;
+    throw error;
   },
 );
-
-export interface CustomResponse<T> {
-  data: T;
-  status: number;
-  headers: any;
-}
 
 export const customInstance = async <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,
-): Promise<AxiosResponse<T>> => {
+): Promise<T> => {
   return await AXIOS_INSTANCE({
     ...config,
     ...options,
-  });
+  }).then(({ data }) => data);
 };
