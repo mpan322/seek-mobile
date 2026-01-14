@@ -1,0 +1,29 @@
+import { ArrowLeftIcon } from "lucide-react-native";
+import { Icon } from "../ui/icon";
+import { Pressable } from "react-native";
+import { useRouter } from "expo-router";
+import { Text } from "../ui/text";
+
+type BackButtonProps = {
+  title?: string;
+};
+
+export default function BackButton({ title }: BackButtonProps) {
+  const router = useRouter();
+
+  return (
+    <Pressable
+      onPressIn={() => router.back()}
+      hitSlop={5}
+      className="flex-row gap-3"
+    >
+      <ArrowLeftIcon className="text-xl" color="white" />
+      {title && (
+        <Text className="text-2xl text-white font-semibold flex-1 text-center line-clamp-1">
+          {title}
+        </Text>
+      )}
+      <ArrowLeftIcon className="text-xl" color="transparent" />
+    </Pressable>
+  );
+}

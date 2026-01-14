@@ -19,9 +19,11 @@ import React from "react";
 import { CloseIcon, Icon } from "@/components/ui/icon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native";
+import { useAuth } from "@/src/store/auth-store";
 
 export default function SettingsScreen() {
   const [open, setOpen] = useState(false);
+  const logout = useAuth((val) => val.logout);
 
   const router = useRouter();
   const goto = (path: Href) => {
@@ -54,7 +56,12 @@ export default function SettingsScreen() {
         <FlatButton onPress={() => goto("/(app)/settings/help")} text="Help" />
         <Divider />
         <Box className="items-start gap-2 pt-2">
-          <Button variant="link" action="secondary" size="lg">
+          <Button
+            onPress={() => logout()}
+            variant="link"
+            action="secondary"
+            size="lg"
+          >
             <ButtonText>Logout</ButtonText>
           </Button>
           <Button
@@ -73,7 +80,7 @@ export default function SettingsScreen() {
         closeOnOverlayClick
         size="xs"
       >
-        <ModalBackdrop  style={{ backgroundColor: "red", opacity: 1 }} />
+        <ModalBackdrop style={{ backgroundColor: "red", opacity: 1 }} />
         <SafeAreaView>
           <ModalContent style={{ width: "80%" }} className="gap-4">
             <ModalHeader>

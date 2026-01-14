@@ -174,7 +174,7 @@ export default function MapScreen() {
           longitudeDelta: 0.01,
         }}
       >
-        {listings.map((listing) => (
+        {listings?.map((listing) => (
           <ListingMarker
             key={listing._id}
             listing={listing}
@@ -241,7 +241,7 @@ function ListingMarker({ listing, onPress }: ListingMarkerProps) {
   return (
     <Marker
       onPress={onPress}
-      tracksViewChanges={true}
+      tracksViewChanges={track}
       coordinate={{
         latitude: 56.337111 + (Math.random() - 0.5) * 0.005,
         longitude: -2.795107 + (Math.random() - 0.5) * 0.005,

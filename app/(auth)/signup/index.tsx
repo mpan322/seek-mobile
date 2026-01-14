@@ -85,11 +85,12 @@ export default function Signup() {
           imageUrl: "https://picsum.photos/200",
           emailVerificationToken: "",
           emailVerificationTokenExpires: "",
+          otpVerificationCode: "",
         },
       },
       {
-        onSuccess: (res) => {
-          console.log("signup successful", res.data);
+        onSuccess: (data) => {
+          console.log("signup successful", data);
           toast.show({
             placement: "top",
             render: (props) => (

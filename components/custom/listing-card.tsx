@@ -4,19 +4,20 @@ import { HStack } from "@/components/ui/hstack";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { FlatList, LayoutChangeEvent, Pressable } from "react-native";
+import { FlatList, LayoutChangeEvent, Pressable, Share } from "react-native";
 import { Box } from "../ui/box";
-import { Button } from "@/components/ui/button";
-import {
-  CircleCheckIcon,
-  HeartIcon,
-  Share2Icon,
-  ShareIcon,
-} from "lucide-react-native";
-import { CheckCircleIcon, Icon } from "../ui/icon/index";
+import { HeartIcon, ShareIcon } from "lucide-react-native";
 import { useState } from "react";
 import { ScrollDots } from "./scroll-dots";
 import { useRouter } from "expo-router";
+
+function handleShare(listing: Listing) {
+  const id = listing._id;
+  Share.share({
+    message: `Check out this listing on Seek!`,
+    url: `https://www.seekapp.uk/link/location/${id}`,
+  });
+}
 
 export type ListingCardProps = {
   data: Listing;
@@ -126,7 +127,11 @@ export function VerticalListingCard({
           </VStack>
           <HStack className="gap-3">
             <HeartIcon fill="white" color="transparent" size={24} />
-            <ShareIcon color="white" size={24} />
+            <ShareIcon
+              onPress={() => handleShare(data)}
+              color="white"
+              size={24}
+            />
           </HStack>
         </HStack>
       </VStack>
