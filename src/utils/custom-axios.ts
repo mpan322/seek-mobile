@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useAuth } from "@/src/store/auth-store";
 import { ErrorDto } from "../api/seek-api/model";
 
-export type ErrorType<E> = AxiosError<E>;
+export type ErrorType<T> = AxiosError<ErrorDto>;
 
 export const AXIOS_INSTANCE = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000",
@@ -30,8 +30,8 @@ AXIOS_INSTANCE.interceptors.response.use(
     return resp;
   },
   (error) => {
-    const { message, status } = error as ErrorType<ErrorDto>;
-    console.log("[LOG] request failed", status, message);
+    const { message, status, cause, stack } = error as ErrorType<never>;
+    console.log("[LOG] request failed", status, message, cause, stack);
     if (error.status === 401) {
       console.log("[LOG] authentication error, logging out");
       useAuth.getState().logout();

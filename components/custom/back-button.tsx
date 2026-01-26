@@ -1,5 +1,4 @@
 import { ArrowLeftIcon } from "lucide-react-native";
-import { Icon } from "../ui/icon";
 import { Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { Text } from "../ui/text";
@@ -8,7 +7,7 @@ type BackButtonProps = {
   title?: string;
 };
 
-export default function BackButton({ title }: BackButtonProps) {
+export function BackButton({ title }: BackButtonProps) {
   const router = useRouter();
 
   return (

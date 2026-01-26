@@ -12,7 +12,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  ContactDto
+  ContactControllerContact201,
+  ContactDto,
+  ErrorDto
 } from './model';
 
 import { customInstance } from '../../utils/custom-axios';
@@ -30,7 +32,7 @@ export const contactControllerContact = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ContactControllerContact201>(
       {url: `/contact`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: contactDto, signal
@@ -40,7 +42,7 @@ export const contactControllerContact = (
   
 
 
-export const getContactControllerContactMutationOptions = <TError = ErrorType<unknown>,
+export const getContactControllerContactMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext> => {
 
@@ -67,9 +69,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ContactControllerContactMutationResult = NonNullable<Awaited<ReturnType<typeof contactControllerContact>>>
     export type ContactControllerContactMutationBody = ContactDto
-    export type ContactControllerContactMutationError = ErrorType<unknown>
+    export type ContactControllerContactMutationError = ErrorType<ErrorDto | ErrorDto>
 
-    export const useContactControllerContact = <TError = ErrorType<unknown>,
+    export const useContactControllerContact = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof contactControllerContact>>, TError,{data: ContactDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof contactControllerContact>>,

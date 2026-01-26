@@ -80,37 +80,33 @@ export default function SettingsScreen() {
         closeOnOverlayClick
         size="xs"
       >
-        <ModalBackdrop style={{ backgroundColor: "red", opacity: 1 }} />
-        <SafeAreaView>
-          <ModalContent style={{ width: "80%" }} className="gap-4">
-            <ModalHeader>
-              <Text size="xl" bold>
-                Confirm Account Deletion
-              </Text>
-              <ModalCloseButton hitSlop={4} onPress={() => setOpen(false)}>
-                <Icon
-                  size="lg"
-                  as={CloseIcon}
-                  className="stroke-background-500"
-                />
-              </ModalCloseButton>
-            </ModalHeader>
-            <ModalBody>
-              <Text className="text-center">
-                Are you sure you want to delete your account?
-              </Text>
-            </ModalBody>
-            <ModalFooter className="justify-center">
-              <Button
-                action="negative"
+        <ModalBackdrop
+          style={{ backgroundColor: "rgba(80, 80, 80, 0.5)" }}
+        />
+        <ModalContent className="gap-2 w-[80%] rounded-xl">
+          <ModalHeader>
+            <Text size="xl" bold>
+              Confirm Account Deletion
+            </Text>
+            <ModalCloseButton hitSlop={4} onPress={() => setOpen(false)}>
+              <Icon
                 size="lg"
-                onPress={() => setOpen(false)}
-              >
-                <ButtonText>Delete Account</ButtonText>
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </SafeAreaView>
+                as={CloseIcon}
+                className="stroke-background-500"
+              />
+            </ModalCloseButton>
+          </ModalHeader>
+          <ModalBody>
+            <Text className="text-center">
+              Are you sure you want to delete your account?
+            </Text>
+          </ModalBody>
+          <ModalFooter className="justify-center">
+            <Button action="negative" size="lg" onPress={() => setOpen(false)}>
+              <ButtonText className="text-white">Delete Account</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </View>
   );

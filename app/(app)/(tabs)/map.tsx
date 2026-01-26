@@ -6,23 +6,18 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { useAutocomplete } from "@/src/api/maps-api/places-api";
 import {
-  CircleChevronRightIcon,
-  FilterIcon,
   FocusIcon,
   Settings2Icon,
 } from "lucide-react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
-  View,
   Dimensions,
   Alert,
-  NativeTouchEvent,
 } from "react-native";
 import MapView, {
   Marker,
   MarkerPressEvent,
-  PROVIDER_GOOGLE,
 } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
@@ -33,16 +28,13 @@ import { useListingsControllerGetAllVerifiedListings } from "@/src/api/seek-api/
 import { Listing } from "@/src/api/seek-api/model/listing";
 import { Pressable } from "@/components/ui/pressable";
 import * as Location from "expo-location";
-import { Button, ButtonIcon } from "@/components/ui/button";
 import BottomSheet, {
   BottomSheetFlatListMethods,
   BottomSheetFlatList as GFlatList,
 } from "@gorhom/bottom-sheet";
 import {
-  ListingCard,
   VerticalListingCard,
 } from "@/components/custom/listing-card";
-import { BottomSheetFlashList as GFlashList } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 
@@ -112,6 +104,10 @@ export default function MapScreen() {
     router.push(`/(app)/location/${listing._id}/details`);
   }
 
+  function handleFilterPress() {
+    router.push("/(app)/filters")
+  }
+
   return (
     <VStack className="flex-1">
       <Box
@@ -152,9 +148,9 @@ export default function MapScreen() {
           </Box>
         </Box>
 
-        <Box className="absolute right-4 bottom-5">
+        <Pressable onPressIn={() => handleFilterPress()} className="absolute right-4 bottom-5">
           <Icon as={Settings2Icon} size="xl" />
-        </Box>
+        </Pressable>
       </Box>
 
       <MapView

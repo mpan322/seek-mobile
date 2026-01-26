@@ -2,4 +2,8 @@
  * import { AxiosError, AxiosResponse } from 'axios';
  */
 
-export interface ContactDto { [key: string]: unknown }
+export interface ContactDto {
+  name: string;
+  email: string;
+  message: string;
+}

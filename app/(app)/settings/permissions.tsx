@@ -7,7 +7,7 @@ import { PasswordInput } from "@/components/custom/password-input";
 import { create } from "zustand";
 import { Alert, AppState, Linking, Platform, View } from "react-native";
 import { VStack } from "@/components/ui/vstack/index";
-import BackButton from "@/components/custom/back-button";
+import { BackButton } from "@/components/custom/back-button";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import { useCallback, useEffect, useState } from "react";

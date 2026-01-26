@@ -6,20 +6,23 @@ import { Listing } from "@/src/api/seek-api/model";
 import { Box } from "@/components/ui/box";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
-import { HeartIcon, Settings2Icon, ShareIcon } from "lucide-react-native";
+import { HeartIcon, Settings2Icon, ShareIcon, UserIcon, UsersIcon } from "lucide-react-native";
 import { VStack } from "@/components/ui/vstack/index";
 import { Avatar } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { useListingsControllerGetAllVerifiedListings } from "@/src/api/seek-api/listings";
 import { RefreshControl } from "react-native-gesture-handler";
 import { ScrollDots } from "@/components/custom/scroll-dots";
+import { Text } from "@/components/ui/text"
 
 export default function HomeScreen() {
   const {
+    error,
     refetch,
     data: listings,
     isRefetching,
   } = useListingsControllerGetAllVerifiedListings();
+  console.log("my listings", listings, error);
 
   const bottomBarHeight = useBottomTabBarHeight();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -109,11 +112,6 @@ function ListingScrollItem({ listing }: { listing: Listing }) {
         )}
       />
       <Overlay data={listing} imageIndex={imageIndex} />
-      {/* <Box className="absolute w-full h-full"> */}
-      {/*   <Box className="absolute bottom-4 w-full"> */}
-      {/*   </Box> */}
-      {/*   <ActionBar data={listing} /> */}
-      {/* </Box> */}
     </Box>
   );
 }
@@ -125,6 +123,7 @@ type OverlayProps = {
 
 function Overlay({ data: listing, imageIndex }: OverlayProps) {
   const { top } = useSafeAreaInsets();
+  const [width, setWidth] = useState<number>(0);
 
   return (
     <Box
@@ -135,7 +134,21 @@ function Overlay({ data: listing, imageIndex }: OverlayProps) {
       pointerEvents="box-none"
     >
       <Box className="flex flex-1 justify-end py-4 gap-2">
-        <ScrollDots total={listing.photos.length} value={imageIndex} />
+        <Box>
+          <Text className="text-white text-2xl font-bold">{listing.propertyTitle}</Text>
+          <Text className="text-white text-sm">{listing.streetAddress}</Text>
+          <Text className="text-white text-sm">£{listing.monthlyRent} pcm</Text>
+          <Box className="flex flex-row">
+            <Box className="flex-row gap-1 items-end" onLayout={e => setWidth(e.nativeEvent.layout.width)}>
+              <UsersIcon color="white" size={20} />
+              <Text className="text-white text-sm">{listing.numOfPeople ?? 0}</Text>
+            </Box>
+            <Box className="flex-1 justify-center">
+              <ScrollDots total={listing.photos.length} value={imageIndex} />
+            </Box>
+            <Box style={{ width }} />
+          </Box>
+        </Box>
       </Box>
       <Box className="h-full w-fit py-4">
         <ActionBar data={listing} />
@@ -175,7 +188,7 @@ function ActionBar({ data }: ActionBarProps) {
       </VStack>
       <Avatar className="overflow-hidden">
         <Image
-          // source={{ uri: "https://picsum.photos/200" }}
+          source={{ uri: "https://picsum.photos/200" }}
           placeholderContentFit="cover"
           contentFit="cover"
           transition={200}

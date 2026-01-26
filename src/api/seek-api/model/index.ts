@@ -5,6 +5,7 @@
 export * from './authControllerLogin201';
 export * from './authControllerVerifyEmail201';
 export * from './confirmPasswordResetDto';
+export * from './contactControllerContact201';
 export * from './contactDto';
 export * from './conversationDto';
 export * from './createApplicationDto';
