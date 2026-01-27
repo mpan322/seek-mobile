@@ -35,6 +35,7 @@ import { ErrorToast } from "@/components/custom/error-toast";
 import { ShareIcon } from "lucide-react-native";
 import { Box } from "@/components/ui/box";
 import { ShareButton } from "@/components/custom/share-button";
+import { getListingLink } from "@/components/links";
 
 type TriggerProps = {
   isExpanded: boolean;
@@ -167,8 +168,8 @@ function LikedListingCard({ data }: LikedListingCardProps) {
   function handleShare() {
     const id = data._id;
     Share.share({
-      message: `Check out this listing on Seek! ${id}`,
-      url: `https://www.seekapp.uk/link/location/${id}/details`,
+      message: `Check out this listing on Seek!`,
+      url: getListingLink(id),
     });
   }
 
@@ -227,8 +228,8 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
   function handleShare() {
     const id = data._id;
     Share.share({
-      message: `Check out this listing on Seek! ${id}`,
-      url: `https://www.seekapp.uk/link/location/${id}/details`,
+      message: `Check out this listing on Seek!`,
+      url: getListingLink(id),
     });
   }
 

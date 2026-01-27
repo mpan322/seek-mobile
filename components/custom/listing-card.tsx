@@ -15,12 +15,13 @@ import { useLike, useUnlike } from "@/hooks/like";
 import { useToast } from "../ui/toast";
 import { ErrorToast } from "./error-toast";
 import { LikeButton } from "./like-button";
+import { getListingLink } from "../links";
 
 function handleShare(listing: Listing) {
   const id = listing._id;
   Share.share({
     message: `Check out this listing on Seek!`,
-    url: `https://www.seekapp.uk/link/location/${id}`,
+    url: getListingLink(id),
   });
 }
 

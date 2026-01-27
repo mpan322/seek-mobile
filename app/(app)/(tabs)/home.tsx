@@ -19,6 +19,7 @@ import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { LikeButton } from "@/components/custom/like-button";
 import { useLike, useUnlike } from "@/hooks/like";
+import { getListingLink } from "@/components/links";
 
 export default function HomeScreen() {
   const {
@@ -211,8 +212,8 @@ function ActionBar({ data }: ActionBarProps) {
 
   function handleShare() {
     Share.share({
-      message: `Check out this listing on Seek! ${id}`,
-      url: `https://www.seekapp.uk/link/${id}`,
+      message: `Check out this listing on Seek!`,
+      url: getListingLink(id),
     });
   }
 
@@ -227,17 +228,19 @@ function ActionBar({ data }: ActionBarProps) {
           <ShareIcon color="white" size={35} />
         </Pressable>
       </VStack>
-      <Avatar className="overflow-hidden">
-        <Image
-          source={{ uri: "https://picsum.photos/200" }}
-          placeholderContentFit="cover"
-          contentFit="cover"
-          transition={200}
-          style={{ width: "100%", height: "100%" }}
-          placeholder={require("@/assets/images/avatar.jpg")}
-        />
-      </Avatar>
+      <Box />
     </VStack>
   );
 }
 
+// <Avatar className="overflow-hidden">
+//   <Image
+//     source={{ uri: "https://picsum.photos/200" }}
+//     placeholderContentFit="cover"
+//     contentFit="cover"
+//     transition={200}
+//     style={{ width: "100%", height: "100%" }}
+//     placeholder={require("@/assets/images/avatar.jpg")}
+//   />
+// </Avatar>
+//
