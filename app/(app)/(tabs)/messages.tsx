@@ -25,7 +25,7 @@ function MessageItem() {
 
   return (
     <Swipeable friction={2} renderRightActions={() => <LeaveButton />}>
-      <Pressable onPress={() => router.push("/(app)/test")}>
+      <Pressable onPress={() => router.push("/(app)/chat/11")}>
         <HStack className="p-4 gap-6">
           <Box className="bg-background-400 w-10 h-10 rounded-full items-center justify-center text-center">
             <Icon as={Users2Icon} color="black" fill="black" size="xl" />

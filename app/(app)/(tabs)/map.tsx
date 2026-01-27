@@ -49,10 +49,8 @@ export default function MapScreen() {
   }, [listings])
 
   const router = useRouter();
-  const [location, setLocation] = useState<Location.LocationObject | null>(
-    null,
-  );
 
+  const mapRef = useRef<MapView>(null)
   const centerLocation = useCallback(async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -62,8 +60,13 @@ export default function MapScreen() {
       );
       return;
     }
-    const location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
+    const { coords: { longitude, latitude } } = await Location.getCurrentPositionAsync({});
+    mapRef.current?.animateToRegion({
+      latitude,
+      longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    }, 300);
   }, []);
 
   const { top } = useSafeAreaInsets();
@@ -155,6 +158,7 @@ export default function MapScreen() {
       </Box>
 
       <MapView
+        ref={mapRef}
         style={{ flex: 1 }}
         onPanDrag={() => {
           sheetRef.current?.snapToIndex(0);
