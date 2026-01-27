@@ -7,9 +7,14 @@ import { VStack } from "@/components/ui/vstack";
 import { FlatList, LayoutChangeEvent, Pressable, Share } from "react-native";
 import { Box } from "../ui/box";
 import { HeartIcon, ShareIcon } from "lucide-react-native";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ScrollDots } from "./scroll-dots";
 import { useRouter } from "expo-router";
+import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
+import { useLike, useUnlike } from "@/hooks/like";
+import { useToast } from "../ui/toast";
+import { ErrorToast } from "./error-toast";
+import { LikeButton } from "./like-button";
 
 function handleShare(listing: Listing) {
   const id = listing._id;
@@ -32,8 +37,8 @@ export function ListingCard({ data, left }: ListingCardProps) {
       <Pressable
         onPress={() => router.navigate(`/(app)/location/${data._id}/details`)}
       >
-        <HStack className="justify-between">
-          <HStack className="gap-4">
+        <HStack className="justify-between w-full">
+          <HStack className="gap-4 flex-1">
             <Image
               className="rounded-xl"
               alt="listing image"
@@ -41,15 +46,17 @@ export function ListingCard({ data, left }: ListingCardProps) {
                 uri: data.photos.at(0) ?? "https://picsum.photos/200",
               }}
             />
-            <VStack className="gap-1">
-              <Text className="text-lg font-bold text-white">
+            <VStack className="gap-1 flex-1">
+              <Text className="text-lg font-bold text-white overflow-ellipsis line-clamp-1">
                 {data.propertyTitle}
               </Text>
               <Text className="text-sm">{data.streetAddress}</Text>
               <Text className="text-sm">£{data.monthlyRent}</Text>
             </VStack>
           </HStack>
-          {left}
+          <Box>
+            {left}
+          </Box>
         </HStack>
       </Pressable>
     </Card>
@@ -65,6 +72,39 @@ export function VerticalListingCard({
   data,
   onPress,
 }: VerticalListingCardProps) {
+  const { data: user } = useAuthControllerCurrentUser();
+  const { mutate: like } = useLike();
+  const { mutate: unlike } = useUnlike();
+  const toast = useToast();
+  const liked = useMemo(() => (user && data.likedBy.includes(user._id)) ?? false, [data, user])
+
+  async function handleUnlike() {
+    console.log("UNLIKE TRIGGERED")
+    unlike({ id: data._id }, {
+      onError(error) {
+        toast.show({
+          render: (props) => (
+            <ErrorToast {...props} error={error.response?.data} />
+          )
+        })
+      }
+    });
+  }
+
+  async function handleLike() {
+    console.log("LIKE TRIGGERED")
+    like({ id: data._id }, {
+      onError(error) {
+        toast.show({
+          render: (props) => (
+            <ErrorToast {...props} error={error.response?.data} />
+          )
+        })
+      }
+    });
+  }
+
+
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [parentWidth, setParentWidth] = useState<number>(0);
   const onLayout = (e: LayoutChangeEvent) => {
@@ -126,7 +166,10 @@ export function VerticalListingCard({
             <Text className="text-sm">£{data.monthlyRent}</Text>
           </VStack>
           <HStack className="gap-3">
-            <HeartIcon fill="white" color="transparent" size={24} />
+            <LikeButton unlike={handleLike}
+              size={24}
+              like={handleUnlike}
+              liked={liked} />
             <ShareIcon
               onPress={() => handleShare(data)}
               color="white"

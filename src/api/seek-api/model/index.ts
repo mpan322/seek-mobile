@@ -21,6 +21,7 @@ export * from './flag';
 export * from './flagCategory';
 export * from './flagStatus';
 export * from './forgotPasswordDto';
+export * from './likedListingsDto';
 export * from './listing';
 export * from './listingEpcRating';
 export * from './listingFurnishingStatus';

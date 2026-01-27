@@ -23,6 +23,7 @@ import type {
 import type {
   CreateListingDto,
   ErrorDto,
+  LikedListingsDto,
   Listing,
   Step2ListingDto,
   Step3ListingDto,
@@ -871,7 +872,7 @@ export const listingsControllerGetLiked = (
 ) => {
       
       
-      return customInstance<Listing[]>(
+      return customInstance<LikedListingsDto>(
       {url: `/listings/like`, method: 'GET', signal
     },
       options);

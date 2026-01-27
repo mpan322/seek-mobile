@@ -6,26 +6,29 @@ import { Listing } from "@/src/api/seek-api/model";
 import { Box } from "@/components/ui/box";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
-import { HeartIcon, Settings2Icon, ShareIcon, UserIcon, UsersIcon } from "lucide-react-native";
+import { Settings2Icon, ShareIcon, UsersIcon } from "lucide-react-native";
 import { VStack } from "@/components/ui/vstack/index";
 import { Avatar } from "@/components/ui/avatar";
 import { useEffect, useMemo, useState } from "react";
-import { getListingsControllerGetAllVerifiedListingsQueryKey, getListingsControllerGetLikedQueryKey, useListingsControllerGetAllVerifiedListings, useListingsControllerLikeListing, useListingsControllerUnlikeListing } from "@/src/api/seek-api/listings";
+import { useListingsControllerGetAllVerifiedListings } from "@/src/api/seek-api/listings";
 import { RefreshControl } from "react-native-gesture-handler";
 import { ScrollDots } from "@/components/custom/scroll-dots";
 import { Text } from "@/components/ui/text"
 import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
-import { queryClient } from "@/app/_layout";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
+import { LikeButton } from "@/components/custom/like-button";
+import { useLike, useUnlike } from "@/hooks/like";
 
 export default function HomeScreen() {
   const {
-    error,
     refetch,
     data: listings,
     isRefetching,
   } = useListingsControllerGetAllVerifiedListings();
+  useEffect(() => {
+    console.log("remount");
+  }, [listings])
 
   const bottomBarHeight = useBottomTabBarHeight();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -176,90 +179,8 @@ function ActionBar({ data }: ActionBarProps) {
   const toast = useToast();
 
   const { data: user } = useAuthControllerCurrentUser();
-  console.log(user?._id);
-
-  const { mutate: like } = useListingsControllerLikeListing({
-    mutation: {
-      async onMutate({ id }) {
-        await queryClient.cancelQueries({ queryKey: getListingsControllerGetAllVerifiedListingsQueryKey() });
-
-        const data = queryClient.getQueryData<Listing[]>(
-          getListingsControllerGetAllVerifiedListingsQueryKey()
-        );
-
-        queryClient.setQueryData<Listing[]>(
-          getListingsControllerGetAllVerifiedListingsQueryKey(),
-          (curr) => {
-            if (!curr || !user) return curr;
-
-            // get the listing
-            const idx = curr.findIndex(elem => elem._id == id);
-            if (idx === -1) {
-              return curr;
-            }
-            const listing = curr[idx];
-
-
-            // check if it is already liked
-            if (listing.likedBy.includes(user._id)) {
-              return curr;
-            }
-
-            // set as liked
-            const modified: Listing = {
-              ...listing,
-              likedBy: [...listing.likedBy, user._id],
-            }
-            return curr.toSpliced(idx, 1, modified)
-          }
-        );
-        return { prev: data };
-      },
-      onError(_, __, ctx) {
-        queryClient.setQueryData(
-          getListingsControllerGetAllVerifiedListingsQueryKey()
-          , ctx?.prev
-        );
-      }
-    }
-  })
-  const { mutate: unlike } = useListingsControllerUnlikeListing({
-    mutation: {
-      async onMutate({ id }) {
-        await queryClient.cancelQueries({ queryKey: getListingsControllerGetAllVerifiedListingsQueryKey() });
-
-        const data = queryClient.getQueryData<Listing[]>(
-          getListingsControllerGetAllVerifiedListingsQueryKey()
-        );
-
-        queryClient.setQueryData<Listing[]>(
-          getListingsControllerGetAllVerifiedListingsQueryKey(),
-          (curr) => {
-            if (!curr || !user) return curr;
-
-            const idx = curr.findIndex(elem => elem._id == id);
-            if (idx === -1) {
-              return curr;
-            }
-            const listing = curr[idx];
-
-            const modified: Listing = {
-              ...listing,
-              likedBy: listing.likedBy.filter(uid => uid !== user._id)
-            }
-            return curr.toSpliced(idx, 1, modified);
-          }
-        );
-        return { prev: data };
-      },
-      onError(_, __, ctx) {
-        queryClient.setQueryData(
-          getListingsControllerGetAllVerifiedListingsQueryKey()
-          , ctx?.prev
-        );
-      }
-    }
-  });
+  const { mutate: like } = useLike();
+  const { mutate: unlike } = useUnlike();
 
   async function handleUnlike() {
     unlike({ id: data._id }, {
@@ -318,24 +239,5 @@ function ActionBar({ data }: ActionBarProps) {
       </Avatar>
     </VStack>
   );
-}
-
-type LikeButtonProps = {
-  like: () => Promise<void>;
-  unlike: () => Promise<void>;
-  liked: boolean;
-}
-
-function LikeButton({
-  like,
-  unlike,
-  liked
-}: LikeButtonProps) {
-  return (
-    <Pressable onPressIn={() => liked ? unlike() : like()} hitSlop={10}>
-      <HeartIcon fill={liked ? "red" : "white"} color="transparent" size={35} />
-    </Pressable>
-  );
-
 }
 

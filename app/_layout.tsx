@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import { useAuth } from "@/src/store/auth-store";
 import { AuthGaurd } from "@/components/custom/auth-gaurd";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { PortalProvider } from "@gluestack-ui/core/lib/esm/overlay/aria";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
@@ -46,16 +48,16 @@ export default function RootLayout() {
   // }
 
   return (
-    <GluestackUIProvider mode="dark">
-      <ThemeProvider value={DarkTheme}>
-        <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <GluestackUIProvider mode="dark">
+        <ThemeProvider value={DarkTheme}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <AuthGaurd>
               <Slot />
             </AuthGaurd>
           </GestureHandlerRootView>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </GluestackUIProvider>
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </QueryClientProvider>
   );
 }

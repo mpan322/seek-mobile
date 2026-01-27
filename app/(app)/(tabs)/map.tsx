@@ -41,6 +41,13 @@ import { useRouter } from "expo-router";
 const BottomSheetFlatList = GFlatList as unknown as typeof FlashList;
 
 export default function MapScreen() {
+  const {
+    data: listings,
+  } = useListingsControllerGetAllVerifiedListings();
+  useEffect(() => {
+    console.log("remount");
+  }, [listings])
+
   const router = useRouter();
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null,
@@ -63,12 +70,6 @@ export default function MapScreen() {
 
   // TODO: replace with expo-crypto uuid
   const sessionToken = useRef(Math.random().toString(36).substring(7));
-
-  const {
-    error: listingsError,
-    data: listings,
-    isLoading: listingsLoading,
-  } = useListingsControllerGetAllVerifiedListings();
 
   // querying places api
   const [searchFocused, setSearchFocused] = useState<boolean>(false);
@@ -209,6 +210,7 @@ export default function MapScreen() {
           ref={listRef}
           showsVerticalScrollIndicator={true}
           data={listings}
+          extraData={listings}
           renderItem={({ item }) => (
             <VerticalListingCard
               data={item}
