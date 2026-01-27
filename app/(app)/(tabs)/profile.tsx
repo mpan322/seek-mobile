@@ -38,6 +38,7 @@ export default function SettingsScreen() {
             variant="outline"
             size="xl"
             className="grid grid-cols-3 rounded-xl"
+            onPress={() => goto("/(app)/personal-info")}
           >
             <Box className="items-center flex flex-row gap-4">
               <ButtonIcon as={UserIcon} />

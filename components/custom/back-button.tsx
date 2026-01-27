@@ -12,7 +12,7 @@ export function BackButton({ title }: BackButtonProps) {
 
   return (
     <Pressable
-      onPressIn={() => router.back()}
+      onPressIn={() => router.canGoBack() ? router.back() : router.navigate("/home")}
       hitSlop={5}
       className="flex-row gap-3"
     >
