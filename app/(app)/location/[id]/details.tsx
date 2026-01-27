@@ -5,7 +5,7 @@ import { VStack } from "@/components/ui/vstack/index";
 import { router } from "expo-router";
 import { Image } from "@/components/ui/image";
 import { FlatList, LayoutChangeEvent, ScrollView } from "react-native";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ScrollDots } from "@/components/custom/scroll-dots";
 import {
   useGlobalSearchParams,
@@ -17,7 +17,7 @@ import {
   useListingsControllerGetById,
 } from "@/src/api/seek-api/listings";
 import { queryClient } from "@/app/_layout";
-import { Listing } from "@/src/api/seek-api/model";
+import { ErrorDto, Listing } from "@/src/api/seek-api/model";
 import { HStack } from "@/components/ui/hstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import {
@@ -31,6 +31,9 @@ import {
   WashingMachineIcon,
   WifiIcon,
 } from "lucide-react-native";
+import { Loader } from "@/components/custom/loader";
+import { useToast } from "@/components/ui/toast";
+import { ErrorToast } from "@/components/custom/error-toast";
 
 function getFurnishingStr(furnishingStatus: string) {
   if (furnishingStatus === "furnished") {
@@ -48,8 +51,9 @@ export default function DetailsScreen() {
   const [parentWidth, setParentWidth] = useState<number>(0);
   const [imageIndex, setImageIndex] = useState<number>(0);
   const { id } = useGlobalSearchParams<{ id: string }>();
+  const toast = useToast()
 
-  const { data, isLoading } = useListingsControllerGetById(id, {
+  const { data, isLoading, isError } = useListingsControllerGetById(id, {
     query: {
       select: (listing) => {
         return {
@@ -68,21 +72,31 @@ export default function DetailsScreen() {
             Listing[]
           >(getListingsControllerGetAllVerifiedListingsQueryKey())
           ?.find((listing) => listing._id === id);
-      },
+      }
     },
   });
+  useEffect(() => {
+    if (isError) {
+      toast.show({
+        placement: "top",
+        render: (props) => <ErrorToast {...props} error={{
+          message: "Unable to find listing.",
+          statusCode: -1,
+        }} />
+      })
+      router.navigate("/home");
+    }
+  }, [isError, id]);
 
   const onLayout = (e: LayoutChangeEvent) => {
     setParentWidth(e.nativeEvent.layout.width);
   };
 
-  const furnishingStr = useMemo(() => {}, []);
-
   return (
-    <ScrollView decelerationRate={0.9}>
-      <VStack className="gap-2 p-4">
+    <ScrollView decelerationRate={0.9} className="h-full">
+      <VStack className="gap-2 p-4 flex-1">
         <HStack className="justify-between w-full items-center gap-4">
-          <Pressable onPressIn={() => router.back()}>
+          <Pressable onPressIn={() => router.canGoBack() ? router.back() : router.navigate("/home")}>
             <Icon as={ArrowLeftIcon} size="xl" />
           </Pressable>
           <Text className="text-2xl text-center font-semibold line-clamp-1 flex-1 text-white">
@@ -91,124 +105,126 @@ export default function DetailsScreen() {
           <Box className="h-6 aspect-square" />
         </HStack>
 
-        <Box
-          onLayout={onLayout}
-          className="rounded-xl overflow-hidden h-[250px]"
-        >
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            disableIntervalMomentum
-            snapToAlignment="start"
-            viewabilityConfig={{
-              viewAreaCoveragePercentThreshold: 51,
-            }}
-            onViewableItemsChanged={({ viewableItems }) => {
-              if (viewableItems.length === 0) {
-                return;
-              }
-              setImageIndex(viewableItems[0].index ?? 0);
-            }}
-            data={data?.photos ?? []}
-            decelerationRate={0.9}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => (
-              <Box
-                style={{
-                  width: parentWidth,
-                }}
-              >
-                <Image
-                  className="w-full h-full"
-                  alt="listing image"
-                  source={{
-                    uri: item,
+        <Loader isLoading={isLoading}>
+          <Box
+            onLayout={onLayout}
+            className="rounded-xl overflow-hidden h-[250px]"
+          >
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              disableIntervalMomentum
+              snapToAlignment="start"
+              viewabilityConfig={{
+                viewAreaCoveragePercentThreshold: 51,
+              }}
+              onViewableItemsChanged={({ viewableItems }) => {
+                if (viewableItems.length === 0) {
+                  return;
+                }
+                setImageIndex(viewableItems[0].index ?? 0);
+              }}
+              data={data?.photos ?? []}
+              decelerationRate={0.9}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <Box
+                  style={{
+                    width: parentWidth,
                   }}
-                />
-              </Box>
-            )}
-          />
-          <Box className="absolute w-full bottom-2">
-            <ScrollDots total={data?.photos.length ?? 0} value={imageIndex} />
+                >
+                  <Image
+                    className="w-full h-full"
+                    alt="listing image"
+                    source={{
+                      uri: item,
+                    }}
+                  />
+                </Box>
+              )}
+            />
+            <Box className="absolute w-full bottom-2">
+              <ScrollDots total={data?.photos.length ?? 0} value={imageIndex} />
+            </Box>
           </Box>
-        </Box>
 
-        <VStack className="gap-4">
-          <HStack>
-            <VStack className="flex-[2]">
-              <Text className="text-2xl font-semibold text-white">
-                {data?.propertyTitle}
-              </Text>
-              <Text className="text-sm text-white">{data?.streetAddress}</Text>
-            </VStack>
-            <Button size="lg" className="flex-1 rounded-xl">
-              <ButtonText>Apply</ButtonText>
-            </Button>
-          </HStack>
+          <VStack className="gap-4">
+            <HStack>
+              <VStack className="flex-[2]">
+                <Text className="text-2xl font-semibold text-white">
+                  {data?.propertyTitle}
+                </Text>
+                <Text className="text-sm text-white">{data?.streetAddress}</Text>
+              </VStack>
+              <Button size="lg" className="flex-1 rounded-xl">
+                <ButtonText>Apply</ButtonText>
+              </Button>
+            </HStack>
 
-          <VStack className="gap-1">
-            <HStack className="gap-2">
-              <LabeledText
-                label="Property Type"
-                value={data?.propertyType ?? ""}
-              />
-              <BedroomInfo
-                bedroomsCount={data?.bedroomsCount}
-                enSuiteBedroomCount={data?.enSuiteBedroomCount}
-              />
-            </HStack>
-            <HStack className="gap-2">
-              <LabeledText
-                label="Montly Rent"
-                value={`£${data?.monthlyRent ?? ""} pcm`}
-              />
-              <LabeledText
-                label="Deposit"
-                value={`£${data?.securityDeposit ?? ""}`}
-              />
-            </HStack>
-            <HStack className="gap-2">
-              <LabeledText
-                label="Property Size"
-                value={`${data?.sizeSqMeters ?? ""} m²`}
-              />
-              <LabeledText
-                label="Bathrooms"
-                value={`${data?.bathrooms ?? ""}`}
-              />
-            </HStack>
-            <HStack className="gap-2">
-              <LabeledText
-                label="Furnishing"
-                value={data?.furnishingStatus ?? ""}
-              />
-              <LabeledText
-                label="EPC Rating"
-                value={`${data?.epcRating ?? "Unknown"}`}
-              />
-            </HStack>
-            {data && (
+            <VStack className="gap-1">
               <HStack className="gap-2">
                 <LabeledText
-                  label="Available From"
-                  value={data.availableFrom}
+                  label="Property Type"
+                  value={data?.propertyType ?? ""}
+                />
+                <BedroomInfo
+                  bedroomsCount={data?.bedroomsCount}
+                  enSuiteBedroomCount={data?.enSuiteBedroomCount}
                 />
               </HStack>
-            )}
-          </VStack>
+              <HStack className="gap-2">
+                <LabeledText
+                  label="Montly Rent"
+                  value={`£${data?.monthlyRent ?? ""} pcm`}
+                />
+                <LabeledText
+                  label="Deposit"
+                  value={`£${data?.securityDeposit ?? ""}`}
+                />
+              </HStack>
+              <HStack className="gap-2">
+                <LabeledText
+                  label="Property Size"
+                  value={`${data?.sizeSqMeters ?? ""} m²`}
+                />
+                <LabeledText
+                  label="Bathrooms"
+                  value={`${data?.bathrooms ?? ""}`}
+                />
+              </HStack>
+              <HStack className="gap-2">
+                <LabeledText
+                  label="Furnishing"
+                  value={data?.furnishingStatus ?? ""}
+                />
+                <LabeledText
+                  label="EPC Rating"
+                  value={`${data?.epcRating ?? "Unknown"}`}
+                />
+              </HStack>
+              {data && (
+                <HStack className="gap-2">
+                  <LabeledText
+                    label="Available From"
+                    value={data.availableFrom}
+                  />
+                </HStack>
+              )}
+            </VStack>
 
-          <VStack>
-            <Text className="text-xl font-semibold text-white">Amenities</Text>
-            <Box className="flex flex-row flex-wrap">
-              {data?.amenities.map((amenity) => (
-                <Box key={amenity} className="w-[50%] justify-center p-1">
-                  <AmenityInfo key={amenity} amenity={amenity} />
-                </Box>
-              ))}
-            </Box>
+            <VStack>
+              <Text className="text-xl font-semibold text-white">Amenities</Text>
+              <Box className="flex flex-row flex-wrap">
+                {data?.amenities.map((amenity) => (
+                  <Box key={amenity} className="w-[50%] justify-center p-1">
+                    <AmenityInfo key={amenity} amenity={amenity} />
+                  </Box>
+                ))}
+              </Box>
+            </VStack>
           </VStack>
-        </VStack>
+        </Loader>
       </VStack>
     </ScrollView>
   );

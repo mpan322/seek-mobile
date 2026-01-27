@@ -6,7 +6,8 @@ import { Box } from "@/components/ui/box";
 import { useRouter } from "expo-router";
 import { textStyle } from "@/components/ui/text/styles";
 import { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
-import { ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BackButton } from "@/components/custom/back-button";
 
 type Flag = {
   _id: string;
@@ -123,18 +124,21 @@ export default function PreviousFlagsScreen() {
   ];
 
   return (
-    <FlatList
-      contentContainerClassName="gap-6 p-6 bg-background-0 h-full"
-      data={data}
-      renderItem={({ item }) => (
-        <FlagCard
-          key={item._id}
-          id={item._id}
-          status={item.status}
-          date={item.date}
-          description={item.description}
-        />
-      )}
-    />
+    <SafeAreaView className="p-6 gap-3">
+      <BackButton />
+      <FlatList
+        contentContainerClassName="gap-6 bg-background-0 h-full"
+        data={data}
+        renderItem={({ item }) => (
+          <FlagCard
+            key={item._id}
+            id={item._id}
+            status={item.status}
+            date={item.date}
+            description={item.description}
+          />
+        )}
+      />
+    </SafeAreaView>
   );
 }

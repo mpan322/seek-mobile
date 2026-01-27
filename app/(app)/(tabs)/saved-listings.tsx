@@ -1,5 +1,5 @@
 import { Text } from "@/components/ui/text";
-import { FlatList, Pressable, ScrollView } from "react-native";
+import { FlatList, Pressable, ScrollView, Share } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Accordion,
@@ -33,6 +33,8 @@ import { useLike, useUnlike } from "@/hooks/like";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { ShareIcon } from "lucide-react-native";
+import { Box } from "@/components/ui/box";
+import { ShareButton } from "@/components/custom/share-button";
 
 type TriggerProps = {
   isExpanded: boolean;
@@ -47,46 +49,58 @@ export default function SavedListings() {
 
   return (
     <SafeAreaView className="p-8 bg-background-0 h-full">
-      <ScrollView>
-        <Accordion type="single">
-          <AccordionItem value="liked">
-            <AccordionHeader>
-              <AccordionTrigger className="border-b-2 border-white">
-                {({ isExpanded }: TriggerProps) => (
-                  <CustomTriggerInner isExpanded={isExpanded} title="Liked" />
-                )}
-              </AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent className="pt-4 gap-4">
-              <FlatList
-                contentContainerClassName="gap-3"
-                data={liked?.data ?? []}
-                renderItem={({ item }) => (
-                  <LikedListingCard data={item} />
-                )}
-              />
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="applications">
+      <Accordion type="single">
+        <AccordionItem value="liked">
+          <AccordionHeader>
             <AccordionTrigger className="border-b-2 border-white">
               {({ isExpanded }: TriggerProps) => (
-                <CustomTriggerInner
-                  isExpanded={isExpanded}
-                  title="Applications"
-                />
+                <CustomTriggerInner isExpanded={isExpanded} title="Liked" />
               )}
             </AccordionTrigger>
-            <AccordionContent className="pt-4 gap-4">
-              <FlatList
-                data={applied ?? []}
-                renderItem={({ item }) => (
-                  <AppliedListingCard data={item} />
-                )}
+          </AccordionHeader>
+          <AccordionContent className="pt-4 gap-4">
+            <FlatList
+              contentContainerClassName="gap-3"
+              data={liked?.data ?? []}
+              renderItem={({ item }) => (
+                <LikedListingCard data={item} />
+              )}
+              ListEmptyComponent={
+                <Box>
+                  <Text className="text-white text-center text-xl">
+                    No liked listings yet
+                  </Text>
+                </Box>
+              }
+            />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="applications">
+          <AccordionTrigger className="border-b-2 border-white">
+            {({ isExpanded }: TriggerProps) => (
+              <CustomTriggerInner
+                isExpanded={isExpanded}
+                title="Applications"
               />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </ScrollView>
+            )}
+          </AccordionTrigger>
+          <AccordionContent className="pt-4 gap-4">
+            <FlatList
+              data={applied ?? []}
+              renderItem={({ item }) => (
+                <AppliedListingCard data={item} />
+              )}
+              ListEmptyComponent={
+                <Box>
+                  <Text className="text-white text-center text-xl">
+                    No applications yet
+                  </Text>
+                </Box>
+              }
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </SafeAreaView>
   );
 }
@@ -128,6 +142,7 @@ function LikedListingCard({ data }: LikedListingCardProps) {
     unlike({ id: data._id }, {
       onError(error) {
         toast.show({
+          placement: "top",
           render: (props) => (
             <ErrorToast {...props} error={error.response?.data} />
           )
@@ -149,6 +164,15 @@ function LikedListingCard({ data }: LikedListingCardProps) {
     });
   }
 
+  function handleShare() {
+    const id = data._id;
+    Share.share({
+      message: `Check out this listing on Seek! ${id}`,
+      url: `https://www.seekapp.uk/link/location/${id}/details`,
+    });
+  }
+
+
   return (
     <ListingCard
       data={data}
@@ -158,10 +182,7 @@ function LikedListingCard({ data }: LikedListingCardProps) {
             size={20}
             like={handleUnlike}
             liked={liked} />
-          <ShareIcon
-            color="white"
-            size={20}
-          />
+          <ShareButton size={20} share={handleShare} />
         </HStack>
       }
     />
@@ -203,6 +224,14 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
     });
   }
 
+  function handleShare() {
+    const id = data._id;
+    Share.share({
+      message: `Check out this listing on Seek! ${id}`,
+      url: `https://www.seekapp.uk/link/location/${id}/details`,
+    });
+  }
+
   return (
     <ListingCard
       data={data}
@@ -212,9 +241,7 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
             size={20}
             like={handleUnlike}
             liked={liked} />
-          <Pressable onPress={() => console.log("clicked!")}>
-            <Icon size="xl" as={ExternalLinkIcon} />
-          </Pressable>
+          <ShareButton size={20} share={handleShare} />
         </HStack>
       }
     />

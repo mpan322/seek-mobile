@@ -6,9 +6,9 @@ import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { AtSignIcon } from "@/components/ui/icon";
 import { Box } from "@/components/ui/box";
 import { Href, useRouter } from "expo-router";
-import { useUsersControllerGetUser } from "@/src/api/seek-api/users";
 import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
-import { Image } from "expo-image";
+import { SettingsIcon } from "@/components/ui/icon/index";
+import { UserIcon } from "lucide-react-native";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -16,22 +16,18 @@ export default function SettingsScreen() {
     router.navigate(path);
   };
 
-  const { data, isLoading } = useAuthControllerCurrentUser();
-  console.log("[LOG] current user", data);
+  const { data } = useAuthControllerCurrentUser();
 
   return (
     <SafeAreaView className="px-6">
       <VStack className="items-center" style={{ gap: 40 }}>
-        <Image
-          className="w-10 h-10"
-          alt="listing image"
-          source={{
-            uri: "https://picsum.photos/200",
-          }}
-        />
         <VStack className="items-center gap-2">
           <Avatar size="xl">
-            <AvatarImage />
+            <AvatarImage
+              source={{
+                uri: data?.profilePicUrl,
+              }}
+            />
           </Avatar>
           <Text size="xl" bold>
             {data?.name}
@@ -43,10 +39,8 @@ export default function SettingsScreen() {
             size="xl"
             className="grid grid-cols-3 rounded-xl"
           >
-            <Box className="items-center flex flex-row">
-              <Box className="flex-1">
-                <ButtonIcon as={AtSignIcon} />
-              </Box>
+            <Box className="items-center flex flex-row gap-4">
+              <ButtonIcon as={UserIcon} />
               <Box className="min-w-fit">
                 <ButtonText>Personal Information</ButtonText>
               </Box>
@@ -60,10 +54,8 @@ export default function SettingsScreen() {
             className="grid grid-cols-3 rounded-xl"
             onPress={() => goto("/(app)/settings")}
           >
-            <Box className="items-center flex flex-row">
-              <Box className="flex-1">
-                <ButtonIcon as={AtSignIcon} />
-              </Box>
+            <Box className="items-center flex flex-row gap-4">
+              <ButtonIcon as={SettingsIcon} />
               <Box className="flex-1">
                 <ButtonText>Settings</ButtonText>
               </Box>
@@ -76,12 +68,10 @@ export default function SettingsScreen() {
             size="xl"
             className="grid grid-cols-3 rounded-xl"
           >
-            <Box className="items-center flex flex-row">
+            <Box className="items-center flex flex-row gap-4">
+              <ButtonIcon as={AtSignIcon} />
               <Box className="flex-1">
-                <ButtonIcon as={AtSignIcon} />
-              </Box>
-              <Box className="flex-1">
-                <ButtonText>Help</ButtonText>
+                <ButtonText onPress={() => goto("/(app)/settings/help")}>Help</ButtonText>
               </Box>
               <Box className="flex-1" />
             </Box>

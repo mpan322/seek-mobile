@@ -7,7 +7,7 @@ import { PasswordInput } from "@/components/custom/password-input";
 import { create } from "zustand";
 import { View } from "react-native";
 import { VStack } from "@/components/ui/vstack/index.web";
-import BackButton from "@/components/custom/back-button";
+import { BackButton } from "@/components/custom/back-button";
 
 type InputState = {
   password: string;

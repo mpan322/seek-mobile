@@ -11,6 +11,8 @@ import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import { VStack } from "@/components/ui/vstack";
 import { create } from "zustand";
 import { useCallback } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BackButton } from "@/components/custom/back-button";
 
 type IssueState = {
   issue: string;
@@ -39,43 +41,46 @@ export default function FlagIssueScreen() {
   };
 
   return (
-    <VStack className="p-6 gap-8">
-      <FormControl isRequired>
-        <FormControlLabel>
-          <FormControlLabelText>Explain the issue</FormControlLabelText>
-        </FormControlLabel>
-        <Textarea>
-          <TextareaInput
-            placeholder="Please describe the issue in detail..."
-            value={issue}
-            onChangeText={setIssue}
-          />
-        </Textarea>
-      </FormControl>
+    <SafeAreaView>
+      <VStack className="p-6 gap-8">
+        <BackButton title="Flag Issue" />
+        <FormControl isRequired>
+          <FormControlLabel>
+            <FormControlLabelText>Explain the issue</FormControlLabelText>
+          </FormControlLabel>
+          <Textarea>
+            <TextareaInput
+              placeholder="Please describe the issue in detail..."
+              value={issue}
+              onChangeText={setIssue}
+            />
+          </Textarea>
+        </FormControl>
 
-      <FormControl>
-        <FormControlLabel>
-          <FormControlLabelText>Account Name (optional)</FormControlLabelText>
-        </FormControlLabel>
-        <Input variant="rounded" size="lg">
-          <InputField
-            placeholder="Name of the account"
-            value={accountName}
-            onChangeText={setAccountName}
-          />
-        </Input>
-      </FormControl>
+        <FormControl>
+          <FormControlLabel>
+            <FormControlLabelText>Account Name (optional)</FormControlLabelText>
+          </FormControlLabel>
+          <Input variant="rounded" size="lg">
+            <InputField
+              placeholder="Name of the account"
+              value={accountName}
+              onChangeText={setAccountName}
+            />
+          </Input>
+        </FormControl>
 
-      <FormControl>
-        <Button
-          onPress={submit}
-          className="rounded-full"
-          size="lg"
-          isDisabled={!isValid}
-        >
-          <ButtonText>Submit</ButtonText>
-        </Button>
-      </FormControl>
-    </VStack>
+        <FormControl>
+          <Button
+            onPress={submit}
+            className="rounded-full"
+            size="lg"
+            isDisabled={!isValid}
+          >
+            <ButtonText>Submit</ButtonText>
+          </Button>
+        </FormControl>
+      </VStack>
+    </SafeAreaView>
   );
 }

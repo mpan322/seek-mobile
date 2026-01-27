@@ -17,9 +17,10 @@ import { useState } from "react";
 import { Text } from "@/components/ui/text";
 import React from "react";
 import { CloseIcon, Icon } from "@/components/ui/icon";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native";
 import { useAuth } from "@/src/store/auth-store";
+import { BackButton } from "@/components/custom/back-button";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
   const [open, setOpen] = useState(false);
@@ -31,8 +32,9 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View className="bg-background-0 h-full">
+    <SafeAreaView className="bg-background-0 h-full">
       <VStack className="px-6 gap-2">
+        <BackButton />
         <FlatButton
           onPress={() => goto("/(app)/settings/modify-password")}
           text="Modify Password"
@@ -52,8 +54,6 @@ export default function SettingsScreen() {
           onPress={() => goto("/(app)/settings/terms-of-service")}
           text="Terms of Service"
         />
-        <Divider />
-        <FlatButton onPress={() => goto("/(app)/settings/help")} text="Help" />
         <Divider />
         <Box className="items-start gap-2 pt-2">
           <Button
@@ -108,6 +108,6 @@ export default function SettingsScreen() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }

@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { SuccessToast } from "@/components/custom/success-toast";
 import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ContactScreen() {
   const { data, isLoading, isError, error } = useAuthControllerCurrentUser();
@@ -62,7 +63,7 @@ export default function ContactScreen() {
         onError: (err) => {
           toast.show({
             placement: "top",
-            render: (props) => <ErrorToast {...props} error={err.message} />,
+            render: (props) => <ErrorToast {...props} error={err.response?.data} />,
           });
         },
       },
@@ -70,31 +71,33 @@ export default function ContactScreen() {
   }
 
   return (
-    <Loader isLoading={isLoading}>
-      <View className="p-6 bg-background-0 h-full gap-8">
-        <BackButton title="Contact" />
-        <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText size="xl">
-              Send a message to us:
-            </FormControlLabelText>
-          </FormControlLabel>
-          <Textarea size="xl">
-            <TextareaInput
-              onChangeText={setMessage}
-              value={message}
-              placeholder="Message..."
-            />
-          </Textarea>
-        </FormControl>
+    <SafeAreaView>
+      <Loader isLoading={isLoading}>
+        <View className="p-6 bg-background-0 h-full gap-8">
+          <BackButton title="Contact" />
+          <FormControl>
+            <FormControlLabel>
+              <FormControlLabelText size="xl">
+                Send a message to us:
+              </FormControlLabelText>
+            </FormControlLabel>
+            <Textarea size="xl">
+              <TextareaInput
+                onChangeText={setMessage}
+                value={message}
+                placeholder="Message..."
+              />
+            </Textarea>
+          </FormControl>
 
-        <HStack className="justify-center">
-          <Button size="lg" className="w-[80%]" onPress={handleSubmit}>
-            {isPending && <ButtonSpinner />}
-            <ButtonText>Send</ButtonText>
-          </Button>
-        </HStack>
-      </View>
-    </Loader>
+          <HStack className="justify-center">
+            <Button size="lg" className="w-[80%]" onPress={handleSubmit}>
+              {isPending && <ButtonSpinner />}
+              <ButtonText>Send</ButtonText>
+            </Button>
+          </HStack>
+        </View>
+      </Loader>
+    </SafeAreaView>
   );
 }

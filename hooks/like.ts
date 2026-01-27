@@ -1,5 +1,5 @@
 import { queryClient } from "@/app/_layout";
-import { getApplicationControllerGetAllMyApplicationsQueryKey } from "@/src/api/seek-api/application";
+import { applicationControllerGetAllMyApplications, getApplicationControllerGetAllMyApplicationsQueryKey } from "@/src/api/seek-api/application";
 import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
 import { getListingsControllerGetAllVerifiedListingsQueryKey, getListingsControllerGetLikedQueryKey, useListingsControllerLikeListing, useListingsControllerUnlikeListing } from "@/src/api/seek-api/listings";
 import { LikedListingsDto, Listing } from "@/src/api/seek-api/model";
@@ -274,6 +274,11 @@ export function useUnlike() {
           getApplicationControllerGetAllMyApplicationsQueryKey(),
           ctx?.prev.applied
         );
+      },
+      onSettled() {
+        queryClient.invalidateQueries({ queryKey: getListingsControllerGetAllVerifiedListingsQueryKey() });
+        queryClient.invalidateQueries({ queryKey: getListingsControllerGetLikedQueryKey() });
+        queryClient.invalidateQueries({ queryKey: getApplicationControllerGetAllMyApplicationsQueryKey() });
       }
     }
   });
