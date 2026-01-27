@@ -35,4 +35,5 @@ export interface Listing {
   isVerified: boolean;
   isDraft: boolean;
   lastUpdated: string;
+  likedBy: string[];
 }

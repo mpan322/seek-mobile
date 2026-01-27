@@ -9,11 +9,15 @@ import { Image } from "expo-image";
 import { HeartIcon, Settings2Icon, ShareIcon, UserIcon, UsersIcon } from "lucide-react-native";
 import { VStack } from "@/components/ui/vstack/index";
 import { Avatar } from "@/components/ui/avatar";
-import { useEffect, useState } from "react";
-import { useListingsControllerGetAllVerifiedListings } from "@/src/api/seek-api/listings";
+import { useEffect, useMemo, useState } from "react";
+import { getListingsControllerGetAllVerifiedListingsQueryKey, getListingsControllerGetLikedQueryKey, useListingsControllerGetAllVerifiedListings, useListingsControllerLikeListing, useListingsControllerUnlikeListing } from "@/src/api/seek-api/listings";
 import { RefreshControl } from "react-native-gesture-handler";
 import { ScrollDots } from "@/components/custom/scroll-dots";
 import { Text } from "@/components/ui/text"
+import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
+import { queryClient } from "@/app/_layout";
+import { useToast } from "@/components/ui/toast";
+import { ErrorToast } from "@/components/custom/error-toast";
 
 export default function HomeScreen() {
   const {
@@ -22,7 +26,6 @@ export default function HomeScreen() {
     data: listings,
     isRefetching,
   } = useListingsControllerGetAllVerifiedListings();
-  console.log("my listings", listings, error);
 
   const bottomBarHeight = useBottomTabBarHeight();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -51,12 +54,18 @@ export default function HomeScreen() {
       snapToAlignment="start"
       decelerationRate={0.9}
       keyExtractor={(item) => item._id}
-      renderItem={({ item }) => <ListingScrollItem listing={item} />}
+      renderItem={({ item }) => (
+        <ListingScrollItem listing={item} />
+      )}
     />
   );
 }
 
-function ListingScrollItem({ listing }: { listing: Listing }) {
+type ListingScrollItemProps = {
+  listing: Listing;
+};
+
+function ListingScrollItem({ listing }: ListingScrollItemProps) {
   const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } =
     Dimensions.get("screen");
   const bottomBarHeight = useBottomTabBarHeight();
@@ -164,9 +173,122 @@ type ActionBarProps = {
 function ActionBar({ data }: ActionBarProps) {
   const id = data._id;
   const router = useRouter();
+  const toast = useToast();
+
+  const { data: user } = useAuthControllerCurrentUser();
+  console.log(user?._id);
+
+  const { mutate: like } = useListingsControllerLikeListing({
+    mutation: {
+      async onMutate({ id }) {
+        await queryClient.cancelQueries({ queryKey: getListingsControllerGetAllVerifiedListingsQueryKey() });
+
+        const data = queryClient.getQueryData<Listing[]>(
+          getListingsControllerGetAllVerifiedListingsQueryKey()
+        );
+
+        queryClient.setQueryData<Listing[]>(
+          getListingsControllerGetAllVerifiedListingsQueryKey(),
+          (curr) => {
+            if (!curr || !user) return curr;
+
+            // get the listing
+            const idx = curr.findIndex(elem => elem._id == id);
+            if (idx === -1) {
+              return curr;
+            }
+            const listing = curr[idx];
+
+
+            // check if it is already liked
+            if (listing.likedBy.includes(user._id)) {
+              return curr;
+            }
+
+            // set as liked
+            const modified: Listing = {
+              ...listing,
+              likedBy: [...listing.likedBy, user._id],
+            }
+            return curr.toSpliced(idx, 1, modified)
+          }
+        );
+        return { prev: data };
+      },
+      onError(_, __, ctx) {
+        queryClient.setQueryData(
+          getListingsControllerGetAllVerifiedListingsQueryKey()
+          , ctx?.prev
+        );
+      }
+    }
+  })
+  const { mutate: unlike } = useListingsControllerUnlikeListing({
+    mutation: {
+      async onMutate({ id }) {
+        await queryClient.cancelQueries({ queryKey: getListingsControllerGetAllVerifiedListingsQueryKey() });
+
+        const data = queryClient.getQueryData<Listing[]>(
+          getListingsControllerGetAllVerifiedListingsQueryKey()
+        );
+
+        queryClient.setQueryData<Listing[]>(
+          getListingsControllerGetAllVerifiedListingsQueryKey(),
+          (curr) => {
+            if (!curr || !user) return curr;
+
+            const idx = curr.findIndex(elem => elem._id == id);
+            if (idx === -1) {
+              return curr;
+            }
+            const listing = curr[idx];
+
+            const modified: Listing = {
+              ...listing,
+              likedBy: listing.likedBy.filter(uid => uid !== user._id)
+            }
+            return curr.toSpliced(idx, 1, modified);
+          }
+        );
+        return { prev: data };
+      },
+      onError(_, __, ctx) {
+        queryClient.setQueryData(
+          getListingsControllerGetAllVerifiedListingsQueryKey()
+          , ctx?.prev
+        );
+      }
+    }
+  });
+
+  async function handleUnlike() {
+    unlike({ id: data._id }, {
+      onError(error) {
+        toast.show({
+          render: (props) => (
+            <ErrorToast {...props} error={error.response?.data} />
+          )
+        })
+      }
+    });
+  }
+
+  async function handleLike() {
+    like({ id: data._id }, {
+      onError(error) {
+        toast.show({
+          render: (props) => (
+            <ErrorToast {...props} error={error.response?.data} />
+          )
+        })
+      }
+    });
+  }
+
+  const liked = useMemo(() => (user && data.likedBy.includes(user._id)) ?? false, [data, user])
+
 
   function handleShare() {
-    console.log("[LOG] sharing listing");
     Share.share({
       message: `Check out this listing on Seek! ${id}`,
       url: `https://www.seekapp.uk/link/${id}`,
@@ -179,9 +301,7 @@ function ActionBar({ data }: ActionBarProps) {
         <Settings2Icon color="white" size={35} />
       </Pressable>
       <VStack className="gap-4">
-        <Pressable>
-          <HeartIcon fill="white" color="transparent" size={35} />
-        </Pressable>
+        <LikeButton like={handleLike} unlike={handleUnlike} liked={liked} />
         <Pressable onPress={handleShare}>
           <ShareIcon color="white" size={35} />
         </Pressable>
@@ -199,3 +319,23 @@ function ActionBar({ data }: ActionBarProps) {
     </VStack>
   );
 }
+
+type LikeButtonProps = {
+  like: () => Promise<void>;
+  unlike: () => Promise<void>;
+  liked: boolean;
+}
+
+function LikeButton({
+  like,
+  unlike,
+  liked
+}: LikeButtonProps) {
+  return (
+    <Pressable onPressIn={() => liked ? unlike() : like()} hitSlop={10}>
+      <HeartIcon fill={liked ? "red" : "white"} color="transparent" size={35} />
+    </Pressable>
+  );
+
+}
+
