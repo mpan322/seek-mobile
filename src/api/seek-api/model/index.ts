@@ -24,6 +24,7 @@ export * from './forgotPasswordDto';
 export * from './listing';
 export * from './listingEpcRating';
 export * from './listingFurnishingStatus';
+export * from './listingLocation';
 export * from './listingPropertyType';
 export * from './loginDto';
 export * from './messageDto';

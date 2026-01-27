@@ -4,6 +4,7 @@
 import type { ListingPropertyType } from './listingPropertyType';
 import type { ListingFurnishingStatus } from './listingFurnishingStatus';
 import type { ListingEpcRating } from './listingEpcRating';
+import type { ListingLocation } from './listingLocation';
 
 export interface Listing {
   _id: string;
@@ -36,4 +37,5 @@ export interface Listing {
   isDraft: boolean;
   lastUpdated: string;
   likedBy: string[];
+  location: ListingLocation;
 }
