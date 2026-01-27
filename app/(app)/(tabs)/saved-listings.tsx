@@ -1,5 +1,5 @@
 import { Text } from "@/components/ui/text";
-import { FlatList, Pressable, ScrollView, Share } from "react-native";
+import { FlatList, Share } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Accordion,
@@ -13,15 +13,8 @@ import {
 import {
   ChevronDownIcon,
   ChevronUpIcon,
-  CloseCircleIcon,
-  ExternalLinkIcon,
-  FavouriteIcon,
 } from "@/components/ui/icon";
-import { Card } from "@/components/ui/card";
 import { HStack } from "@/components/ui/hstack";
-import { Image } from "@/components/ui/image";
-import { VStack } from "@/components/ui/vstack";
-import { Icon } from "@/components/ui/icon/index.web";
 import { Listing } from "@/src/api/seek-api/model";
 import { ListingCard } from "@/components/custom/listing-card";
 import { useListingsControllerGetLiked } from "@/src/api/seek-api/listings";
@@ -32,7 +25,6 @@ import { useMemo } from "react";
 import { useLike, useUnlike } from "@/hooks/like";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
-import { ShareIcon } from "lucide-react-native";
 import { Box } from "@/components/ui/box";
 import { ShareButton } from "@/components/custom/share-button";
 import { getListingLink } from "@/components/links";
@@ -44,9 +36,6 @@ type TriggerProps = {
 export default function SavedListings() {
   const { data: liked } = useListingsControllerGetLiked();
   const { data: applied } = useApplicationControllerGetAllMyApplications();
-
-  console.log("liked", liked);
-  console.log("applied", applied);
 
   return (
     <SafeAreaView className="p-8 bg-background-0 h-full">
@@ -68,7 +57,7 @@ export default function SavedListings() {
               )}
               ListEmptyComponent={
                 <Box>
-                  <Text className="text-white text-center text-xl">
+                  <Text className="text-secondary-800 text-center text-xl">
                     No liked listings yet
                   </Text>
                 </Box>
@@ -93,7 +82,7 @@ export default function SavedListings() {
               )}
               ListEmptyComponent={
                 <Box>
-                  <Text className="text-white text-center text-xl">
+                  <Text className="text-secondary-800 text-center text-xl">
                     No applications yet
                   </Text>
                 </Box>

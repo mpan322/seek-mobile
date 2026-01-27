@@ -4,7 +4,7 @@ import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { HouseIcon, UserIcon } from "lucide-react-native";
+import { HouseIcon, UserIcon, MessagesSquareIcon, StarIcon, MapIcon } from "lucide-react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -32,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: "Map",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="map" color={color} />
+            <MapIcon size={28} color={color} />
           ),
         }}
       />
@@ -50,7 +50,7 @@ export default function TabLayout() {
         options={{
           title: "Messages",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="bubble.circle.fill" color={color} />
+            <MessagesSquareIcon size={28} color={color} />
           ),
         }}
       />
@@ -59,7 +59,7 @@ export default function TabLayout() {
         options={{
           title: "Saved Listings",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="star" color={color} />
+            <StarIcon size={28} color={color} />
           ),
         }}
       />

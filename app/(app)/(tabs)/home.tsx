@@ -8,7 +8,6 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
 import { Settings2Icon, ShareIcon, UsersIcon } from "lucide-react-native";
 import { VStack } from "@/components/ui/vstack/index";
-import { Avatar } from "@/components/ui/avatar";
 import { useEffect, useMemo, useState } from "react";
 import { useListingsControllerGetAllVerifiedListings } from "@/src/api/seek-api/listings";
 import { RefreshControl } from "react-native-gesture-handler";

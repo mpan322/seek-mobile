@@ -69,7 +69,7 @@ export default function PermissionsScreen() {
         <BackButton title="Permissions" />
         <VStack className="gap-2">
           <HStack className="justify-between p-2">
-            <Text size="xl" bold className="text-white">
+            <Text size="xl" bold>
               Location
             </Text>
             <Switch
@@ -79,7 +79,7 @@ export default function PermissionsScreen() {
           </HStack>
           <Divider />
           <HStack className="justify-between p-2">
-            <Text size="xl" bold className="text-white">
+            <Text size="xl" bold>
               Camera
             </Text>
             <Switch
@@ -89,7 +89,7 @@ export default function PermissionsScreen() {
           </HStack>
           <Divider />
           <HStack className="justify-between p-2">
-            <Text size="xl" bold className="text-white">
+            <Text size="xl" bold>
               Photos
             </Text>
             <Switch

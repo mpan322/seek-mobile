@@ -23,35 +23,35 @@ export default function PersonalInfo() {
           title="Identification"
           description="Please upload your passport or national ID."
           icon={
-            <IdCardIcon color="white" />
+            <IdCardIcon />
           } />
 
         <DocumentCard
           title="Proof of Income"
           description="Please upload your proof of income."
           icon={
-            <WalletIcon color="white" />
+            <WalletIcon />
           } />
 
         <DocumentCard
           title="Guarantor Agreement"
           description="Please upload your guarantor agreement with a UK based guarantor."
           icon={
-            <UsersIcon color="white" />
+            <UsersIcon />
           } />
 
         <DocumentCard
           title="Landlord Reference"
           description="Please your previous landlord reference or University accommodation letter of reference."
           icon={
-            <BuildingIcon color="white" />
+            <BuildingIcon />
           } />
 
         <DocumentCard
           title="Character Reference"
           description="Please upload a character reference from a non-friend and non-relative."
           icon={
-            <HandshakeIcon color="white" />
+            <HandshakeIcon />
           } />
       </ScrollView>
     </SafeAreaView>

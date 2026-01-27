@@ -11,6 +11,7 @@ import { AuthGaurd } from "@/components/custom/auth-gaurd";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PortalProvider } from "@gluestack-ui/core/lib/esm/overlay/aria";
+import { useColorScheme } from "react-native";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
@@ -26,6 +27,7 @@ axios.defaults.headers["platform"] = "mobile";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
   const path = usePathname();
   useEffect(() => {
     console.log(`path=${path}`);
@@ -43,20 +45,18 @@ export default function RootLayout() {
   }, [_hasHydrated]);
 
   // // prevent rendering until auth state is hydrated
-  // if (!_hasHydrated) {
-  //   return <Slot />;
-  // }
+  if (!_hasHydrated) {
+    return <Slot />;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GluestackUIProvider mode="dark">
-        <ThemeProvider value={DarkTheme}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <AuthGaurd>
-              <Slot />
-            </AuthGaurd>
-          </GestureHandlerRootView>
-        </ThemeProvider>
+      <GluestackUIProvider mode={colorScheme ?? "dark"}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AuthGaurd>
+            <Slot />
+          </AuthGaurd>
+        </GestureHandlerRootView>
       </GluestackUIProvider>
     </QueryClientProvider>
   );
