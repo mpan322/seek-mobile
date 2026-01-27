@@ -25,6 +25,7 @@ import type {
   ErrorDto,
   LikedListingsDto,
   Listing,
+  ListingsControllerGetFilteredListingsParams,
   Step2ListingDto,
   Step3ListingDto,
   Step4ListingDto
@@ -856,6 +857,92 @@ export function useListingsControllerGetAllVerifiedListings<TData = Awaited<Retu
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getListingsControllerGetAllVerifiedListingsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const listingsControllerGetFilteredListings = (
+    params: ListingsControllerGetFilteredListingsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/listings/filter`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getListingsControllerGetFilteredListingsQueryKey = (params?: ListingsControllerGetFilteredListingsParams,) => {
+    return [
+    `/listings/filter`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getListingsControllerGetFilteredListingsQueryOptions = <TData = Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError = ErrorType<unknown>>(params: ListingsControllerGetFilteredListingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListingsControllerGetFilteredListingsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>> = ({ signal }) => listingsControllerGetFilteredListings(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListingsControllerGetFilteredListingsQueryResult = NonNullable<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>>
+export type ListingsControllerGetFilteredListingsQueryError = ErrorType<unknown>
+
+
+export function useListingsControllerGetFilteredListings<TData = Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError = ErrorType<unknown>>(
+ params: ListingsControllerGetFilteredListingsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>,
+          TError,
+          Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListingsControllerGetFilteredListings<TData = Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError = ErrorType<unknown>>(
+ params: ListingsControllerGetFilteredListingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>,
+          TError,
+          Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListingsControllerGetFilteredListings<TData = Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError = ErrorType<unknown>>(
+ params: ListingsControllerGetFilteredListingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useListingsControllerGetFilteredListings<TData = Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError = ErrorType<unknown>>(
+ params: ListingsControllerGetFilteredListingsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listingsControllerGetFilteredListings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListingsControllerGetFilteredListingsQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

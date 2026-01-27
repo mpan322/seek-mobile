@@ -27,6 +27,8 @@ export * from './listingEpcRating';
 export * from './listingFurnishingStatus';
 export * from './listingLocation';
 export * from './listingPropertyType';
+export * from './listingsControllerGetFilteredListingsParams';
+export * from './listingsControllerGetFilteredListingsPropertyType';
 export * from './loginDto';
 export * from './messageDto';
 export * from './messageDtoMessageType';
