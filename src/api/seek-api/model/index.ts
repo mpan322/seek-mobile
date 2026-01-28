@@ -2,6 +2,8 @@
  * import { AxiosError, AxiosResponse } from 'axios';
  */
 
+export * from './addDocumentDto';
+export * from './addDocumentDtoDocumentType';
 export * from './authControllerLogin201';
 export * from './authControllerVerifyEmail201';
 export * from './confirmPasswordResetDto';
@@ -34,6 +36,7 @@ export * from './messageDto';
 export * from './messageDtoMessageType';
 export * from './presignResDto';
 export * from './resolveFlagDto';
+export * from './sendMessageDto';
 export * from './setProfilePicDto';
 export * from './setUsernameDto';
 export * from './step2ListingDto';

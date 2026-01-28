@@ -24,6 +24,7 @@ export interface CreateListingDto {
   availableFrom: string;
   availableUntil: string;
   registerOfTitleKey: string;
+  registrationNumber: string;
   furnishingStatus: CreateListingDtoFurnishingStatus;
   epcRating: CreateListingDtoEpcRating;
   photos: string[];

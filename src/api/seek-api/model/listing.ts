@@ -17,6 +17,7 @@ export interface Listing {
   enSuiteBedroomCount: number;
   bathrooms: number;
   registerOfTitleKey: string;
+  registrationNumber: string;
   propertyDesc: string;
   amenities: string[];
   streetAddress: string;

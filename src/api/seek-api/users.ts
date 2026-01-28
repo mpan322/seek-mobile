@@ -21,6 +21,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AddDocumentDto,
   CreateUserDto,
   ErrorDto,
   SetProfilePicDto,
@@ -376,6 +377,64 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getUsersControllerSetUsernameMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const usersControllerAddDocument = (
+    addDocumentDto: AddDocumentDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/users/addDocument`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addDocumentDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getUsersControllerAddDocumentMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerAddDocument>>, TError,{data: AddDocumentDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof usersControllerAddDocument>>, TError,{data: AddDocumentDto}, TContext> => {
+
+const mutationKey = ['usersControllerAddDocument'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersControllerAddDocument>>, {data: AddDocumentDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  usersControllerAddDocument(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UsersControllerAddDocumentMutationResult = NonNullable<Awaited<ReturnType<typeof usersControllerAddDocument>>>
+    export type UsersControllerAddDocumentMutationBody = AddDocumentDto
+    export type UsersControllerAddDocumentMutationError = ErrorType<unknown>
+
+    export const useUsersControllerAddDocument = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerAddDocument>>, TError,{data: AddDocumentDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof usersControllerAddDocument>>,
+        TError,
+        {data: AddDocumentDto},
+        TContext
+      > => {
+
+      const mutationOptions = getUsersControllerAddDocumentMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

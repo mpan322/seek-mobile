@@ -9,30 +9,27 @@ import { Href, Redirect, useRouter } from "expo-router";
 import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
 import { SettingsIcon } from "@/components/ui/icon/index";
 import { UserIcon } from "lucide-react-native";
-import { ProfilePhotoInput } from "@/components/custom/profile-photo-input";
 import { useProfilePicture } from "@/hooks/use-profile-photo";
-import { ErrorDto, UserDto } from "@/src/api/seek-api/model";
+import { UserDto } from "@/src/api/seek-api/model";
 import { Loader } from "@/components/custom/loader";
 import { Pressable } from "react-native";
 import React, { useCallback, useState } from "react";
-import { usersControllerSetProfilePic, useUsersControllerSetProfilePic } from "@/src/api/seek-api/users";
+import { useUsersControllerSetProfilePic } from "@/src/api/seek-api/users";
 import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ActionsheetDragIndicatorWrapper, ActionsheetItem, ActionsheetItemText } from "@/components/ui/actionsheet";
-import { uploadControllerGetPresignedUrl, useUploadControllerGetPresignedUrl } from "@/src/api/seek-api/upload";
-import axios from "axios";
 import { useToast } from "@/components/ui/toast";
-import { ErrorToast } from "@/components/custom/error-toast";
 import { InterfaceToastProps } from "@gluestack-ui/core/lib/esm/toast/creator/types";
+import { uploadFile } from "@/src/utils/upload-file";
+import { errorToast } from "@/src/utils/error-toast";
 
 export default function SettingsScreen() {
-  const { data, isLoading } = useAuthControllerCurrentUser();
-  console.log(data);
-  if (data == undefined) {
+  const { data, isLoading, isError } = useAuthControllerCurrentUser();
+  if (isError) {
     return <Redirect href="/home" />
   }
 
   return (
-    <Loader isLoading={isLoading}>
-      <InnerSettingsScreen user={data} />
+    <Loader isLoading={isLoading || !data}>
+      <InnerSettingsScreen user={data!} />
     </Loader>
   );
 }
@@ -67,23 +64,13 @@ function InnerSettingsScreen({
     const mimeType = image.mimeType ?? "image/*";
     let fileUrl: string;
     try {
-      const response = await fetch(image.uri);
-      const blob = await response.blob();
-
-      const { uploadUrl, fileUrl: url } = await uploadControllerGetPresignedUrl({
-        fileType: mimeType,
-        filename: userId,
-        folder: "public"
+      const data = await uploadFile({
+        uri: image.uri,
+        mimeType,
+        name: `${userId}-profile`,
+        folder: "public",
       });
-      await fetch(uploadUrl, {
-        method: "PUT",
-        body: blob,
-        headers: {
-          "Content-Type": mimeType
-        }
-      });
-
-      fileUrl = url;
+      fileUrl = data.fileUrl;
     } catch {
       errorToast({ toast, data: { message: "Failed to upload file.", statusCode: -1 } });
       return;
@@ -185,22 +172,5 @@ function InnerSettingsScreen({
     </SafeAreaView>
 
   )
-}
-
-type ErrorToastProps = {
-  toast: {
-    show: (props: InterfaceToastProps) => string;
-    close: (id: string) => void;
-    closeAll: () => void;
-    isActive: (id: string) => boolean;
-  },
-  data?: ErrorDto,
-}
-
-function errorToast({ toast, data }: ErrorToastProps) {
-  toast.show({
-    placement: "top",
-    render: (props) => <ErrorToast {...props} error={data} />
-  });
 }
 
