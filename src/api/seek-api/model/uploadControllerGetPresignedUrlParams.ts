@@ -1,9 +1,10 @@
 /**
  * import { AxiosError, AxiosResponse } from 'axios';
  */
+import type { UploadControllerGetPresignedUrlFolder } from './uploadControllerGetPresignedUrlFolder';
 
 export type UploadControllerGetPresignedUrlParams = {
-filename: string;
 fileType: string;
-folder: string;
+folder: UploadControllerGetPresignedUrlFolder;
+filename: string;
 };
