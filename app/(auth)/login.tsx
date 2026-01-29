@@ -53,7 +53,7 @@ export default function Login() {
             accessToken: access_token,
             refreshToken: refresh_token,
           });
-          console.log("[LOG] login successful");
+          console.log("[LOG] login successful")
           router.navigate("/(app)/(tabs)/home");
         },
         onError: (err) => {

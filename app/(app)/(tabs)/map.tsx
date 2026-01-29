@@ -141,7 +141,7 @@ export default function MapScreen() {
                     data={locations}
                     ItemSeparatorComponent={() => <Divider />}
                     renderItem={({ item }) => (
-                      <Text className="text-secondary-0 line-clamp-2">
+                      <Text className="text-primary-600 line-clamp-2">
                         {item.description}
                       </Text>
                     )}

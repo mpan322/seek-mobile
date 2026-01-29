@@ -5,6 +5,7 @@
 export * from './addDocumentDto';
 export * from './addDocumentDtoDocumentType';
 export * from './authControllerLogin201';
+export * from './authControllerSignup201';
 export * from './authControllerVerifyEmail201';
 export * from './confirmPasswordResetDto';
 export * from './contactControllerContact201';

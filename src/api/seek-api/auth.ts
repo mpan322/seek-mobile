@@ -22,6 +22,7 @@ import type {
 
 import type {
   AuthControllerLogin201,
+  AuthControllerSignup201,
   AuthControllerVerifyEmail201,
   ConfirmPasswordResetDto,
   CreateUserDto,
@@ -105,7 +106,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<AuthControllerSignup201>(
       {url: `/auth/signup`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createUserDto, signal

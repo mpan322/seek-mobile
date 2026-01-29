@@ -26,9 +26,6 @@ export default function HomeScreen() {
     data: listings,
     isRefetching,
   } = useListingsControllerGetAllVerifiedListings();
-  useEffect(() => {
-    console.log("remount");
-  }, [listings])
 
   const bottomBarHeight = useBottomTabBarHeight();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
