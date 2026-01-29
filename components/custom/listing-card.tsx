@@ -34,7 +34,7 @@ export function ListingCard({ data, left }: ListingCardProps) {
   const router = useRouter();
 
   return (
-    <Card className="border-[1px] border-white rounded-xl p-3">
+    <Card className="border-[1px] border-primary-500 rounded-xl p-3">
       <Pressable
         onPress={() => router.navigate(`/(app)/location/${data._id}/details`)}
       >
@@ -44,11 +44,11 @@ export function ListingCard({ data, left }: ListingCardProps) {
               className="rounded-xl"
               alt="listing image"
               source={{
-                uri: data.photos.at(0) ?? "https://picsum.photos/200",
+                uri: data.photos?.at(0) ?? "https://picsum.photos/200",
               }}
             />
             <VStack className="gap-1 flex-1">
-              <Text className="text-lg font-bold text-white overflow-ellipsis line-clamp-1">
+              <Text className="text-lg font-bold text-primary-500 overflow-ellipsis line-clamp-1">
                 {data.propertyTitle}
               </Text>
               <Text className="text-sm">{data.streetAddress}</Text>

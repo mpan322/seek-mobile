@@ -77,8 +77,9 @@ export default function SavedListings() {
           <AccordionContent className="pt-4 gap-4">
             <FlatList
               data={applied ?? []}
+              contentContainerClassName="gap-2"
               renderItem={({ item }) => (
-                <AppliedListingCard data={item} />
+                <AppliedListingCard data={item.listing} />
               )}
               ListEmptyComponent={
                 <Box>
@@ -125,7 +126,7 @@ function LikedListingCard({ data }: LikedListingCardProps) {
   const { mutate: like } = useLike();
   const { mutate: unlike } = useUnlike();
   const toast = useToast();
-  const liked = useMemo(() => (user && data.likedBy.includes(user._id)) ?? false, [data, user])
+  const liked = useMemo(() => (user && data.likedBy?.includes(user._id)) ?? false, [data, user])
 
   async function handleUnlike() {
     console.log("UNLIKE PRESSED")
@@ -188,7 +189,9 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
   const { mutate: like } = useLike();
   const { mutate: unlike } = useUnlike();
   const toast = useToast();
-  const liked = useMemo(() => (user && data.likedBy.includes(user._id)) ?? false, [data, user])
+  const liked = useMemo(() => false
+    // (user && data.likedBy?.includes(user._id)) ?? false
+    , [data, user])
 
   async function handleUnlike() {
     unlike({ id: data._id }, {

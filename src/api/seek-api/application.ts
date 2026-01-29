@@ -21,7 +21,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  CreateApplicationDto
+  ApplicationDto,
+  CreateApplicationDto,
+  ErrorDto
 } from './model';
 
 import { customInstance } from '../../utils/custom-axios';
@@ -39,7 +41,7 @@ export const applicationControllerCreateApplication = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<unknown>(
       {url: `/application/create`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createApplicationDto, signal
@@ -49,7 +51,7 @@ export const applicationControllerCreateApplication = (
   
 
 
-export const getApplicationControllerCreateApplicationMutationOptions = <TError = ErrorType<unknown>,
+export const getApplicationControllerCreateApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,{data: CreateApplicationDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,{data: CreateApplicationDto}, TContext> => {
 
@@ -76,9 +78,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ApplicationControllerCreateApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerCreateApplication>>>
     export type ApplicationControllerCreateApplicationMutationBody = CreateApplicationDto
-    export type ApplicationControllerCreateApplicationMutationError = ErrorType<unknown>
+    export type ApplicationControllerCreateApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
 
-    export const useApplicationControllerCreateApplication = <TError = ErrorType<unknown>,
+    export const useApplicationControllerCreateApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerCreateApplication>>, TError,{data: CreateApplicationDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof applicationControllerCreateApplication>>,
@@ -97,7 +99,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ApplicationDto[]>(
       {url: `/application/mine`, method: 'GET', signal
     },
       options);
@@ -113,7 +115,7 @@ export const getApplicationControllerGetAllMyApplicationsQueryKey = () => {
     }
 
     
-export const getApplicationControllerGetAllMyApplicationsQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getApplicationControllerGetAllMyApplicationsQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<ErrorDto | ErrorDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -132,10 +134,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type ApplicationControllerGetAllMyApplicationsQueryResult = NonNullable<Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>>
-export type ApplicationControllerGetAllMyApplicationsQueryError = ErrorType<unknown>
+export type ApplicationControllerGetAllMyApplicationsQueryError = ErrorType<ErrorDto | ErrorDto>
 
 
-export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<ErrorDto | ErrorDto>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>,
@@ -145,7 +147,7 @@ export function useApplicationControllerGetAllMyApplications<TData = Awaited<Ret
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<ErrorDto | ErrorDto>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>,
@@ -155,12 +157,12 @@ export function useApplicationControllerGetAllMyApplications<TData = Awaited<Ret
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<ErrorDto | ErrorDto>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetAllMyApplications<TData = Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError = ErrorType<ErrorDto | ErrorDto>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllMyApplications>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -182,7 +184,7 @@ export const applicationControllerGetApplication = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ApplicationDto>(
       {url: `/application/${id}`, method: 'GET', signal
     },
       options);
@@ -198,7 +200,7 @@ export const getApplicationControllerGetApplicationQueryKey = (id?: string,) => 
     }
 
     
-export const getApplicationControllerGetApplicationQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getApplicationControllerGetApplicationQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<ErrorDto | ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -217,10 +219,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type ApplicationControllerGetApplicationQueryResult = NonNullable<Awaited<ReturnType<typeof applicationControllerGetApplication>>>
-export type ApplicationControllerGetApplicationQueryError = ErrorType<unknown>
+export type ApplicationControllerGetApplicationQueryError = ErrorType<ErrorDto | ErrorDto>
 
 
-export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof applicationControllerGetApplication>>,
@@ -230,7 +232,7 @@ export function useApplicationControllerGetApplication<TData = Awaited<ReturnTyp
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof applicationControllerGetApplication>>,
@@ -240,12 +242,12 @@ export function useApplicationControllerGetApplication<TData = Awaited<ReturnTyp
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetApplication<TData = Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetApplication>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -267,7 +269,7 @@ export const applicationControllerGetShareLink = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<string>(
       {url: `/application/${id}/share`, method: 'GET', signal
     },
       options);
@@ -283,7 +285,7 @@ export const getApplicationControllerGetShareLinkQueryKey = (id?: string,) => {
     }
 
     
-export const getApplicationControllerGetShareLinkQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getApplicationControllerGetShareLinkQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -302,10 +304,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type ApplicationControllerGetShareLinkQueryResult = NonNullable<Awaited<ReturnType<typeof applicationControllerGetShareLink>>>
-export type ApplicationControllerGetShareLinkQueryError = ErrorType<unknown>
+export type ApplicationControllerGetShareLinkQueryError = ErrorType<ErrorDto | ErrorDto>
 
 
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof applicationControllerGetShareLink>>,
@@ -315,7 +317,7 @@ export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof applicationControllerGetShareLink>>,
@@ -325,12 +327,12 @@ export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<unknown>>(
+export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -352,7 +354,7 @@ export const applicationControllerJoinApplication = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ApplicationDto>(
       {url: `/application/${id}/join`, method: 'POST', signal
     },
       options);
@@ -360,7 +362,7 @@ export const applicationControllerJoinApplication = (
   
 
 
-export const getApplicationControllerJoinApplicationMutationOptions = <TError = ErrorType<unknown>,
+export const getApplicationControllerJoinApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext> => {
 
@@ -387,9 +389,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ApplicationControllerJoinApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerJoinApplication>>>
     
-    export type ApplicationControllerJoinApplicationMutationError = ErrorType<unknown>
+    export type ApplicationControllerJoinApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
 
-    export const useApplicationControllerJoinApplication = <TError = ErrorType<unknown>,
+    export const useApplicationControllerJoinApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof applicationControllerJoinApplication>>,
@@ -408,7 +410,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ApplicationDto>(
       {url: `/application/${id}/send`, method: 'POST', signal
     },
       options);
@@ -416,7 +418,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   
 
 
-export const getApplicationControllerSendApplicationMutationOptions = <TError = ErrorType<unknown>,
+export const getApplicationControllerSendApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext> => {
 
@@ -443,9 +445,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ApplicationControllerSendApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerSendApplication>>>
     
-    export type ApplicationControllerSendApplicationMutationError = ErrorType<unknown>
+    export type ApplicationControllerSendApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
 
-    export const useApplicationControllerSendApplication = <TError = ErrorType<unknown>,
+    export const useApplicationControllerSendApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof applicationControllerSendApplication>>,

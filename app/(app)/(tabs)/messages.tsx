@@ -10,6 +10,33 @@ import { Users2Icon, ArrowRightIcon } from "lucide-react-native";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { Pressable } from "@/components/ui/pressable";
 import { useRouter } from "expo-router";
+import { useApplicationControllerGetAllMyApplications } from "@/src/api/seek-api/application";
+import { Loader } from "@/components/custom/loader";
+
+export default function MessagesScreen() {
+  const { data: applications, isLoading } = useApplicationControllerGetAllMyApplications();
+
+  return (
+    <SafeAreaView className="h-full bg-background-0">
+      <Loader isLoading={isLoading}>
+        <FlatList
+          className="px-6"
+          ListHeaderComponent={
+            <Text bold size="2xl" className="text-center pb-4">
+              Messages
+            </Text>
+          }
+          data={applications ?? []}
+          ItemSeparatorComponent={() => <Divider />}
+          renderItem={() => <MessageItem />}
+          ListEmptyComponent={() => <Text className="text-center text-primary-100 text-xl">
+            No groups yet.{'\n'}Start an application to get a group.
+          </Text>}
+        />
+      </Loader>
+    </SafeAreaView>
+  );
+}
 
 function MessageItem() {
   function LeaveButton() {
@@ -45,23 +72,5 @@ function MessageItem() {
         </HStack>
       </Pressable>
     </Swipeable>
-  );
-}
-
-export default function MessagesScreen() {
-  return (
-    <SafeAreaView className="h-full bg-background-0">
-      <FlatList
-        className="px-6"
-        ListHeaderComponent={
-          <Text bold size="2xl" className="text-center pb-4">
-            Messages
-          </Text>
-        }
-        data={["ahaha", "a"]}
-        ItemSeparatorComponent={() => <Divider />}
-        renderItem={() => <MessageItem />}
-      />
-    </SafeAreaView>
   );
 }

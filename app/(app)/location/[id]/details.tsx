@@ -5,11 +5,11 @@ import { VStack } from "@/components/ui/vstack/index";
 import { router } from "expo-router";
 import { Image } from "@/components/ui/image";
 import { FlatList, LayoutChangeEvent, ScrollView } from "react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollDots } from "@/components/custom/scroll-dots";
 import {
   useGlobalSearchParams,
-  useSearchParams,
+  useRouter,
 } from "expo-router/build/hooks";
 import { Text } from "@/components/ui/text";
 import {
@@ -17,14 +17,13 @@ import {
   useListingsControllerGetById,
 } from "@/src/api/seek-api/listings";
 import { queryClient } from "@/app/_layout";
-import { ErrorDto, Listing } from "@/src/api/seek-api/model";
+import { Listing } from "@/src/api/seek-api/model";
 import { HStack } from "@/components/ui/hstack";
 import { Button, ButtonText } from "@/components/ui/button";
 import {
   AlarmSmokeIcon,
   FlowerIcon,
   HeartIcon,
-  HeaterIcon,
   LucideIcon,
   ParkingSquareIcon,
   TvIcon,
@@ -34,6 +33,9 @@ import {
 import { Loader } from "@/components/custom/loader";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
+import { useApplicationControllerCreateApplication } from "@/src/api/seek-api/application";
+import { errorToast } from "@/src/utils/error-toast";
+import { SuccessToast } from "@/components/custom/success-toast";
 
 function getFurnishingStr(furnishingStatus: string) {
   if (furnishingStatus === "furnished") {
@@ -51,7 +53,24 @@ export default function DetailsScreen() {
   const [parentWidth, setParentWidth] = useState<number>(0);
   const [imageIndex, setImageIndex] = useState<number>(0);
   const { id } = useGlobalSearchParams<{ id: string }>();
-  const toast = useToast()
+  const router = useRouter();
+
+  const toast = useToast();
+  const { mutate: apply } = useApplicationControllerCreateApplication();
+  function handleApply() {
+    apply({
+      data: {
+        listingId: id
+      }
+    }, {
+      onError(error) {
+        errorToast({ toast, data: error.response?.data });
+      },
+      onSuccess() {
+        router.navigate("/application-successful");
+      }
+    })
+  }
 
   const { data, isLoading, isError } = useListingsControllerGetById(id, {
     query: {
@@ -99,7 +118,7 @@ export default function DetailsScreen() {
           <Pressable onPressIn={() => router.canGoBack() ? router.back() : router.navigate("/home")}>
             <Icon as={ArrowLeftIcon} size="xl" />
           </Pressable>
-          <Text className="text-2xl text-center font-semibold line-clamp-1 flex-1 text-white">
+          <Text className="text-2xl text-center font-semibold line-clamp-1 flex-1 text-primary-500">
             {data?.propertyTitle}
           </Text>
           <Box className="h-6 aspect-square" />
@@ -152,12 +171,12 @@ export default function DetailsScreen() {
           <VStack className="gap-4">
             <HStack>
               <VStack className="flex-[2]">
-                <Text className="text-2xl font-semibold text-white">
+                <Text className="text-2xl font-semibold text-primary-500">
                   {data?.propertyTitle}
                 </Text>
-                <Text className="text-sm text-white">{data?.streetAddress}</Text>
+                <Text className="text-sm text-primary-500">{data?.streetAddress}</Text>
               </VStack>
-              <Button size="lg" className="flex-1 rounded-xl">
+              <Button size="lg" className="flex-1 rounded-xl" onPress={handleApply}>
                 <ButtonText>Apply</ButtonText>
               </Button>
             </HStack>
@@ -214,7 +233,7 @@ export default function DetailsScreen() {
             </VStack>
 
             <VStack>
-              <Text className="text-xl font-semibold text-white">Amenities</Text>
+              <Text className="text-xl font-semibold text-primary-500">Amenities</Text>
               <Box className="flex flex-row flex-wrap">
                 {data?.amenities.map((amenity) => (
                   <Box key={amenity} className="w-[50%] justify-center p-1">
@@ -252,8 +271,8 @@ type LabeledTextProps = {
 function LabeledText({ label, value }: LabeledTextProps) {
   return (
     <VStack className="flex-1">
-      <Text className="text-lg font-semibold text-white">{label}</Text>
-      <Text className="text-sm text-white">{value}</Text>
+      <Text className="text-lg font-semibold text-primary-500">{label}</Text>
+      <Text className="text-sm text-primary-500">{value}</Text>
     </VStack>
   );
 }
@@ -285,7 +304,7 @@ function AmenityInfo({ amenity }: { amenity: string }) {
   return (
     <HStack className="gap-3 items-center">
       <Icon as={icon} size="sm" />
-      <Text className="text-center text-md text-white">{text}</Text>
+      <Text className="text-center text-md text-primary-500">{text}</Text>
     </HStack>
   );
 }
