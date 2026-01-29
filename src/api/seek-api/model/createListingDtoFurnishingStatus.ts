@@ -7,7 +7,7 @@ export type CreateListingDtoFurnishingStatus = typeof CreateListingDtoFurnishing
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateListingDtoFurnishingStatus = {
-  furnished: 'furnished',
-  unfurnished: 'unfurnished',
-  partFurnished: 'partFurnished',
+  Furnished: 'Furnished',
+  Unfurnished: 'Unfurnished',
+  'Part-Furnished': 'Part-Furnished',
 } as const;

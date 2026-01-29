@@ -396,7 +396,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   
 
 
-export const getUsersControllerAddDocumentMutationOptions = <TError = ErrorType<unknown>,
+export const getUsersControllerAddDocumentMutationOptions = <TError = ErrorType<ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerAddDocument>>, TError,{data: AddDocumentDto}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof usersControllerAddDocument>>, TError,{data: AddDocumentDto}, TContext> => {
 
@@ -423,9 +423,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type UsersControllerAddDocumentMutationResult = NonNullable<Awaited<ReturnType<typeof usersControllerAddDocument>>>
     export type UsersControllerAddDocumentMutationBody = AddDocumentDto
-    export type UsersControllerAddDocumentMutationError = ErrorType<unknown>
+    export type UsersControllerAddDocumentMutationError = ErrorType<ErrorDto>
 
-    export const useUsersControllerAddDocument = <TError = ErrorType<unknown>,
+    export const useUsersControllerAddDocument = <TError = ErrorType<ErrorDto>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerAddDocument>>, TError,{data: AddDocumentDto}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof usersControllerAddDocument>>,
