@@ -13,7 +13,6 @@ export function ShareButton({
   return (
     <Pressable onPressIn={share} hitSlop={10}>
       <ExternalLinkIcon
-        color="white"
         size={size} />
     </Pressable>
   );

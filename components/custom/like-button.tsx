@@ -17,7 +17,6 @@ export function LikeButton({
   return (
     <Pressable onPressIn={() => liked ? unlike() : like()} hitSlop={10}>
       <HeartIcon fill={liked ? "red" : "white"}
-        color="transparent"
         size={size} />
     </Pressable>
   );

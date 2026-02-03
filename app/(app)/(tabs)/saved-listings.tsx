@@ -28,6 +28,7 @@ import { ErrorToast } from "@/components/custom/error-toast";
 import { Box } from "@/components/ui/box";
 import { ShareButton } from "@/components/custom/share-button";
 import { getListingLink } from "@/components/links";
+import { useFocusEffect } from "@react-navigation/native";
 
 type TriggerProps = {
   isExpanded: boolean;
@@ -78,6 +79,7 @@ export default function SavedListings() {
             <FlatList
               data={applied ?? []}
               contentContainerClassName="gap-2"
+              keyExtractor={item => item._id}
               renderItem={({ item }) => (
                 <AppliedListingCard data={item.listing} />
               )}
@@ -189,8 +191,13 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
   const { mutate: like } = useLike();
   const { mutate: unlike } = useUnlike();
   const toast = useToast();
-  const liked = useMemo(() => false
-    // (user && data.likedBy?.includes(user._id)) ?? false
+
+  useFocusEffect(() => {
+    console.log("listing", data)
+  })
+
+  const liked = useMemo(() =>
+    (user && data.likedBy?.includes(user._id)) ?? false
     , [data, user])
 
   async function handleUnlike() {
