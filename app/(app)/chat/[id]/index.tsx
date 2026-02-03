@@ -9,7 +9,7 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable } from "react-native-gesture-handler";
 import { useCallback, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
@@ -17,6 +17,7 @@ import { useAuth } from "@/src/store/auth-store";
 import { useFocusEffect } from "@react-navigation/native";
 import { errorToast } from "@/src/utils/error-toast";
 import { useToast } from "@/components/ui/toast";
+import { useConversationControllerSendMessage } from "@/src/api/seek-api/conversation";
 
 enum EventNames {
   NEW_MESSAGE = "message:new",
@@ -29,18 +30,32 @@ export default function ChatScreen() {
   const { top, bottom } = useSafeAreaInsets();
   const accessToken = useAuth(state => state.accessToken);
 
-
+  const { mutate } = useConversationControllerSendMessage()
   const clientRef = useRef<Socket>(null);
   const toast = useToast();
 
-  function sendMessage() {
+
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  if (!id) {
+    return <Redirect href="/home" />;
+  }
+
+  function sendMessage(id: string, message: string) {
     if (!clientRef.current) {
       errorToast({ toast, data: { statusCode: -1, message: "Cannot send message, not connected to room." } });
       return;
     }
 
-
-
+    mutate({
+      id,
+      data: {
+        message
+      }
+    }, {
+      onError(error) {
+        errorToast({ toast, data: error.response?.data })
+      }
+    });
   }
 
   useEffect(() => {
