@@ -11,9 +11,63 @@ import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable } from "react-native-gesture-handler";
+import { useCallback, useEffect, useRef } from "react";
+import { io, Socket } from "socket.io-client";
+import { useAuth } from "@/src/store/auth-store";
+import { useFocusEffect } from "@react-navigation/native";
+import { errorToast } from "@/src/utils/error-toast";
+import { useToast } from "@/components/ui/toast";
+
+enum EventNames {
+  NEW_MESSAGE = "message:new",
+  JOIN = "conversation:join",
+}
+
+const BACKEND_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000"
 
 export default function ChatScreen() {
   const { top, bottom } = useSafeAreaInsets();
+  const accessToken = useAuth(state => state.accessToken);
+
+
+  const clientRef = useRef<Socket>(null);
+  const toast = useToast();
+
+  function sendMessage() {
+    if (!clientRef.current) {
+      errorToast({ toast, data: { statusCode: -1, message: "Cannot send message, not connected to room." } });
+      return;
+    }
+
+
+
+  }
+
+  useEffect(() => {
+    const client = io(`${BACKEND_URL}/converstaion`, {
+      extraHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+        // @ts-ignore
+        mobile: true,
+      },
+      transports: ["websocket"]
+    });
+
+    client.emit(EventNames.JOIN)
+    clientRef.current = client;
+
+    return () => { client.disconnect(); };
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (!clientRef.current) return;
+        clientRef.current.disconnect();
+      };
+    }, [])
+  );
+
   const messages = [
     {
       from: "John",
@@ -47,7 +101,7 @@ export default function ChatScreen() {
           <Text bold size="xl">
             {chat}
           </Text>
-          <Pressable onPressIn={() => router.push(`/(app)/${chat}/details`)}>
+          <Pressable onPressIn={() => router.push(`/chat/${chat}/details`)}>
             <Icon as={InfoIcon} size="xl" />
           </Pressable>
         </Box>
@@ -64,9 +118,7 @@ export default function ChatScreen() {
               className={`flex flex-1 flex-row w-full ${from === "Me" ? "justify-end" : "justify-start"}`}
             >
               <Box className="max-w-[66%]">
-                {from !== "Me" && (
-                  <Text className="w-fit flex-shrink">{from}</Text>
-                )}
+                <Text className="w-fit flex-shrink">{from}</Text>
                 <Box className="bg-background-200 rounded-md p-2">
                   <Text className="w-fit flex-shrink">{message}</Text>
                 </Box>

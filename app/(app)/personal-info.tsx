@@ -6,39 +6,43 @@ import { Divider } from "@/components/ui/divider";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card/index";
 import { HStack } from "@/components/ui/hstack";
-import { BuildingIcon, HandshakeIcon, IdCardIcon, UsersIcon, WalletIcon } from "lucide-react-native";
-import React, { ReactNode, useCallback, useState } from "react";
+import { BuildingIcon, CheckCircleIcon, HandshakeIcon, IdCardIcon, UsersIcon, WalletIcon, XCircleIcon } from "lucide-react-native";
+import React, { ReactNode, useCallback, useMemo, useState } from "react";
 import { ScrollView } from "react-native";
 import * as DocumentPicker from 'expo-document-picker';
 import { uploadFile } from "@/src/utils/upload-file";
-import { AddDocumentDtoDocumentType, UserDto } from "@/src/api/seek-api/model";
+import { AddDocumentDtoDocumentType, DocumentTypesDtoDataItem, UserDto } from "@/src/api/seek-api/model";
 import { Loader } from "@/components/custom/loader";
 import { Redirect } from "expo-router";
 import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
 import { useToast } from "@/components/ui/toast";
 import { errorToast } from "@/src/utils/error-toast";
 import { useProfilePicture } from "@/hooks/use-profile-photo";
-import { useUsersControllerAddDocument } from "@/src/api/seek-api/users";
+import { useUsersControllerAddDocument, useUsersControllerDocumentTypes } from "@/src/api/seek-api/users";
 import { Actionsheet, ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ActionsheetDragIndicatorWrapper, ActionsheetItem, ActionsheetItemText } from "@/components/ui/actionsheet";
 
 export default function PersonalInfo() {
   const { data, isLoading, isError } = useAuthControllerCurrentUser();
+  const { data: docs, isLoading: loadingDocs } = useUsersControllerDocumentTypes();
+
   if (isError) {
     return <Redirect href="/home" />
   }
+  console.log("docs", docs)
 
   return (
-    <Loader isLoading={isLoading || !data}>
-      <InnerPersonalInfo user={data!} />
+    <Loader isLoading={isLoading || data == null || loadingDocs}>
+      <InnerPersonalInfo user={data!} docTypes={docs?.data ?? []} />
     </Loader>
   );
 }
 
 type InnerPersonalInfoProps = {
   user: UserDto
+  docTypes: DocumentTypesDtoDataItem[]
 }
 
-function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
+function InnerPersonalInfo({ user, docTypes }: InnerPersonalInfoProps) {
   const toast = useToast();
 
   const { mutate: addDocument } = useUsersControllerAddDocument();
@@ -64,6 +68,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
     // upload the file
     const userId = user._id;
     let fileUrl: string;
+    let key: string;
     try {
       const data = await uploadFile({
         uri: asset.uri,
@@ -72,6 +77,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
         folder: "private",
       });
       fileUrl = data.fileUrl;
+      key = data.key;
     } catch {
       errorToast({ toast, data: { message: "Failed to upload file.", statusCode: -1 } });
       return;
@@ -81,7 +87,8 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
     addDocument({
       data: {
         url: fileUrl,
-        documentType: doc
+        documentType: doc,
+        key
       }
     }, {
       onError(error) {
@@ -90,7 +97,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
     });
   };
 
-  const { pickImage, image } = useProfilePicture(user.profilePicUrl);
+  const { pickImage } = useProfilePicture(user.profilePicUrl);
   const [show, setShow] = useState<boolean>(false)
   const handleImage = useCallback(async (camera: boolean) => {
     const image = await pickImage(camera);
@@ -99,12 +106,15 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
       setShow(false);
       return;
     }
+    setShow(false);
 
     // upload the file
     const userId = user._id;
     const mimeType = image.mimeType ?? "image/*";
     let fileUrl: string;
+    let key: string;
     try {
+      console.log("UPLOADING FILE")
       const data = await uploadFile({
         uri: image.uri,
         mimeType,
@@ -112,6 +122,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
         folder: "private",
       });
       fileUrl = data.fileUrl;
+      key = data.key;
     } catch {
       errorToast({ toast, data: { message: "Failed to upload file.", statusCode: -1 } });
       return;
@@ -122,14 +133,31 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
       data: {
         url: fileUrl,
         documentType: "IDENTIFICATION",
+        key
       },
     }, {
       onError(error) {
         errorToast({ toast, data: error.response?.data });
       },
     });
-    setShow(false);
   }, []);
+
+  const {
+    hasIdentification,
+    hasProofOfIncome,
+    hasGaurantorAgreement,
+    hasLandlordReference,
+    hasCharacterReference
+  } = useMemo(() => {
+    return {
+      hasIdentification: docTypes.includes("IDENTIFICATION"),
+      hasProofOfIncome: docTypes.includes("PROOF_OF_INCOME"),
+      hasGaurantorAgreement: docTypes.includes("GUARANTOR_AGREEMENT"),
+      hasLandlordReference: docTypes.includes("LANDLORD_REFERENCE"),
+      hasCharacterReference: docTypes.includes("CHARACTER_REFERENCE")
+    }
+
+  }, [user]);
 
   return (
     <SafeAreaView>
@@ -139,6 +167,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
         <BackButton title="Peronal Information" />
 
         <DocumentCard
+          present={true}
           onPress={() => setShow(true)}
           title="Identification"
           description="Please upload your passport or national ID."
@@ -147,6 +176,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
           } />
 
         <DocumentCard
+          present={hasProofOfIncome}
           onPress={() => handleFile("PROOF_OF_INCOME")}
           title="Proof of Income"
           description="Please upload your proof of income."
@@ -155,6 +185,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
           } />
 
         <DocumentCard
+          present={hasGaurantorAgreement}
           onPress={() => handleFile("GUARANTOR_AGREEMENT")}
           title="Guarantor Agreement"
           description="Please upload your guarantor agreement with a UK based guarantor."
@@ -163,6 +194,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
           } />
 
         <DocumentCard
+          present={hasLandlordReference}
           onPress={() => handleFile("LANDLORD_REFERENCE")}
           title="Landlord Reference"
           description="Please your previous landlord reference or University accommodation letter of reference."
@@ -171,6 +203,7 @@ function InnerPersonalInfo({ user }: InnerPersonalInfoProps) {
           } />
 
         <DocumentCard
+          present={hasCharacterReference}
           onPress={() => handleFile("CHARACTER_REFERENCE")}
           title="Character Reference"
           description="Please upload a character reference from a non-friend and non-relative."
@@ -201,6 +234,7 @@ type DocumentCardProps = {
   title: string;
   description: string;
   icon: ReactNode;
+  present: boolean;
   onPress: () => void;
 }
 
@@ -208,13 +242,17 @@ function DocumentCard({
   title,
   description,
   icon,
+  present,
   onPress
 }: DocumentCardProps) {
   return (
     <Card className="gap-2 border-[1px] border-white rounded-xl">
-      <HStack className="items-center gap-2">
-        {icon}
-        <Text className="text-2xl">{title}</Text>
+      <HStack className="justify-between">
+        <HStack className="items-center gap-2">
+          {icon}
+          <Text className="text-2xl">{title}</Text>
+        </HStack>
+        <PresentIndicator present={present} />
       </HStack>
       <Divider />
       <VStack className="gap-4">
@@ -226,3 +264,16 @@ function DocumentCard({
     </Card>
   )
 }
+
+type PresentIndicatorProps = {
+  present: boolean;
+}
+
+function PresentIndicator({ present }: PresentIndicatorProps) {
+  if (present) {
+    return <CheckCircleIcon />
+  } else {
+    return <XCircleIcon />
+  }
+}
+

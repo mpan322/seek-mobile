@@ -22,6 +22,8 @@ export * from './createListingDtoEpcRating';
 export * from './createListingDtoFurnishingStatus';
 export * from './createListingDtoPropertyType';
 export * from './createUserDto';
+export * from './documentTypesDto';
+export * from './documentTypesDtoDataItem';
 export * from './errorDto';
 export * from './flag';
 export * from './flagCategory';

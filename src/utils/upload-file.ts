@@ -8,13 +8,13 @@ type UploadFileProps = {
   access_token?: string
 };
 
-export async function uploadFile({ uri, mimeType, name, access_token }: UploadFileProps) {
+export async function uploadFile({ uri, mimeType, name, folder, access_token }: UploadFileProps) {
   const response = await fetch(uri);
   const blob = await response.blob();
   const data = await uploadControllerGetPresignedUrl({
     fileType: mimeType,
     filename: name,
-    folder: "public",
+    folder: folder,
   }, {
     headers: {
       Authorization: access_token && `Bearer ${access_token}`

@@ -9,7 +9,6 @@ export type ApplicationDtoStage = typeof ApplicationDtoStage[keyof typeof Applic
 export const ApplicationDtoStage = {
   SENT: 'SENT',
   NOT_SENT: 'NOT_SENT',
-  UNDER_REVIEW: 'UNDER_REVIEW',
   ACCEPTED: 'ACCEPTED',
   REJECTED: 'REJECTED',
 } as const;

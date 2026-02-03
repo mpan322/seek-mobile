@@ -12,6 +12,8 @@ import { Pressable } from "@/components/ui/pressable";
 import { useRouter } from "expo-router";
 import { useApplicationControllerGetAllMyApplications } from "@/src/api/seek-api/application";
 import { Loader } from "@/components/custom/loader";
+import { ApplicationDto, Conversation, ConversationDto } from "@/src/api/seek-api/model";
+import { useMemo } from "react";
 
 export default function MessagesScreen() {
   const { data: applications, isLoading } = useApplicationControllerGetAllMyApplications();
@@ -28,25 +30,43 @@ export default function MessagesScreen() {
           }
           data={applications ?? []}
           ItemSeparatorComponent={() => <Divider />}
-          renderItem={() => <MessageItem />}
-          ListEmptyComponent={() => <Text className="text-center text-primary-100 text-xl">
-            No groups yet.{'\n'}Start an application to get a group.
-          </Text>}
+          renderItem={({ item }) => <MessageItem data={item} />}
+          ListEmptyComponent={() => (
+            <Text className="text-center text-primary-100 text-xl">
+              No groups yet.{'\n'}Start an application to get a group.
+            </Text>
+          )}
         />
       </Loader>
     </SafeAreaView>
   );
 }
 
-function MessageItem() {
+type MessageItemProps = {
+  data: ApplicationDto;
+};
+
+function MessageItem({ data }: MessageItemProps) {
   function LeaveButton() {
     return (
       <Box className="bg-red-600 p-2 items-center">
-        <Icon as={ArrowRightIcon} color="white" fill="white" size="xl" />
-        <Text>Leave</Text>
+        <Icon as={ArrowRightIcon} fill="white" size="xl" />
+        <Text className="text-primary-950">Leave</Text>
       </Box>
     );
   }
+
+  const time = useMemo(() => {
+    if (!data.conversation.lastMessage) {
+      return undefined;
+    }
+    const date = new Date(data.conversation.lastMessage.createdAt);
+    return date.toLocaleString("en-GB", {
+      timeZone: 'Europe/London',
+      dateStyle: 'full',
+      timeStyle: 'short'
+    });
+  }, [data]);
 
   const router = useRouter();
 
@@ -57,16 +77,15 @@ function MessageItem() {
           <Box className="bg-background-400 w-10 h-10 rounded-full items-center justify-center text-center">
             <Icon as={Users2Icon} color="black" fill="black" size="xl" />
           </Box>
-          <Box className=" bg-primary-100" />
+          <Box className="bg-primary-100" />
           <VStack className="flex-1">
-            <Text bold>Group Chat Name</Text>
+            <Text bold>{data.conversation.name}</Text>
             <Text className="text-background-300" size="sm">
-              I like this!
             </Text>
           </VStack>
           <Box>
             <Text size="sm" className="text-background-300">
-              10:00 AM
+              {time}
             </Text>
           </Box>
         </HStack>

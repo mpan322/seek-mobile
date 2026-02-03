@@ -41,7 +41,7 @@ export const applicationControllerCreateApplication = (
 ) => {
       
       
-      return customInstance<unknown>(
+      return customInstance<ApplicationDto>(
       {url: `/application/create`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createApplicationDto, signal
@@ -93,7 +93,367 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
       return useMutation(mutationOptions, queryClient);
     }
-    export const applicationControllerGetAllMyApplications = (
+    export const applicationControllerJoinApplication = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/application/${id}/join`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getApplicationControllerJoinApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['applicationControllerJoinApplication'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  applicationControllerJoinApplication(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApplicationControllerJoinApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerJoinApplication>>>
+    
+    export type ApplicationControllerJoinApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
+
+    export const useApplicationControllerJoinApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof applicationControllerJoinApplication>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getApplicationControllerJoinApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const applicationControllerSendApplication = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/application/${id}/send`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getApplicationControllerSendApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['applicationControllerSendApplication'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerSendApplication>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  applicationControllerSendApplication(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApplicationControllerSendApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerSendApplication>>>
+    
+    export type ApplicationControllerSendApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
+
+    export const useApplicationControllerSendApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof applicationControllerSendApplication>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getApplicationControllerSendApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const applicationControllerApproveApplication = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/application/${id}/approve`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getApplicationControllerApproveApplicationMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerApproveApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerApproveApplication>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['applicationControllerApproveApplication'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerApproveApplication>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  applicationControllerApproveApplication(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApplicationControllerApproveApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerApproveApplication>>>
+    
+    export type ApplicationControllerApproveApplicationMutationError = ErrorType<unknown>
+
+    export const useApplicationControllerApproveApplication = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerApproveApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof applicationControllerApproveApplication>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getApplicationControllerApproveApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const applicationControllerRejectApplication = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/application/${id}/reject`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getApplicationControllerRejectApplicationMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerRejectApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerRejectApplication>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['applicationControllerRejectApplication'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerRejectApplication>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  applicationControllerRejectApplication(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApplicationControllerRejectApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerRejectApplication>>>
+    
+    export type ApplicationControllerRejectApplicationMutationError = ErrorType<unknown>
+
+    export const useApplicationControllerRejectApplication = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerRejectApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof applicationControllerRejectApplication>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getApplicationControllerRejectApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const applicationControllerDeleteApplication = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/application/${id}/delete`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getApplicationControllerDeleteApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerDeleteApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerDeleteApplication>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['applicationControllerDeleteApplication'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerDeleteApplication>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  applicationControllerDeleteApplication(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApplicationControllerDeleteApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerDeleteApplication>>>
+    
+    export type ApplicationControllerDeleteApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
+
+    export const useApplicationControllerDeleteApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerDeleteApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof applicationControllerDeleteApplication>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getApplicationControllerDeleteApplicationMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const applicationControllerGetAllForListing = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/application/listing/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getApplicationControllerGetAllForListingQueryKey = (id?: string,) => {
+    return [
+    `/application/listing/${id}`
+    ] as const;
+    }
+
+    
+export const getApplicationControllerGetAllForListingQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getApplicationControllerGetAllForListingQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>> = ({ signal }) => applicationControllerGetAllForListing(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ApplicationControllerGetAllForListingQueryResult = NonNullable<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>>
+export type ApplicationControllerGetAllForListingQueryError = ErrorType<unknown>
+
+
+export function useApplicationControllerGetAllForListing<TData = Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError = ErrorType<unknown>>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof applicationControllerGetAllForListing>>,
+          TError,
+          Awaited<ReturnType<typeof applicationControllerGetAllForListing>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplicationControllerGetAllForListing<TData = Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof applicationControllerGetAllForListing>>,
+          TError,
+          Awaited<ReturnType<typeof applicationControllerGetAllForListing>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplicationControllerGetAllForListing<TData = Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useApplicationControllerGetAllForListing<TData = Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError = ErrorType<unknown>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetAllForListing>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getApplicationControllerGetAllForListingQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const applicationControllerGetAllMyApplications = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -184,7 +544,7 @@ export const applicationControllerGetApplication = (
 ) => {
       
       
-      return customInstance<ApplicationDto>(
+      return customInstance<void>(
       {url: `/application/${id}`, method: 'GET', signal
     },
       options);
@@ -263,256 +623,3 @@ export function useApplicationControllerGetApplication<TData = Awaited<ReturnTyp
 
 
 
-export const applicationControllerGetShareLink = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<string>(
-      {url: `/application/${id}/share`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
-
-export const getApplicationControllerGetShareLinkQueryKey = (id?: string,) => {
-    return [
-    `/application/${id}/share`
-    ] as const;
-    }
-
-    
-export const getApplicationControllerGetShareLinkQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getApplicationControllerGetShareLinkQueryKey(id);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof applicationControllerGetShareLink>>> = ({ signal }) => applicationControllerGetShareLink(id, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ApplicationControllerGetShareLinkQueryResult = NonNullable<Awaited<ReturnType<typeof applicationControllerGetShareLink>>>
-export type ApplicationControllerGetShareLinkQueryError = ErrorType<ErrorDto | ErrorDto>
-
-
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof applicationControllerGetShareLink>>,
-          TError,
-          Awaited<ReturnType<typeof applicationControllerGetShareLink>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof applicationControllerGetShareLink>>,
-          TError,
-          Awaited<ReturnType<typeof applicationControllerGetShareLink>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useApplicationControllerGetShareLink<TData = Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError = ErrorType<ErrorDto | ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetShareLink>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getApplicationControllerGetShareLinkQueryOptions(id,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const applicationControllerJoinApplication = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApplicationDto>(
-      {url: `/application/${id}/join`, method: 'POST', signal
-    },
-      options);
-    }
-  
-
-
-export const getApplicationControllerJoinApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['applicationControllerJoinApplication'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  applicationControllerJoinApplication(id,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ApplicationControllerJoinApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerJoinApplication>>>
-    
-    export type ApplicationControllerJoinApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
-
-    export const useApplicationControllerJoinApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerJoinApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof applicationControllerJoinApplication>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
-
-      const mutationOptions = getApplicationControllerJoinApplicationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const applicationControllerSendApplication = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<ApplicationDto>(
-      {url: `/application/${id}/send`, method: 'POST', signal
-    },
-      options);
-    }
-  
-
-
-export const getApplicationControllerSendApplicationMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['applicationControllerSendApplication'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerSendApplication>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  applicationControllerSendApplication(id,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ApplicationControllerSendApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerSendApplication>>>
-    
-    export type ApplicationControllerSendApplicationMutationError = ErrorType<ErrorDto | ErrorDto>
-
-    export const useApplicationControllerSendApplication = <TError = ErrorType<ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerSendApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof applicationControllerSendApplication>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
-
-      const mutationOptions = getApplicationControllerSendApplicationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    export const applicationControllerReviewApplication = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/application/${id}/review`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getApplicationControllerReviewApplicationMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerReviewApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof applicationControllerReviewApplication>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['applicationControllerReviewApplication'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof applicationControllerReviewApplication>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  applicationControllerReviewApplication(id,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ApplicationControllerReviewApplicationMutationResult = NonNullable<Awaited<ReturnType<typeof applicationControllerReviewApplication>>>
-    
-    export type ApplicationControllerReviewApplicationMutationError = ErrorType<unknown>
-
-    export const useApplicationControllerReviewApplication = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof applicationControllerReviewApplication>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof applicationControllerReviewApplication>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
-
-      const mutationOptions = getApplicationControllerReviewApplicationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    

@@ -6,4 +6,5 @@ import type { AddDocumentDtoDocumentType } from './addDocumentDtoDocumentType';
 export interface AddDocumentDto {
   documentType: AddDocumentDtoDocumentType;
   url: string;
+  key?: string;
 }
