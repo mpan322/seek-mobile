@@ -11,13 +11,14 @@ import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable } from "react-native-gesture-handler";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "@/src/store/auth-store";
 import { useFocusEffect } from "@react-navigation/native";
 import { errorToast } from "@/src/utils/error-toast";
 import { useToast } from "@/components/ui/toast";
-import { useConversationControllerSendMessage } from "@/src/api/seek-api/conversation";
+import { useConversationControllerGetMessages, useConversationControllerSendMessage } from "@/src/api/seek-api/conversation";
+import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
 
 enum EventNames {
   NEW_MESSAGE = "message:new",
@@ -28,9 +29,10 @@ const BACKEND_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000"
 
 export default function ChatScreen() {
   const { top, bottom } = useSafeAreaInsets();
+  const router = useRouter();
   const accessToken = useAuth(state => state.accessToken);
 
-  const { mutate } = useConversationControllerSendMessage()
+  const { mutate } = useConversationControllerSendMessage({})
   const clientRef = useRef<Socket>(null);
   const toast = useToast();
 
@@ -40,7 +42,22 @@ export default function ChatScreen() {
     return <Redirect href="/home" />;
   }
 
-  function sendMessage(id: string, message: string) {
+  const { data: messages, isError } = useConversationControllerGetMessages(id, {});
+  const { data: user, isError: isUserError } = useAuthControllerCurrentUser();
+
+
+  useEffect(() => {
+    if (isError) {
+      console.log("failed to get messages")
+      router.navigate("/home");
+    }
+  }, [isError]);
+
+  const [message, setMessage] = useState<string>("");
+  function sendMessage(id: string) {
+    if (message.length === 0) {
+      return;
+    }
     if (!clientRef.current) {
       errorToast({ toast, data: { statusCode: -1, message: "Cannot send message, not connected to room." } });
       return;
@@ -71,6 +88,7 @@ export default function ChatScreen() {
     client.emit(EventNames.JOIN)
     clientRef.current = client;
 
+
     return () => { client.disconnect(); };
   }, []);
 
@@ -83,27 +101,6 @@ export default function ChatScreen() {
     }, [])
   );
 
-  const messages = [
-    {
-      from: "John",
-      message: "Hello, how are you?",
-    },
-    {
-      from: "Jane",
-      message:
-        "I'm doing great, thanks for asking! jlkadsfj;lasdkfjalsdkjflasjdf;lasd;flkjas;dfkljaskd;ladifjasldfja;skdjf",
-    },
-    {
-      from: "Me",
-      message: "No problem, I'm here to help.",
-    },
-    {
-      from: "Jane",
-      message: "That's great to hear!",
-    },
-  ];
-
-  const router = useRouter();
   const { chat } = useLocalSearchParams<{ chat: string }>();
 
   return (
@@ -127,15 +124,15 @@ export default function ChatScreen() {
           contentContainerClassName="gap-2"
           decelerationRate="fast"
         >
-          {messages.map(({ message, from }) => (
+          {messages?.map(({ _id, sender, data }) => (
             <Box
-              key={message + from}
-              className={`flex flex-1 flex-row w-full ${from === "Me" ? "justify-end" : "justify-start"}`}
+              key={_id}
+              className={`flex flex-1 flex-row w-full ${user?._id === sender._id ? "justify-end" : "justify-start"}`}
             >
               <Box className="max-w-[66%]">
-                <Text className="w-fit flex-shrink">{from}</Text>
+                <Text className="w-fit flex-shrink">{sender.name}</Text>
                 <Box className="bg-background-200 rounded-md p-2">
-                  <Text className="w-fit flex-shrink">{message}</Text>
+                  <Text className="w-fit flex-shrink">{data}</Text>
                 </Box>
               </Box>
             </Box>
@@ -148,8 +145,11 @@ export default function ChatScreen() {
           keyboardVerticalOffset={top + bottom}
         >
           <Input variant="rounded" size="lg">
-            <InputField placeholder="Message..." />
-            <InputSlot className="pr-3">
+            <InputField placeholder="Message..."
+              onSubmitEditing={() => sendMessage(id)}
+              onChangeText={setMessage} />
+            <InputSlot className="pr-3"
+              onPressIn={() => sendMessage(id)}>
               <InputIcon as={ArrowUpIcon} size="xl" />
             </InputSlot>
           </Input>
