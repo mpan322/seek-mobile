@@ -453,6 +453,91 @@ export function useApplicationControllerGetAllForListing<TData = Awaited<ReturnT
 
 
 
+export const applicationControllerGetByConversation = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ApplicationDto>(
+      {url: `/application/conversation/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getApplicationControllerGetByConversationQueryKey = (id?: string,) => {
+    return [
+    `/application/conversation/${id}`
+    ] as const;
+    }
+
+    
+export const getApplicationControllerGetByConversationQueryOptions = <TData = Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError = ErrorType<ErrorDto | ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getApplicationControllerGetByConversationQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof applicationControllerGetByConversation>>> = ({ signal }) => applicationControllerGetByConversation(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ApplicationControllerGetByConversationQueryResult = NonNullable<Awaited<ReturnType<typeof applicationControllerGetByConversation>>>
+export type ApplicationControllerGetByConversationQueryError = ErrorType<ErrorDto | ErrorDto>
+
+
+export function useApplicationControllerGetByConversation<TData = Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError = ErrorType<ErrorDto | ErrorDto>>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof applicationControllerGetByConversation>>,
+          TError,
+          Awaited<ReturnType<typeof applicationControllerGetByConversation>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplicationControllerGetByConversation<TData = Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError = ErrorType<ErrorDto | ErrorDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof applicationControllerGetByConversation>>,
+          TError,
+          Awaited<ReturnType<typeof applicationControllerGetByConversation>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useApplicationControllerGetByConversation<TData = Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError = ErrorType<ErrorDto | ErrorDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useApplicationControllerGetByConversation<TData = Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError = ErrorType<ErrorDto | ErrorDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof applicationControllerGetByConversation>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getApplicationControllerGetByConversationQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
 export const applicationControllerGetAllMyApplications = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -544,7 +629,7 @@ export const applicationControllerGetApplication = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ApplicationDto>(
       {url: `/application/${id}`, method: 'GET', signal
     },
       options);

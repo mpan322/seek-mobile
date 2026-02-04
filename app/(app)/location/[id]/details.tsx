@@ -91,7 +91,7 @@ export default function DetailsScreen() {
             Listing[]
           >(getListingsControllerGetAllVerifiedListingsQueryKey())
           ?.find((listing) => listing._id === id);
-      }
+      },
     },
   });
   useEffect(() => {
@@ -103,9 +103,9 @@ export default function DetailsScreen() {
           statusCode: -1,
         }} />
       })
-      router.navigate("/home");
+      router.replace("/home");
     }
-  }, [isError, id]);
+  }, [isError]);
 
   const onLayout = (e: LayoutChangeEvent) => {
     setParentWidth(e.nativeEvent.layout.width);

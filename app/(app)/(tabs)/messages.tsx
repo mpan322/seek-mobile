@@ -61,11 +61,9 @@ function MessageItem({ data }: MessageItemProps) {
       return undefined;
     }
     const date = new Date(data.conversation.lastMessage.createdAt);
-    return date.toLocaleString("en-GB", {
-      timeZone: 'Europe/London',
-      dateStyle: 'full',
-      timeStyle: 'short'
-    });
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`
   }, [data]);
 
   const router = useRouter();
@@ -80,8 +78,6 @@ function MessageItem({ data }: MessageItemProps) {
           <Box className="bg-primary-100" />
           <VStack className="flex-1">
             <Text bold>{data.conversation.name}</Text>
-            <Text className="text-background-300" size="sm">
-            </Text>
           </VStack>
           <Box>
             <Text size="sm" className="text-background-300">

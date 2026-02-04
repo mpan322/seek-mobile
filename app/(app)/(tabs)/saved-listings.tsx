@@ -21,7 +21,7 @@ import { useListingsControllerGetLiked } from "@/src/api/seek-api/listings";
 import { useApplicationControllerGetAllMyApplications } from "@/src/api/seek-api/application";
 import { LikeButton } from "@/components/custom/like-button";
 import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useLike, useUnlike } from "@/hooks/like";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
@@ -37,6 +37,11 @@ type TriggerProps = {
 export default function SavedListings() {
   const { data: liked } = useListingsControllerGetLiked();
   const { data: applied } = useApplicationControllerGetAllMyApplications();
+  useFocusEffect(
+    useCallback(() => {
+      console.log(applied);
+    }, [])
+  );
 
   return (
     <SafeAreaView className="p-8 bg-background-0 h-full">
@@ -131,7 +136,6 @@ function LikedListingCard({ data }: LikedListingCardProps) {
   const liked = useMemo(() => (user && data.likedBy?.includes(user._id)) ?? false, [data, user])
 
   async function handleUnlike() {
-    console.log("UNLIKE PRESSED")
     unlike({ id: data._id }, {
       onError(error) {
         toast.show({
@@ -145,7 +149,6 @@ function LikedListingCard({ data }: LikedListingCardProps) {
   }
 
   async function handleLike() {
-    console.log("LIKE PRESSED")
     like({ id: data._id }, {
       onError(error) {
         toast.show({
@@ -192,10 +195,6 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
   const { mutate: unlike } = useUnlike();
   const toast = useToast();
 
-  useFocusEffect(() => {
-    console.log("listing", data)
-  })
-
   const liked = useMemo(() =>
     (user && data.likedBy?.includes(user._id)) ?? false
     , [data, user])
@@ -237,9 +236,9 @@ function AppliedListingCard({ data }: AppliedListindCardProps) {
       data={data}
       left={
         <HStack className="gap-3">
-          <LikeButton unlike={handleLike}
+          <LikeButton unlike={handleUnlike}
             size={20}
-            like={handleUnlike}
+            like={handleLike}
             liked={liked} />
           <ShareButton size={20} share={handleShare} />
         </HStack>

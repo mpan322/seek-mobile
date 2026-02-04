@@ -21,8 +21,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ConversationDto,
   ErrorDto,
-  MessageDto,
   SendMessageDto
 } from './model';
 
@@ -94,14 +94,14 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
       return useMutation(mutationOptions, queryClient);
     }
-    export const conversationControllerGetMessages = (
+    export const conversationControllerGetConversation = (
     id: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<MessageDto[]>(
-      {url: `/conversation/${id}/messages`, method: 'GET', signal
+      return customInstance<ConversationDto>(
+      {url: `/conversation/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -109,66 +109,66 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-export const getConversationControllerGetMessagesQueryKey = (id?: string,) => {
+export const getConversationControllerGetConversationQueryKey = (id?: string,) => {
     return [
-    `/conversation/${id}/messages`
+    `/conversation/${id}`
     ] as const;
     }
 
     
-export const getConversationControllerGetMessagesQueryOptions = <TData = Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError = ErrorType<ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getConversationControllerGetConversationQueryOptions = <TData = Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError = ErrorType<ErrorDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getConversationControllerGetMessagesQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getConversationControllerGetConversationQueryKey(id);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof conversationControllerGetMessages>>> = ({ signal }) => conversationControllerGetMessages(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof conversationControllerGetConversation>>> = ({ signal }) => conversationControllerGetConversation(id, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ConversationControllerGetMessagesQueryResult = NonNullable<Awaited<ReturnType<typeof conversationControllerGetMessages>>>
-export type ConversationControllerGetMessagesQueryError = ErrorType<ErrorDto>
+export type ConversationControllerGetConversationQueryResult = NonNullable<Awaited<ReturnType<typeof conversationControllerGetConversation>>>
+export type ConversationControllerGetConversationQueryError = ErrorType<ErrorDto>
 
 
-export function useConversationControllerGetMessages<TData = Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError = ErrorType<ErrorDto>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError, TData>> & Pick<
+export function useConversationControllerGetConversation<TData = Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError = ErrorType<ErrorDto>>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof conversationControllerGetMessages>>,
+          Awaited<ReturnType<typeof conversationControllerGetConversation>>,
           TError,
-          Awaited<ReturnType<typeof conversationControllerGetMessages>>
+          Awaited<ReturnType<typeof conversationControllerGetConversation>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConversationControllerGetMessages<TData = Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError = ErrorType<ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError, TData>> & Pick<
+export function useConversationControllerGetConversation<TData = Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError = ErrorType<ErrorDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof conversationControllerGetMessages>>,
+          Awaited<ReturnType<typeof conversationControllerGetConversation>>,
           TError,
-          Awaited<ReturnType<typeof conversationControllerGetMessages>>
+          Awaited<ReturnType<typeof conversationControllerGetConversation>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConversationControllerGetMessages<TData = Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError = ErrorType<ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useConversationControllerGetConversation<TData = Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError = ErrorType<ErrorDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useConversationControllerGetMessages<TData = Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError = ErrorType<ErrorDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetMessages>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useConversationControllerGetConversation<TData = Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError = ErrorType<ErrorDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof conversationControllerGetConversation>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getConversationControllerGetMessagesQueryOptions(id,options)
+  const queryOptions = getConversationControllerGetConversationQueryOptions(id,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

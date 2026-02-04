@@ -1,8 +1,8 @@
 import { queryClient } from "@/app/_layout";
-import { applicationControllerGetAllMyApplications, getApplicationControllerGetAllMyApplicationsQueryKey } from "@/src/api/seek-api/application";
+import { getApplicationControllerGetAllMyApplicationsQueryKey } from "@/src/api/seek-api/application";
 import { useAuthControllerCurrentUser } from "@/src/api/seek-api/auth";
 import { getListingsControllerGetAllVerifiedListingsQueryKey, getListingsControllerGetLikedQueryKey, useListingsControllerLikeListing, useListingsControllerUnlikeListing } from "@/src/api/seek-api/listings";
-import { LikedListingsDto, Listing } from "@/src/api/seek-api/model";
+import { ApplicationDto, LikedListingsDto, Listing } from "@/src/api/seek-api/model";
 
 type UpdateLikeProps = {
   listings: Listing[];
@@ -56,7 +56,6 @@ export function useLike() {
         if (!user) {
           return;
         }
-        console.log("on mutate running");
 
         await queryClient.cancelQueries({
           queryKey: getListingsControllerGetAllVerifiedListingsQueryKey()
@@ -74,18 +73,12 @@ export function useLike() {
         const liked = queryClient.getQueryData<LikedListingsDto>(
           getListingsControllerGetLikedQueryKey()
         );
-        const applied = queryClient.getQueryData<Listing[]>(
+        const applied = queryClient.getQueryData<ApplicationDto[]>(
           getApplicationControllerGetAllMyApplicationsQueryKey()
-        );
-        console.log(
-          "keys found exist",
-          verified != undefined,
-          liked != undefined,
-          applied != undefined
         );
 
         const listing = verified?.find(elem => elem._id === id)
-          ?? applied?.find(elem => elem._id === id)
+          ?? applied?.find(elem => elem.listing._id === id)?.listing
           ?? liked?.data.find(elem => elem._id === id);
 
         queryClient.setQueriesData<Listing[]>(
@@ -94,15 +87,12 @@ export function useLike() {
             exact: false
           },
           (curr) => {
-            console.log("set query data running: all verified", curr?.length)
             if (!curr) return curr;
-            console.log("set query data running: all verified (not undef)")
             const old = updateLike({
               listingId: id,
               userId: user._id,
               listings: curr,
             });
-            console.log("NOTHING CHANGED", old === curr);
             return old;
           }
         );
@@ -112,32 +102,39 @@ export function useLike() {
             exact: false
           },
           (curr) => {
-            console.log("set query data running: get liked")
             if (!curr || !listing) return curr;
-            if (curr.data.find(elem => elem._id === id)) return curr;
+            if (!curr.data.find(elem => elem._id === id)) return curr;
             return {
               ...curr,
               data: [...curr.data, listing],
             }
           }
         );
-        queryClient.setQueriesData<Listing[]>(
+        queryClient.setQueriesData<ApplicationDto[]>(
           {
             queryKey: getApplicationControllerGetAllMyApplicationsQueryKey(),
             exact: false
           },
           (curr) => {
-            console.log("set query data running: get my applications")
             if (!curr) return curr;
-            return updateLike({
-              listingId: id,
-              userId: user._id,
-              listings: curr,
-            });
+            return curr.map(app => {
+              if (app.listing._id !== id) {
+                return app;
+              }
+              if (app.listing.likedBy.includes(user._id)) {
+                return app;
+              }
+              return {
+                ...app,
+                listing: {
+                  ...app.listing,
+                  likedBy: [...app.listing.likedBy, user._id]
+                }
+              };
+            })
           }
         );
 
-        console.log("on mutate end")
         return {
           prev: {
             liked,
@@ -147,7 +144,6 @@ export function useLike() {
         };
       },
       onError(_, __, ctx) {
-        console.log("ERROR OCCURED")
         queryClient.setQueryData<Listing[]>(
           getListingsControllerGetAllVerifiedListingsQueryKey(),
           ctx?.prev.verified
@@ -156,7 +152,7 @@ export function useLike() {
           getListingsControllerGetLikedQueryKey(),
           ctx?.prev.liked
         );
-        queryClient.setQueryData<Listing[]>(
+        queryClient.setQueryData<ApplicationDto[]>(
           getApplicationControllerGetAllMyApplicationsQueryKey(),
           ctx?.prev.applied
         );
@@ -174,7 +170,6 @@ export function useUnlike() {
         if (!user) {
           return;
         }
-        console.log("on mutate running");
 
         await queryClient.cancelQueries({
           queryKey: getListingsControllerGetAllVerifiedListingsQueryKey()
@@ -192,16 +187,9 @@ export function useUnlike() {
         const liked = queryClient.getQueryData<LikedListingsDto>(
           getListingsControllerGetLikedQueryKey()
         );
-        const applied = queryClient.getQueryData<Listing[]>(
+        const applied = queryClient.getQueryData<ApplicationDto[]>(
           getApplicationControllerGetAllMyApplicationsQueryKey()
         );
-        console.log(
-          "keys found exist",
-          verified != undefined,
-          liked != undefined,
-          applied != undefined
-        );
-
 
         queryClient.setQueriesData<Listing[]>(
           {
@@ -209,15 +197,12 @@ export function useUnlike() {
             exact: false
           },
           (curr) => {
-            console.log("set query data running: all verified", curr?.length)
             if (!curr) return curr;
-            console.log("set query data running: all verified (not undef)")
             const old = updateUnlike({
               listingId: id,
               userId: user._id,
               listings: curr,
             });
-            console.log("NOTHING CHANGED", old === curr);
             return old;
           }
         );
@@ -227,7 +212,6 @@ export function useUnlike() {
             exact: false
           },
           (curr) => {
-            console.log("set query data running");
             if (!curr) return curr;
             return {
               ...curr,
@@ -235,23 +219,32 @@ export function useUnlike() {
             }
           }
         );
-        queryClient.setQueriesData<Listing[]>(
+        queryClient.setQueriesData<ApplicationDto[]>(
           {
             queryKey: getApplicationControllerGetAllMyApplicationsQueryKey(),
             exact: false
           },
           (curr) => {
-            console.log("set query data running");
             if (!curr) return curr;
-            return updateUnlike({
-              listingId: id,
-              userId: user._id,
-              listings: curr,
-            });
+            return curr.map(app => {
+              console.log("===================");
+              if (app.listing._id !== id) {
+                console.log("skipping");
+                return app;
+              }
+              console.log("found one skipping");
+              console.log("===================");
+              return {
+                ...app,
+                listing: {
+                  ...app.listing,
+                  likedBy: app.listing.likedBy.filter(id => id !== user._id)
+                }
+              }
+            })
           }
         );
 
-        console.log("on mutate end");
         return {
           prev: {
             liked,
@@ -270,7 +263,7 @@ export function useUnlike() {
           getListingsControllerGetLikedQueryKey(),
           ctx?.prev.liked
         );
-        queryClient.setQueryData<Listing[]>(
+        queryClient.setQueryData<ApplicationDto[]>(
           getApplicationControllerGetAllMyApplicationsQueryKey(),
           ctx?.prev.applied
         );
