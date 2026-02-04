@@ -629,7 +629,7 @@ export const applicationControllerGetApplication = (
 ) => {
       
       
-      return customInstance<ApplicationDto>(
+      return customInstance<void>(
       {url: `/application/${id}`, method: 'GET', signal
     },
       options);

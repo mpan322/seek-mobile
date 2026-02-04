@@ -40,6 +40,10 @@ export default function SettingsScreen() {
           text="Modify Password"
         />
         <Divider />
+
+        <FlatButton onPress={() => goto("/(app)/settings/flag-issue")} text="Flags" />
+        <Divider />
+
         <FlatButton
           onPress={() => goto("/(app)/settings/permissions")}
           text="Permissions"

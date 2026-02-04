@@ -94,6 +94,149 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
       return useMutation(mutationOptions, queryClient);
     }
+    export const flagsControllerGetAll = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<Flag>(
+      {url: `/flags/all`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getFlagsControllerGetAllQueryKey = () => {
+    return [
+    `/flags/all`
+    ] as const;
+    }
+
+    
+export const getFlagsControllerGetAllQueryOptions = <TData = Awaited<ReturnType<typeof flagsControllerGetAll>>, TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof flagsControllerGetAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getFlagsControllerGetAllQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof flagsControllerGetAll>>> = ({ signal }) => flagsControllerGetAll(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof flagsControllerGetAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type FlagsControllerGetAllQueryResult = NonNullable<Awaited<ReturnType<typeof flagsControllerGetAll>>>
+export type FlagsControllerGetAllQueryError = ErrorType<ErrorDto | ErrorDto | ErrorDto>
+
+
+export function useFlagsControllerGetAll<TData = Awaited<ReturnType<typeof flagsControllerGetAll>>, TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof flagsControllerGetAll>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof flagsControllerGetAll>>,
+          TError,
+          Awaited<ReturnType<typeof flagsControllerGetAll>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFlagsControllerGetAll<TData = Awaited<ReturnType<typeof flagsControllerGetAll>>, TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof flagsControllerGetAll>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof flagsControllerGetAll>>,
+          TError,
+          Awaited<ReturnType<typeof flagsControllerGetAll>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFlagsControllerGetAll<TData = Awaited<ReturnType<typeof flagsControllerGetAll>>, TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof flagsControllerGetAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useFlagsControllerGetAll<TData = Awaited<ReturnType<typeof flagsControllerGetAll>>, TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof flagsControllerGetAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getFlagsControllerGetAllQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const flagsControllerResolve = (
+    id: string,
+    resolveFlagDto: ResolveFlagDto,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/flags/resolve/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: resolveFlagDto
+    },
+      options);
+    }
+  
+
+
+export const getFlagsControllerResolveMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof flagsControllerResolve>>, TError,{id: string;data: ResolveFlagDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof flagsControllerResolve>>, TError,{id: string;data: ResolveFlagDto}, TContext> => {
+
+const mutationKey = ['flagsControllerResolve'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof flagsControllerResolve>>, {id: string;data: ResolveFlagDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  flagsControllerResolve(id,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type FlagsControllerResolveMutationResult = NonNullable<Awaited<ReturnType<typeof flagsControllerResolve>>>
+    export type FlagsControllerResolveMutationBody = ResolveFlagDto
+    export type FlagsControllerResolveMutationError = ErrorType<ErrorDto | ErrorDto | ErrorDto>
+
+    export const useFlagsControllerResolve = <TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof flagsControllerResolve>>, TError,{id: string;data: ResolveFlagDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof flagsControllerResolve>>,
+        TError,
+        {id: string;data: ResolveFlagDto},
+        TContext
+      > => {
+
+      const mutationOptions = getFlagsControllerResolveMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
     export const flagsControllerFindOne = (
     id: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -179,62 +322,3 @@ export function useFlagsControllerFindOne<TData = Awaited<ReturnType<typeof flag
 
 
 
-export const flagsControllerResolve = (
-    id: string,
-    resolveFlagDto: ResolveFlagDto,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/flags/resolve/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: resolveFlagDto
-    },
-      options);
-    }
-  
-
-
-export const getFlagsControllerResolveMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof flagsControllerResolve>>, TError,{id: string;data: ResolveFlagDto}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof flagsControllerResolve>>, TError,{id: string;data: ResolveFlagDto}, TContext> => {
-
-const mutationKey = ['flagsControllerResolve'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof flagsControllerResolve>>, {id: string;data: ResolveFlagDto}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  flagsControllerResolve(id,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type FlagsControllerResolveMutationResult = NonNullable<Awaited<ReturnType<typeof flagsControllerResolve>>>
-    export type FlagsControllerResolveMutationBody = ResolveFlagDto
-    export type FlagsControllerResolveMutationError = ErrorType<ErrorDto | ErrorDto | ErrorDto>
-
-    export const useFlagsControllerResolve = <TError = ErrorType<ErrorDto | ErrorDto | ErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof flagsControllerResolve>>, TError,{id: string;data: ResolveFlagDto}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof flagsControllerResolve>>,
-        TError,
-        {id: string;data: ResolveFlagDto},
-        TContext
-      > => {
-
-      const mutationOptions = getFlagsControllerResolveMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
