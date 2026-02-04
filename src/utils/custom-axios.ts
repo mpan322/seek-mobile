@@ -4,8 +4,10 @@ import { ErrorDto } from "../api/seek-api/model";
 
 export type ErrorType<T> = AxiosError<ErrorDto>;
 
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+
 export const AXIOS_INSTANCE = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000",
+  baseURL: BASE_URL || "http://localhost:3000",
   headers: {
     platform: "mobile",
   },
@@ -29,14 +31,34 @@ AXIOS_INSTANCE.interceptors.response.use(
     console.log("[LOG] request successful", resp.status);
     return resp;
   },
-  (error) => {
-    const { message, status, cause, stack } = error as ErrorType<never>;
-    console.log("[LOG] request failed", status, message, cause, stack);
-    if (error.status === 401) {
-      console.log("[LOG] authentication error, logging out");
+  async (error) => {
+    const { config, response } = error as ErrorType<never>;
+    console.error("[ERROR] request failed", config?.url, response?.data.message ?? "no message");
+
+    const status = response?.status;
+    if (status !== 401) {
+      throw error;
+    }
+
+    console.log("[LOG] authentication error, attempting refresh");
+    try {
+      const refreshToken = useAuth.getState().refreshToken;
+      const { data } = await axios.post<{ access_token: string, refresh_token: string }>(`${BASE_URL}/auth/refresh`, {}, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+          mobile: true
+        }
+      });
+
+      useAuth.getState().login({
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token
+      });
+      console.log("[LOG] refresh successful");
+    } catch {
+      console.log("[LOG] refresh failed, logging out");
       useAuth.getState().logout();
     }
-    throw error;
   },
 );
 
