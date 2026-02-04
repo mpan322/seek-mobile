@@ -6,17 +6,9 @@ function getExtension(variant: string): Partial<ExpoConfig> {
     return {
       ios: {
         bundleIdentifier: "com.seek.seekapp.dev",
-        config: {
-          googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY!,
-        },
       },
       android: {
         package: "com.seek.seekapp.dev",
-        config: {
-          googleMaps: {
-            apiKey: process.env.GOOGLE_MAPS_API_KEY!,
-          },
-        },
       },
     };
   }
