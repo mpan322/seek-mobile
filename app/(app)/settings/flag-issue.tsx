@@ -13,6 +13,9 @@ import { create } from "zustand";
 import { useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BackButton } from "@/components/custom/back-button";
+import {useToast} from "@/components/ui/toast";
+import {ErrorToast} from "@/components/custom/error-toast";
+import {SuccessToast} from "@/components/custom/success-toast";
 
 type IssueState = {
   issue: string;
@@ -20,24 +23,35 @@ type IssueState = {
   setIssue: (issue: string) => void;
   setAccountName: (accountName: string) => void;
   clear: () => void;
-  isValid: boolean;
 };
 
 const useIssueState = create<IssueState>((set, get) => ({
   issue: "",
   accountName: "",
-  isValid: get()?.issue.length > 0,
   setIssue: (issue: string) => set({ issue }),
   setAccountName: (accountName: string) => set({ accountName }),
   clear: () => set({ issue: "", accountName: "" }),
 }));
 
 export default function FlagIssueScreen() {
-  const { issue, accountName, setIssue, setAccountName, isValid } =
+  const { issue, accountName, setIssue, setAccountName } =
     useIssueState();
+
+  const isValid = issue.trim().length > 0;
+  const toast = useToast();
 
   const submit = () => {
     console.log("submitting");
+
+    toast.show({
+      placement: "top",
+      duration: 3000,
+      render: () => (
+          <SuccessToast id={"plz work"} message="Flag sent successfully. Thanks for reporting!" />
+      ),
+    });
+
+    useIssueState.getState().clear();
   };
 
   return (
