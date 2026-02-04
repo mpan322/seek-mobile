@@ -37,6 +37,7 @@ import {
 } from "@/components/custom/listing-card";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
+import { PROVIDER_GOOGLE } from "react-native-maps";
 
 const BottomSheetFlatList = GFlatList as unknown as typeof FlashList;
 
@@ -158,6 +159,7 @@ export default function MapScreen() {
       </Box>
 
       <MapView
+        provider={PROVIDER_GOOGLE}
         ref={mapRef}
         style={{ flex: 1 }}
         onPanDrag={() => {
