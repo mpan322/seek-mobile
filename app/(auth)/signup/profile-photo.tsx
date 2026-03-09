@@ -22,7 +22,6 @@ export default function ProfilePhoto() {
   }, []);
 
   const { userId, access_token } = useSignupState(state => state.data);
-
   const toast = useToast();
   const { pickImage, image } = useProfilePicture();
   const [show, setShow] = useState<boolean>(false)
@@ -54,14 +53,16 @@ export default function ProfilePhoto() {
     // update the user profile
     try {
       const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000";
-      axios.put<any, any, SetProfilePicDto>(`${BASE_URL}/users/setProfilePic`, {
+      await axios.put<any, any, SetProfilePicDto>(`${BASE_URL}/users/setProfilePic`, {
         url: fileUrl
       }, {
         headers: {
-          Authorization: `Bearer ${access_token}`
+          Authorization: `Bearer ${access_token}`,
+          platform: "mobile"
         }
       });
-    } catch {
+    } catch (error) {
+      console.error(error);
       errorToast({ toast, data: { message: "Failed to update profile photo", statusCode: -1 } });
     }
     setShow(false);

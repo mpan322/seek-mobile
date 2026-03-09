@@ -42,6 +42,7 @@ export * from './messageDto';
 export * from './messageDtoMessageType';
 export * from './objectId';
 export * from './presignResDto';
+export * from './resendOtpDto';
 export * from './resolveFlagDto';
 export * from './sendMessageDto';
 export * from './setProfilePicDto';

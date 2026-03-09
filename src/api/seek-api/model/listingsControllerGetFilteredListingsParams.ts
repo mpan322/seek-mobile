@@ -11,4 +11,5 @@ monthlyRentMax: number;
 sizeSqMeters: number;
 amenities: string[];
 lat: number;
+lng: number;
 };

@@ -1,45 +1,40 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { MMKVStorage } from "./persist/mmkv";
+import { ListingsControllerGetFilteredListingsParams } from "../api/seek-api/model";
 
 type FilterState = {
-  location: "only-center" | "everywhere";
-  numberOfPeople: number;
-  pricePerMonth: number;
-  propertyType: "flat" | "house";
-  ammenities: string[];
-
-  setLocation: (location: "only-center" | "everywhere") => void;
-  setNumberOfPeople: (numberOfPeople: number) => void;
-  setPricePerMonth: (pricePerMonth: number) => void;
-  setPropertyType: (propertyType: "flat" | "house") => void;
-  setAmmenities: (ammenities: string[]) => void;
+  data: ListingsControllerGetFilteredListingsParams
+  setValue: <K extends keyof ListingsControllerGetFilteredListingsParams>(key: K)
+    => (value: ListingsControllerGetFilteredListingsParams[K]) => void;
 };
 
 export const useFilterStore = create<FilterState>()(
   persist(
     (set) => ({
-      location: "only-center",
-      numberOfPeople: 0,
-      pricePerMonth: 0,
-      propertyType: "flat",
-      ammenities: [],
-      setLocation: (location) => set({ location }),
-      setNumberOfPeople: (numberOfPeople) => set({ numberOfPeople }),
-      setPricePerMonth: (pricePerMonth) => set({ pricePerMonth }),
-      setPropertyType: (propertyType) => set({ propertyType }),
-      setAmmenities: (ammenities) => set({ ammenities }),
+      data: {
+        propertyType: "FLAT_APARTMENT",
+        numOfPeople: 0,
+        monthlyRentMin: 0,
+        monthlyRentMax: 0,
+        sizeSqMeters: 0,
+        amenities: [],
+        lng: 0,
+        lat: 0,
+      },
+      setValue: (key) => (value) =>
+        set(state => ({
+          ...state,
+          data: {
+            ...state.data,
+            [key]: value
+          }
+        }))
     }),
     {
       name: "filter-store",
       storage: createJSONStorage(() => MMKVStorage),
-      partialize: (state) => ({
-        location: state.location,
-        numberOfPeople: state.numberOfPeople,
-        pricePerMonth: state.pricePerMonth,
-        propertyType: state.propertyType,
-        ammenities: state.ammenities,
-      }),
+      partialize: (state) => state.data
     },
   ),
 );

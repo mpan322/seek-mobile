@@ -15,20 +15,27 @@ import { useState } from "react";
 type PasswordInputProps = {
   password: string;
   setPassword: (password: string) => void;
+  label?: string;
+  placeholder?: string;
 };
 
-export function PasswordInput({ password, setPassword }: PasswordInputProps) {
+export function PasswordInput({
+  password,
+  setPassword,
+  label = "Password",
+  placeholder = "Enter your password"
+}: PasswordInputProps) {
   const [show, setShow] = useState<boolean>(false);
 
   return (
     <FormControl isInvalid={password.length > 0 && !isValidPassword(password)}>
       <FormControlLabel>
-        <FormControlLabelText size="lg">Password</FormControlLabelText>
+        <FormControlLabelText size="lg">{label}</FormControlLabelText>
       </FormControlLabel>
       <Input size="lg">
         <InputField
           type={show ? "text" : "password"}
-          placeholder="Enter your password"
+          placeholder={placeholder}
           onChangeText={setPassword}
           value={password}
         />

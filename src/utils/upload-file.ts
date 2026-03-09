@@ -1,4 +1,6 @@
 import { uploadControllerGetPresignedUrl, useUploadControllerGetPresignedUrl } from "@/src/api/seek-api/upload";
+import axios, { AxiosResponse } from "axios";
+import { PresignResDto, UploadControllerGetPresignedUrlParams } from "../api/seek-api/model";
 
 type UploadFileProps = {
   uri: string,
@@ -8,24 +10,28 @@ type UploadFileProps = {
   access_token?: string
 };
 
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000";
+
 export async function uploadFile({ uri, mimeType, name, folder, access_token }: UploadFileProps) {
   const response = await fetch(uri);
   const blob = await response.blob();
-  const data = await uploadControllerGetPresignedUrl({
-    fileType: mimeType,
-    filename: name,
-    folder: folder,
-  }, {
+  const resp = await axios.get<any, AxiosResponse<PresignResDto>, UploadControllerGetPresignedUrlParams>(`${BASE_URL}/upload/presign`, {
+    params: {
+      fileType: mimeType,
+      filename: name,
+      folder: folder,
+    },
     headers: {
-      Authorization: access_token && `Bearer ${access_token}`
+      Authorization: `Bearer ${access_token}`,
+      platform: "mobile",
     }
   });
-  await fetch(data.uploadUrl, {
+  await fetch(resp.data.uploadUrl, {
     method: "PUT",
     body: blob,
     headers: {
       "Content-Type": mimeType,
     },
   });
-  return data;
+  return resp.data;
 }

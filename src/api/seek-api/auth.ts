@@ -29,6 +29,7 @@ import type {
   ErrorDto,
   ForgotPasswordDto,
   LoginDto,
+  ResendOtpDto,
   UserDto,
   VerifyEmailDto
 } from './model';
@@ -640,6 +641,63 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getAuthControllerRefreshTokenMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const authControllerResendOtp = (
+    resendOtpDto: ResendOtpDto,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/auth/resend-otp`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: resendOtpDto
+    },
+      options);
+    }
+  
+
+
+export const getAuthControllerResendOtpMutationOptions = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerResendOtp>>, TError,{data: ResendOtpDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof authControllerResendOtp>>, TError,{data: ResendOtpDto}, TContext> => {
+
+const mutationKey = ['authControllerResendOtp'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerResendOtp>>, {data: ResendOtpDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  authControllerResendOtp(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthControllerResendOtpMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerResendOtp>>>
+    export type AuthControllerResendOtpMutationBody = ResendOtpDto
+    export type AuthControllerResendOtpMutationError = ErrorType<ErrorDto | ErrorDto>
+
+    export const useAuthControllerResendOtp = <TError = ErrorType<ErrorDto | ErrorDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerResendOtp>>, TError,{data: ResendOtpDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof authControllerResendOtp>>,
+        TError,
+        {data: ResendOtpDto},
+        TContext
+      > => {
+
+      const mutationOptions = getAuthControllerResendOtpMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

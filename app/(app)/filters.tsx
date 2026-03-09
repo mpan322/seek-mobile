@@ -39,18 +39,17 @@ const ALL_AMMENITIES = [
 export default function Filters() {
   const router = useRouter();
 
+  const { data, setValue } = useFilterStore();
   const {
-    location,
-    numberOfPeople,
-    pricePerMonth,
+    amenities,
+    monthlyRentMax,
+    monthlyRentMin,
+    numOfPeople,
+    sizeSqMeters,
     propertyType,
-    ammenities,
-    setLocation,
-    setNumberOfPeople,
-    setPricePerMonth,
-    setPropertyType,
-    setAmmenities,
-  } = useFilterStore();
+    lat,
+    lng,
+  } = data;
 
   return (
     <SafeAreaView className="py-4 px-6">
@@ -67,22 +66,8 @@ export default function Filters() {
           </Text>
         </Box>
 
-        <Box className="gap-2">
-          <Text size="lg">Location</Text>
-          <SelectBoxInput
-            opions={[
-              { label: "Only Center", value: "only-center" },
-              { label: "Everywhere", value: "everywhere" },
-            ]}
-            value={location}
-            // @ts-ignore
-            onChange={setLocation}
-            className="gap-2"
-          />
-        </Box>
-
         {/* People */}
-        <PeopleInput value={numberOfPeople} onChange={setNumberOfPeople} />
+        <PeopleInput value={numOfPeople} onChange={setValue("numOfPeople")} />
 
         {/* Price Slider */}
         <Box className="gap-2">
@@ -92,8 +77,8 @@ export default function Filters() {
               size="lg"
               minValue={0}
               maxValue={1000}
-              onChange={setPricePerMonth}
-              value={pricePerMonth}
+              onChange={setValue("monthlyRentMax")}
+              value={monthlyRentMax}
             >
               <SliderTrack>
                 <SliderFilledTrack />
@@ -123,8 +108,8 @@ export default function Filters() {
           <Text size="lg">Ammenities</Text>
           <CheckboxGroup
             className="flex flex-wrap flex-row justify-between gap-2"
-            value={ammenities}
-            onChange={setAmmenities}
+            value={amenities}
+            onChange={setValue("amenities")}
           >
             {ALL_AMMENITIES.map((ammenity) => (
               <Checkbox value={ammenity} key={ammenity} size="lg">

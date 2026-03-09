@@ -9,7 +9,7 @@ import { Image } from "expo-image";
 import { Settings2Icon, ShareIcon, UsersIcon } from "lucide-react-native";
 import { VStack } from "@/components/ui/vstack/index";
 import { useMemo, useState } from "react";
-import { useListingsControllerGetAllVerifiedListings } from "@/src/api/seek-api/listings";
+import { useListingsControllerGetAllVerifiedListings, useListingsControllerGetFilteredListings } from "@/src/api/seek-api/listings";
 import { RefreshControl } from "react-native-gesture-handler";
 import { ScrollDots } from "@/components/custom/scroll-dots";
 import { Text } from "@/components/ui/text"
@@ -19,13 +19,16 @@ import { ErrorToast } from "@/components/custom/error-toast";
 import { LikeButton } from "@/components/custom/like-button";
 import { useLike, useUnlike } from "@/hooks/like";
 import { getListingLink } from "@/components/links";
+import { useFilterStore } from "@/src/store/filter-store";
 
 export default function HomeScreen() {
+  const filters = useFilterStore(state => state.data);
+
   const {
     refetch,
     data: listings,
     isRefetching,
-  } = useListingsControllerGetAllVerifiedListings();
+  } = useListingsControllerGetFilteredListings(filters);
 
   const bottomBarHeight = useBottomTabBarHeight();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");

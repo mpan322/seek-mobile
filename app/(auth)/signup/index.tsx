@@ -9,15 +9,12 @@ import { create } from "zustand";
 import { EmailInput } from "@/components/custom/email-input";
 import { PasswordInput } from "@/components/custom/password-input";
 import { isValidPassword } from "@/src/utils/validate-password";
-import { authControllerCurrentUser, useAuthControllerCurrentUser, useAuthControllerSignup } from "@/src/api/seek-api/auth";
+import { authControllerCurrentUser, useAuthControllerSignup } from "@/src/api/seek-api/auth";
 import { useToast } from "@/components/ui/toast";
 import { ErrorToast } from "@/components/custom/error-toast";
 import { Input, InputField } from "@/components/ui/input";
 import { Link, useRouter } from "expo-router";
 import { LinkText } from "@/components/ui/link";
-import { SuccessToast } from "@/components/custom/success-toast";
-import { ProfilePhotoInput } from "@/components/custom/profile-photo-input";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 import { useProgress } from "@/components/custom/progress-bar";
 import { useSignupState } from "./state";
@@ -155,21 +152,10 @@ export default function Signup() {
       <PasswordInput setPassword={setKey("password")} password={password} />
 
       {/* Confirm Password */}
-      <FormControl isInvalid={confirmPassword !== password}>
-        <FormControlLabel>
-          <FormControlLabelText size="lg">
-            Confirm Password
-          </FormControlLabelText>
-        </FormControlLabel>
-        <Input size="lg">
-          <InputField
-            type="password"
-            placeholder="Confirm your password"
-            onChangeText={setKey("confirmPassword")}
-            value={confirmPassword}
-          />
-        </Input>
-      </FormControl>
+      <PasswordInput label="Confirm Password"
+        placeholder="Confirm your password"
+        setPassword={setKey("confirmPassword")}
+        password={confirmPassword} />
 
       <FormControl>
         <Button onPress={handleSubmit} isDisabled={!isValid()} size="lg">
